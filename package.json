@@ -1,24 +1,25 @@
 {
-  "name": "hero-stack",
+  "name": "bible-buddy-web",
   "version": "1.0.0",
-  "description": "placeholder site for herostack.ai",
+  "description": "placeholder site for biblebuddy.rocks",
   "main": "index.html",
   "scripts": {
     "start": "http-server ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/workingdevshero/hero-stack.git"
+    "url": "git+https://github.com/bobbyg603/bible-buddy-web.git"
   },
   "keywords": [
-    "hero"
+    "bible",
+    "buddy"
   ],
-  "author": "@workingdevshero",
+  "author": "@bobbyg603",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/workingdevshero/hero-stack/issues"
+    "url": "https://github.com/bobbyg603/bible-buddy-web/issues"
   },
-  "homepage": "https://github.com/workingdevshero/hero-stack#readme",
+  "homepage": "https://github.com/bobbyg603/bible-buddy-web#readme",
   "devDependencies": {
     "http-server": "^14.1.1"
   }
