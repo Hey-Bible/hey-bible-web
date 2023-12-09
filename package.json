@@ -1,14 +1,14 @@
 {
-  "name": "bible-buddy-web",
+  "name": "hey-bible-web",
   "version": "1.0.0",
-  "description": "placeholder site for biblebuddy.rocks",
+  "description": "placeholder site for heybible.app",
   "main": "index.html",
   "scripts": {
     "start": "http-server ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bobbyg603/bible-buddy-web.git"
+    "url": "git+https://github.com/bobbyg603/hey-bible-web.git"
   },
   "keywords": [
     "bible",
@@ -17,9 +17,9 @@
   "author": "@bobbyg603",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/bobbyg603/bible-buddy-web/issues"
+    "url": "https://github.com/bobbyg603/hey-bible-web/issues"
   },
-  "homepage": "https://github.com/bobbyg603/bible-buddy-web#readme",
+  "homepage": "https://github.com/bobbyg603/hey-bible-web#readme",
   "devDependencies": {
     "http-server": "^14.1.1"
   }
