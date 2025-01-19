@@ -1,18 +1,184 @@
-body {
-    display: flex;
-    background-color: #6fd0ff;
-    justify-content: center;
-    vertical-align: middle;
-    height: 100vh;
+* {
+    font-family: Arial, sans-serif;
+    color: #1a4b8f;
+    box-sizing: border-box;
 }
 
-div {
+body {
     display: flex;
+    flex-direction: column;
+    background-color: #6fd0ff;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    height: 100%;
+    justify-content: center;
+    flex: 1;
+}
+
+.about-content {
+    width: 400px;
+    max-width: 100%;
+}
+
+.about-logo {
+    width: 100px;
+}
+
+.app-store-icon {
+    margin-top: 1rem;
 }
 
 img {
     max-height: 320px;
+    max-width: 100%;
+    height: auto;
     display: inline-block;
+}
+
+.main-footer {
+    background-color: rgba(47, 128, 237, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem 0;
+    width: 100%;
+}
+
+.footer-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-nav a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease;
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+}
+
+.main-header {
+    background-color: rgba(47, 128, 237, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-nav a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+.header-nav a:hover {
+    opacity: 0.8;
+}
+
+.header-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.github-icon,
+.globe-icon {
+    height: 1.3rem;
+    width: auto;
+    filter: invert(27%) sepia(15%) saturate(2044%) hue-rotate(182deg) brightness(96%) contrast(89%);
+}
+
+.header-nav a:hover .github-icon,
+.header-nav a:hover .globe-icon {
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    .header-nav a {
+        font-size: 1.2rem;
+    }
+
+    .github-icon,
+    .globe-icon {
+        height: 1.5rem;
+    }
+
+    .footer-nav {
+        gap: 1rem;
+    }
+
+    .footer-nav a {
+        font-size: 1rem;
+    }
+
+    img {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 0.8rem;
+    }
+
+    .header-nav a {
+        font-size: 1.3rem;
+    }
+
+    .github-icon,
+    .globe-icon {
+        height: 1.6rem;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .footer-nav a {
+        font-size: 1.1rem;
+    }
+
+    img {
+        max-height: 200px;
+    }
+
+    .footer-links {
+        gap: 1rem;
+    }
+
+    .footer-nav a {
+        font-size: 1.1rem;
+    }
+
+    .main-footer {
+        padding: 1.2rem 0;
+    }
+
+    .footer-nav {
+        gap: 1.2rem;
+    }
 }
