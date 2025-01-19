@@ -182,3 +182,25 @@ img {
         gap: 1.2rem;
     }
 }
+
+.login-button {
+    background: none;
+    border: 2px solid #1a4b8f;
+    border-radius: 6px;
+    padding: 0.4rem 1.2rem;
+    color: #1a4b8f;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.login-button:hover {
+    background: #1a4b8f;
+    color: white;
+}
+
+@media (max-width: 480px) {
+    .login-button {
+        padding: 0.5rem 1.4rem;
+    }
+}
