@@ -204,3 +204,7 @@ img {
         padding: 0.5rem 1.4rem;
     }
 }
+
+li {
+    margin: 0.5rem 0;
+}
