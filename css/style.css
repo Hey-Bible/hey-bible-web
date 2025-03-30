@@ -30,8 +30,16 @@ body {
     width: 100px;
 }
 
-.app-store-icon {
+.app-store-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
     margin-top: 1rem;
+}
+
+.app-store-icon {
+    height: 40px;
+    width: auto;
 }
 
 img {
