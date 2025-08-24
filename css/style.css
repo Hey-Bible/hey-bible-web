@@ -1,6 +1,6 @@
 * {
-    font-family: Arial, sans-serif;
-    color: #1a4b8f;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: #153a7a;
     box-sizing: border-box;
 }
 
@@ -11,6 +11,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    padding-bottom: 120px;
 }
 
 .content {
@@ -18,6 +19,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding-bottom: 1rem;
     flex: 1;
 }
 
@@ -26,12 +28,20 @@ body {
     max-width: 100%;
 }
 
+.legal-content {
+    width: 95%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
 .about-logo {
     width: 100px;
 }
 
 .app-store-container {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     align-items: center;
     margin-top: 1rem;
@@ -43,7 +53,7 @@ body {
 }
 
 img {
-    max-height: 320px;
+    max-height: 240px;
     max-width: 100%;
     height: auto;
     display: inline-block;
@@ -54,6 +64,10 @@ img {
     backdrop-filter: blur(10px);
     padding: 1.5rem 0;
     width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
 }
 
 .footer-nav {
@@ -74,11 +88,12 @@ img {
 .footer-nav a {
     text-decoration: none;
     font-size: 0.9rem;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .footer-nav a:hover {
-    opacity: 0.8;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 16px rgba(255, 255, 255, 0.5), 0 0 24px rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
 }
 
 .main-header {
@@ -99,11 +114,12 @@ img {
     text-decoration: none;
     font-size: 1.1rem;
     font-weight: 600;
-    transition: opacity 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .header-nav a:hover {
-    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
 }
 
 .header-right {
@@ -189,22 +205,33 @@ img {
     .footer-nav {
         gap: 1.2rem;
     }
+
+    .social-links {
+        gap: 2rem;
+    }
+
+    .social-icon {
+        height: 2rem;
+    }
 }
 
 .login-button {
     background: none;
-    border: 2px solid #1a4b8f;
+    border: 2px solid #153a7a;
     border-radius: 6px;
     padding: 0.4rem 1.2rem;
-    color: #1a4b8f;
+    color: #153a7a;
     font-weight: 600;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     text-decoration: none;
 }
 
 .login-button:hover {
-    background: #1a4b8f;
+    background: #153a7a;
     color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.4);
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.3));
+    transform: translateY(-2px);
 }
 
 @media (max-width: 480px) {
@@ -215,4 +242,51 @@ img {
 
 li {
     margin: 0.5rem 0;
+}
+
+/* Content links glow effect */
+.about-content a, .legal-content a {
+    transition: all 0.3s ease;
+}
+
+.about-content a:hover, .legal-content a:hover {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 16px rgba(255, 255, 255, 0.4);
+}
+
+/* App store images glow effect */
+.app-store-icon {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.app-store-icon:hover {
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4)) drop-shadow(0 0 45px rgba(255, 255, 255, 0.2));
+    transform: translateY(-3px) scale(1.02);
+}
+
+/* Logo image glow effect */
+.content img:hover, .about-logo:hover {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.4));
+    transform: scale(1.05);
+}
+
+/* Social media icons */
+.social-links {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: flex-start;
+    margin-top: 2rem;
+}
+
+.social-icon {
+    height: 1.8rem;
+    width: auto;
+    filter: invert(27%) sepia(15%) saturate(2044%) hue-rotate(182deg) brightness(96%) contrast(89%);
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    filter: invert(27%) sepia(15%) saturate(2044%) hue-rotate(182deg) brightness(96%) contrast(89%) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
+    transform: translateY(-2px) scale(1.1);
 }
