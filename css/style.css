@@ -1,18 +1,94 @@
+/* ═══════════════════════════════════════════
+   Hey Bible Web — Retro-Flat Minimalist
+   ═══════════════════════════════════════════ */
+
+/* ── Design Tokens ── */
+:root {
+    --retro-bg: #E8F6FA;
+    --retro-text: #1a2833;
+    --retro-primary: #7FCDEB;
+    --retro-primary-rgb: 127, 205, 235;
+    --retro-secondary: #A8DAED;
+    --retro-secondary-rgb: 168, 218, 237;
+    --retro-tertiary: #B8D4F1;
+    --retro-surface-bar: #f4fbfd;
+    --retro-surface-card: #ffffff;
+    --retro-border: 1px solid var(--retro-secondary);
+    --retro-radius-sm: 12px;
+    --retro-radius-md: 18px;
+    --retro-radius-lg: 24px;
+    --retro-radius-pill: 999px;
+    --retro-transition: 0.2s ease;
+    --retro-icon-filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%);
+    --retro-glow-rgb: 127, 205, 235;
+}
+
+/* ── Dark Mode Tokens ── */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --retro-bg: #000000;
+        --retro-text: #ffffff;
+        --retro-primary: #428cff;
+        --retro-primary-rgb: 66, 140, 255;
+        --retro-secondary: #50c8ff;
+        --retro-secondary-rgb: 80, 200, 255;
+        --retro-tertiary: #6a64ff;
+        --retro-surface-bar: #1a1a1a;
+        --retro-surface-card: #1c1c1d;
+        --retro-border: 1px solid rgba(255, 255, 255, 0.12);
+        --retro-icon-filter: invert(100%) brightness(2);
+        --retro-glow-rgb: 255, 255, 255;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════ */
+
 * {
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    color: #1a2833;
+    color: var(--retro-text);
     box-sizing: border-box;
 }
 
 body {
     display: flex;
     flex-direction: column;
-    background-color: #E8F6FA;
+    background-color: var(--retro-bg);
     min-height: 100vh;
     margin: 0;
     padding: 0;
     padding-bottom: 120px;
+    font-size: 18px;
+    line-height: 1.6;
+
+    /* Subtle wave background */
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Cpath d='M0 30 Q25 10 50 30 T100 30' fill='none' stroke='%23B8D4F1' stroke-width='0.8' stroke-opacity='0.25'/%3E%3Cpath d='M0 45 Q25 25 50 45 T100 45' fill='none' stroke='%23A8DAED' stroke-width='0.6' stroke-opacity='0.18'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px auto;
 }
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Cpath d='M0 30 Q25 10 50 30 T100 30' fill='none' stroke='%23808080' stroke-width='1' stroke-opacity='0.2'/%3E%3Cpath d='M0 45 Q25 25 50 45 T100 45' fill='none' stroke='%23999999' stroke-width='0.8' stroke-opacity='0.15'/%3E%3C/svg%3E");
+    }
+}
+
+a {
+    color: var(--retro-primary);
+    text-decoration: none;
+    transition: opacity var(--retro-transition);
+}
+
+a:hover {
+    opacity: 0.75;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
 
 .content {
     display: flex;
@@ -26,6 +102,7 @@ body {
 .about-content {
     width: 400px;
     max-width: 100%;
+    padding: 0 1rem;
 }
 
 .legal-content {
@@ -35,23 +112,6 @@ body {
     padding: 2rem;
 }
 
-.about-logo {
-    width: 100px;
-}
-
-.app-store-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    margin-top: 1rem;
-}
-
-.app-store-icon {
-    height: 40px;
-    width: auto;
-}
-
 img {
     max-height: 240px;
     max-width: 100%;
@@ -59,9 +119,62 @@ img {
     display: inline-block;
 }
 
+/* ═══════════════════════════════════════════
+   HEADER — Flat bar
+   ═══════════════════════════════════════════ */
+
+.main-header {
+    background-color: var(--retro-surface-bar);
+    border-bottom: var(--retro-border);
+    padding: 1rem;
+}
+
+.header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-nav a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--retro-text);
+    transition: all 0.3s ease;
+}
+
+.header-nav a:hover {
+    text-shadow: 0 0 6px rgba(var(--retro-glow-rgb), 0.6), 0 0 12px rgba(var(--retro-glow-rgb), 0.3);
+    transform: translateY(-1px);
+}
+
+.header-right {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.github-icon,
+.globe-icon {
+    height: 1.3rem;
+    width: auto;
+    filter: var(--retro-icon-filter);
+}
+
+.header-nav a:hover .github-icon,
+.header-nav a:hover .globe-icon {
+    opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER — Flat bar
+   ═══════════════════════════════════════════ */
+
 .main-footer {
-    background-color: rgba(127, 205, 235, 0.3);
-    backdrop-filter: blur(10px);
+    background-color: var(--retro-surface-bar);
+    border-top: var(--retro-border);
     padding: 1.5rem 0;
     width: 100%;
     position: fixed;
@@ -88,57 +201,153 @@ img {
 .footer-nav a {
     text-decoration: none;
     font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--retro-text);
     transition: all 0.3s ease;
 }
 
 .footer-nav a:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 6px rgba(var(--retro-glow-rgb), 0.6), 0 0 12px rgba(var(--retro-glow-rgb), 0.3);
     transform: translateY(-1px);
 }
 
-.main-header {
-    background-color: rgba(127, 205, 235, 0.3);
-    backdrop-filter: blur(10px);
-    padding: 1rem;
-}
+/* ═══════════════════════════════════════════
+   BUTTONS — Large rounded flat
+   ═══════════════════════════════════════════ */
 
-.header-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.header-nav a {
+.login-button {
+    background: var(--retro-primary);
+    border: none;
+    border-radius: var(--retro-radius-lg);
+    padding: 0.5rem 1.5rem;
+    color: #ffffff;
+    font-weight: 700;
+    transition: all 0.3s ease;
     text-decoration: none;
-    font-size: 1.1rem;
-    font-weight: 600;
+}
+
+.login-button:hover {
+    text-shadow: 0 0 4px rgba(var(--retro-glow-rgb), 0.5), 0 0 8px rgba(var(--retro-glow-rgb), 0.3);
+    box-shadow: 0 0 10px rgba(var(--retro-glow-rgb), 0.4), 0 0 20px rgba(var(--retro-glow-rgb), 0.2);
+    transform: translateY(-2px);
+    color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════
+   HEADINGS — Chunky Nunito
+   ═══════════════════════════════════════════ */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    color: var(--retro-text);
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.6rem; }
+
+/* ═══════════════════════════════════════════
+   APP STORE / DOWNLOAD
+   ═══════════════════════════════════════════ */
+
+.about-logo {
+    width: 100px;
+}
+
+.app-store-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.app-store-icon {
+    height: 40px;
+    width: auto;
+    border-radius: var(--retro-radius-sm);
     transition: all 0.3s ease;
 }
 
-.header-nav a:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
+.app-store-icon:hover {
+    filter: drop-shadow(0 0 8px rgba(var(--retro-glow-rgb), 0.6)) drop-shadow(0 0 16px rgba(var(--retro-glow-rgb), 0.3));
+    transform: translateY(-2px) scale(1.02);
 }
 
-.header-right {
+/* Logo */
+.content img,
+.about-logo {
+    transition: all 0.3s ease;
+}
+
+.content img:hover,
+.about-logo:hover {
+    filter: drop-shadow(0 0 10px rgba(var(--retro-glow-rgb), 0.6)) drop-shadow(0 0 20px rgba(var(--retro-glow-rgb), 0.3));
+    transform: scale(1.05);
+}
+
+/* Logo outline in dark mode */
+@media (prefers-color-scheme: dark) {
+    .content img,
+    .about-logo {
+        filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+    }
+
+    .content img:hover,
+    .about-logo:hover {
+        filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 0 10px rgba(var(--retro-glow-rgb), 0.6)) drop-shadow(0 0 20px rgba(var(--retro-glow-rgb), 0.3));
+    }
+}
+
+/* ═══════════════════════════════════════════
+   CONTENT LINKS
+   ═══════════════════════════════════════════ */
+
+.about-content a,
+.legal-content a {
+    color: var(--retro-primary);
+    font-weight: 600;
+    transition: opacity var(--retro-transition);
+}
+
+.about-content a:hover,
+.legal-content a:hover {
+    text-shadow: 0 0 6px rgba(var(--retro-glow-rgb), 0.6), 0 0 12px rgba(var(--retro-glow-rgb), 0.3);
+}
+
+/* ═══════════════════════════════════════════
+   SOCIAL ICONS
+   ═══════════════════════════════════════════ */
+
+.social-links {
     display: flex;
-    gap: 1rem;
-    align-items: center;
+    gap: 1.5rem;
+    justify-content: flex-start;
+    margin-top: 2rem;
 }
 
-.github-icon,
-.globe-icon {
-    height: 1.3rem;
+.social-icon {
+    height: 1.8rem;
     width: auto;
-    filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%);
+    filter: var(--retro-icon-filter);
+    transition: all 0.3s ease;
 }
 
-.header-nav a:hover .github-icon,
-.header-nav a:hover .globe-icon {
-    opacity: 0.8;
+.social-icon:hover {
+    filter: var(--retro-icon-filter) drop-shadow(0 0 8px rgba(var(--retro-glow-rgb), 0.6)) drop-shadow(0 0 16px rgba(var(--retro-glow-rgb), 0.3));
+    transform: translateY(-2px) scale(1.1);
 }
+
+/* ═══════════════════════════════════════════
+   LISTS
+   ═══════════════════════════════════════════ */
+
+li {
+    margin: 0.5rem 0;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
 
 @media (max-width: 768px) {
     .header-nav a {
@@ -194,16 +403,8 @@ img {
         gap: 1rem;
     }
 
-    .footer-nav a {
-        font-size: 1.1rem;
-    }
-
     .main-footer {
         padding: 1.2rem 0;
-    }
-
-    .footer-nav {
-        gap: 1.2rem;
     }
 
     .social-links {
@@ -213,81 +414,8 @@ img {
     .social-icon {
         height: 2rem;
     }
-}
 
-.login-button {
-    background: none;
-    border: 2px solid #1a2833;
-    border-radius: 6px;
-    padding: 0.4rem 1.2rem;
-    color: #1a2833;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.login-button:hover {
-    background: #7FCDEB;
-    border-color: #7FCDEB;
-    color: #1a2833;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 16px rgba(255, 255, 255, 0.6);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.5), 0 0 60px rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-}
-
-@media (max-width: 480px) {
     .login-button {
         padding: 0.5rem 1.4rem;
     }
-}
-
-li {
-    margin: 0.5rem 0;
-}
-
-/* Content links glow effect */
-.about-content a, .legal-content a {
-    transition: all 0.3s ease;
-}
-
-.about-content a:hover, .legal-content a:hover {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.4);
-}
-
-/* App store images glow effect */
-.app-store-icon {
-    transition: all 0.3s ease;
-    border-radius: 8px;
-}
-
-.app-store-icon:hover {
-    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.4));
-    transform: translateY(-3px) scale(1.02);
-}
-
-/* Logo image glow effect */
-.content img:hover, .about-logo:hover {
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 75px rgba(255, 255, 255, 0.4));
-    transform: scale(1.05);
-}
-
-/* Social media icons */
-.social-links {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: flex-start;
-    margin-top: 2rem;
-}
-
-.social-icon {
-    height: 1.8rem;
-    width: auto;
-    filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%);
-    transition: all 0.3s ease;
-}
-
-.social-icon:hover {
-    filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%) drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 40px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.4));
-    transform: translateY(-2px) scale(1.1);
 }
