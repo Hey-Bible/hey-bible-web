@@ -1,7 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Home | Hey Bible</title>
+    <meta charset="utf-8" />
+    <title>Hey Bible - Search, Save & Share Bible Verses</title>
+    <meta name="description" content="Hey Bible is a free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture. Available on iOS and Android." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://heybible.org" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,12 +18,44 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./img/favicons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="./img/favicons/favicon-16x16.png" />
     <link rel="manifest" href="./img/favicons/site.webmanifest" />
-    <meta property="og:title" content="Hey Bible">
-    <meta property="og:image" content="./img/og-image.png">
-    <meta property="og:image:width" content="1280">
-    <meta property="og:image:height" content="720">
-    <meta property="og:url" content="https://heybible.app">
-    <meta property="og:site_name" content="Hey Bible">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hey Bible - Search, Save & Share Bible Verses" />
+    <meta property="og:description" content="A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture." />
+    <meta property="og:image" content="https://heybible.org/img/og-image.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="720" />
+    <meta property="og:url" content="https://heybible.org" />
+    <meta property="og:site_name" content="Hey Bible" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@heybibleapp" />
+    <meta name="twitter:title" content="Hey Bible - Search, Save & Share Bible Verses" />
+    <meta name="twitter:description" content="A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture." />
+    <meta name="twitter:image" content="https://heybible.org/img/og-image.png" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Hey Bible",
+      "description": "A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture.",
+      "url": "https://heybible.org",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "iOS, Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Working Dev's Hero LLC",
+        "url": "https://workingdevshero.com"
+      },
+      "installUrl": [
+        "https://apps.apple.com/us/app/hey-bible/id6474075530",
+        "https://play.google.com/store/apps/details?id=com.workingdevshero.heybible"
+      ]
+    }
+    </script>
   </head>
   <body>
     <header class="main-header">
@@ -35,18 +71,22 @@
     <div class="content">
       <h1>Download Hey Bible</h1>
       <a href="https://heybible.app">
-        <img src="./img/logo-small.png" />
+        <img src="./img/logo-small.png" alt="Hey Bible app logo" />
       </a>
+      <p>
+        Search the Bible, save your favorite verses, add personal notes, and
+        create beautiful, shareable images of scripture. Free on iOS and Android.
+      </p>
       <div class="app-store-container">
         <a
           href="https://apps.apple.com/us/app/hey-bible/id6474075530"
           target="_blank"
-          ><img class="app-store-icon" src="./img/app-store.svg"
+          ><img class="app-store-icon" src="./img/app-store.svg" alt="Download on the App Store"
         /></a>
         <a
           href="https://play.google.com/store/apps/details?id=com.workingdevshero.heybible"
           target="_blank"
-          ><img class="app-store-icon" src="./img/play-store.svg"
+          ><img class="app-store-icon" src="./img/play-store.svg" alt="Get it on Google Play"
         /></a>
       </div>
     </div>
@@ -61,7 +101,7 @@
           <a href="./terms">Terms</a>
         </div>
         <a href="https://workingdevshero.com" target="_blank"
-          >© Working Dev's Hero LLC</a
+          >&copy; Working Dev's Hero LLC</a
         >
       </nav>
     </footer>

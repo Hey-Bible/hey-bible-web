@@ -99,6 +99,12 @@ a:hover {
     flex: 1;
 }
 
+.content > p {
+    max-width: 640px;
+    padding: 0 1rem;
+    text-align: center;
+}
+
 .about-content {
     width: 400px;
     max-width: 100%;
