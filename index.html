@@ -98,8 +98,20 @@
           <span class="dot"></span>
         </div>
       </div>
+
+      <!-- Lightbox -->
+      <div id="lightbox" class="lightbox">
+        <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">&larr;</button>
+        <div class="lightbox-content">
+          <img id="lightbox-img" src="" alt="" />
+        </div>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">&rarr;</button>
+      </div>
+
       <script>
         (function() {
+          // Carousel
           const slides = document.querySelectorAll('.carousel-slide');
           const dots = document.querySelectorAll('.dot');
           const prevBtn = document.querySelector('.carousel-arrow-left');
@@ -136,6 +148,89 @@
           dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAutoplay(); showSlide(i); startAutoplay(); }));
 
           startAutoplay();
+
+          // Lightbox
+          const lightbox = document.getElementById('lightbox');
+          const lightboxImg = document.getElementById('lightbox-img');
+          const lightboxClose = document.querySelector('.lightbox-close');
+          const lightboxPrev = document.querySelector('.lightbox-prev');
+          const lightboxNext = document.querySelector('.lightbox-next');
+          const imageSources = Array.from(slides).map(slide => slide.src);
+          const imageAlts = Array.from(slides).map(slide => slide.alt);
+          let lightboxCurrent = 0;
+
+          function openLightbox(index) {
+            lightboxCurrent = index;
+            lightboxImg.src = imageSources[lightboxCurrent];
+            lightboxImg.alt = imageAlts[lightboxCurrent];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+          }
+
+          function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+          }
+
+          function showLightboxSlide(index) {
+            if (index < 0) index = imageSources.length - 1;
+            if (index >= imageSources.length) index = 0;
+            lightboxCurrent = index;
+            lightboxImg.src = imageSources[lightboxCurrent];
+            lightboxImg.alt = imageAlts[lightboxCurrent];
+          }
+
+          // Open lightbox on slide click
+          slides.forEach((slide, i) => {
+            slide.style.cursor = 'pointer';
+            slide.addEventListener('click', () => openLightbox(i));
+          });
+
+          // Lightbox navigation
+          lightboxClose.addEventListener('click', closeLightbox);
+          lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showLightboxSlide(lightboxCurrent - 1); });
+          lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showLightboxSlide(lightboxCurrent + 1); });
+
+          // Close on backdrop click
+          lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+          });
+
+          // Close on Escape key
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+              closeLightbox();
+            }
+            if (lightbox.classList.contains('active')) {
+              if (e.key === 'ArrowLeft') showLightboxSlide(lightboxCurrent - 1);
+              if (e.key === 'ArrowRight') showLightboxSlide(lightboxCurrent + 1);
+            }
+          });
+
+          // Touch/swipe support for mobile
+          let touchStartX = 0;
+          let touchEndX = 0;
+
+          lightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+          }, { passive: true });
+
+          lightbox.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+          }, { passive: true });
+
+          function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > swipeThreshold) {
+              if (diff > 0) {
+                showLightboxSlide(lightboxCurrent + 1);
+              } else {
+                showLightboxSlide(lightboxCurrent - 1);
+              }
+            }
+          }
         })();
       </script>
       <p class="hero-subtitle">
