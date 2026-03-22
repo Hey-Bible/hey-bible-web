@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Hey Bible - Search, Save & Share Bible Verses</title>
-    <meta name="description" content="Hey Bible is a free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture. Available on iOS and Android." />
+    <title>Hey Bible - Turn Scripture Into Shareable Art</title>
+    <meta name="description" content="Create beautiful, shareable images of Bible verses. Search scripture, save favorites, add notes. Free on iOS and Android." />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="canonical" href="https://heybible.org" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,8 +19,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./img/favicons/favicon-16x16.png" />
     <link rel="manifest" href="./img/favicons/site.webmanifest" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Hey Bible - Search, Save & Share Bible Verses" />
-    <meta property="og:description" content="A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture." />
+    <meta property="og:title" content="Hey Bible - Turn Scripture Into Shareable Art" />
+    <meta property="og:description" content="Create beautiful, shareable images of Bible verses. Search scripture, save favorites, add notes." />
     <meta property="og:image" content="https://heybible.org/img/og-image.png" />
     <meta property="og:image:width" content="1280" />
     <meta property="og:image:height" content="720" />
@@ -28,15 +28,15 @@
     <meta property="og:site_name" content="Hey Bible" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@heybibleapp" />
-    <meta name="twitter:title" content="Hey Bible - Search, Save & Share Bible Verses" />
-    <meta name="twitter:description" content="A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture." />
+    <meta name="twitter:title" content="Hey Bible - Turn Scripture Into Shareable Art" />
+    <meta name="twitter:description" content="Create beautiful, shareable images of Bible verses. Search scripture, save favorites, add notes." />
     <meta name="twitter:image" content="https://heybible.org/img/og-image.png" />
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "Hey Bible",
-      "description": "A free app for searching Bible verses, saving your favorites, adding notes, and creating beautiful shareable images of scripture.",
+      "description": "Create beautiful, shareable images of Bible verses. Search scripture, save favorites, add notes.",
       "url": "https://heybible.org",
       "applicationCategory": "LifestyleApplication",
       "operatingSystem": "iOS, Android",
@@ -58,11 +58,19 @@
     </script>
   </head>
   <body>
-    <!-- Preview deploy test - upstream branch -->
+    <!-- Charity Banner -->
+    <div class="charity-banner">
+      <span class="charity-icon">⛪</span>
+      <span>All proceeds support local churches and food banks</span>
+    </div>
+
     <header class="main-header">
       <nav class="header-nav">
         <div class="header-left">
-          <a href="./">Hey Bible</a>
+          <a href="./" class="header-logo-link">
+            <img src="./img/logo-small.png" alt="" class="header-logo" />
+            <span>Hey Bible</span>
+          </a>
         </div>
         <div class="header-right">
           <a href="https://heybible.app" class="login-button">Login</a>
@@ -70,24 +78,82 @@
       </nav>
     </header>
     <div class="content">
-      <h1>Download Hey Bible</h1>
-      <a href="https://heybible.app">
-        <img src="./img/logo-small.png" alt="Hey Bible app logo" />
-      </a>
-      <p>
+      <h1>Turn Scripture Into Shareable Art</h1>
+      <!-- Carousel -->
+      <div class="carousel">
+        <button class="carousel-arrow carousel-arrow-left" aria-label="Previous slide">&larr;</button>
+        <div class="carousel-container">
+          <img src="./img/carousel-1.jpg" alt="Verse art example 1" class="carousel-slide active" />
+          <img src="./img/carousel-2.jpg" alt="Verse art example 2" class="carousel-slide" />
+          <img src="./img/carousel-3.jpg" alt="Verse art example 3" class="carousel-slide" />
+          <img src="./img/carousel-4.jpg" alt="Verse art example 4" class="carousel-slide" />
+          <img src="./img/carousel-5.jpg" alt="Verse art example 5" class="carousel-slide" />
+          <img src="./img/carousel-6.jpg" alt="Verse art example 6" class="carousel-slide" />
+        </div>
+        <button class="carousel-arrow carousel-arrow-right" aria-label="Next slide">&rarr;</button>
+        <div class="carousel-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+      <script>
+        (function() {
+          const slides = document.querySelectorAll('.carousel-slide');
+          const dots = document.querySelectorAll('.dot');
+          const prevBtn = document.querySelector('.carousel-arrow-left');
+          const nextBtn = document.querySelector('.carousel-arrow-right');
+          let current = 0;
+          let interval;
+
+          function showSlide(index) {
+            slides.forEach((slide, i) => {
+              slide.classList.toggle('active', i === index);
+              dots[i].classList.toggle('active', i === index);
+            });
+            current = index;
+          }
+
+          function nextSlide() {
+            showSlide((current + 1) % slides.length);
+          }
+
+          function prevSlide() {
+            showSlide((current - 1 + slides.length) % slides.length);
+          }
+
+          function startAutoplay() {
+            interval = setInterval(nextSlide, 5000);
+          }
+
+          function stopAutoplay() {
+            clearInterval(interval);
+          }
+
+          nextBtn.addEventListener('click', () => { stopAutoplay(); nextSlide(); startAutoplay(); });
+          prevBtn.addEventListener('click', () => { stopAutoplay(); prevSlide(); startAutoplay(); });
+          dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAutoplay(); showSlide(i); startAutoplay(); }));
+
+          startAutoplay();
+        })();
+      </script>
+      <p class="hero-subtitle">
         Search the Bible, save your favorite verses, add personal notes, and
-        create beautiful, shareable images of scripture. Free on iOS and Android.
+        create beautiful, shareable images of scripture.
       </p>
       <div class="app-store-container">
         <a
           href="https://apps.apple.com/us/app/hey-bible/id6474075530"
           target="_blank"
-          ><img class="app-store-icon" src="./img/app-store.svg" alt="Download on the App Store"
+          ><img class="app-store-icon app-store-icon-large" src="./img/app-store.svg" alt="Download on the App Store"
         /></a>
         <a
           href="https://play.google.com/store/apps/details?id=com.workingdevshero.heybible"
           target="_blank"
-          ><img class="app-store-icon" src="./img/play-store.svg" alt="Get it on Google Play"
+          ><img class="app-store-icon app-store-icon-large" src="./img/play-store.svg" alt="Get it on Google Play"
         /></a>
       </div>
     </div>
@@ -102,7 +168,7 @@
           <a href="./terms">Terms</a>
         </div>
         <a href="https://workingdevshero.com" target="_blank"
-          >&copy; Working Dev's Hero LLC</a
+          >Built with ❤️ by Working Dev's Hero</a
         >
       </nav>
     </footer>
