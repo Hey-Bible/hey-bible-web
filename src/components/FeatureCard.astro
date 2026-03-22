@@ -1,0 +1,29 @@
+---
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+  screenshot?: string;
+}
+
+const { icon, title, description, screenshot } = Astro.props;
+---
+
+<div
+  class="feature-card rounded-2xl p-3 md:p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg min-w-[220px] max-w-[250px] md:min-w-[330px] md:max-w-[375px] flex-shrink-0 cursor-pointer"
+  style={`background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);`}
+  data-title={`${icon} ${title}`}
+  data-description={description}
+  data-screenshot={screenshot || ''}
+>
+  <h3 class="text-base font-extrabold mb-1" style={`color: var(--color-retro-text);`}>{icon} {title}</h3>
+  <p class="text-sm leading-relaxed opacity-80" style={`color: var(--color-retro-text);`}>{description}</p>
+  {screenshot && (
+    <img
+      src={screenshot}
+      alt={`${title} screenshot`}
+      class="mt-2 rounded-xl max-h-[300px] md:max-h-[450px] mx-auto logo-glow"
+      style="box-shadow: 0 4px 20px rgba(0,0,0,0.1);"
+    />
+  )}
+</div>

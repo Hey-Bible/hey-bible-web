@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Lightbox from '../components/Lightbox.astro';
+import AppStoreButtons from '../components/AppStoreButtons.astro';
+
+const carouselImages = [
+  { src: '/img/carousel-3.webp', alt: 'John 13:34' },
+  { src: '/img/carousel-8.webp', alt: 'Genesis 8' },
+  { src: '/img/carousel-2.webp', alt: 'Luke 9:23' },
+  { src: '/img/carousel-1.webp', alt: '1 Corinthians 3:8-9' },
+  { src: '/img/carousel-7.webp', alt: 'Psalm 23' },
+  { src: '/img/carousel-4.webp', alt: 'Acts 4:11' },
+];
+---
+
+<BaseLayout title="Hey Bible - Your Complete Bible Companion">
+  <div class="flex flex-col items-center justify-center pt-4 pb-4 flex-1">
+    <h1 class="text-3xl md:text-4xl px-4">Your Complete Bible Companion</h1>
+
+    <div class="w-full overflow-x-scroll" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      <div class="flex flex-row gap-4 px-4 py-4 items-stretch w-max">
+        {carouselImages.map((img) => (
+          <img
+            src={img.src}
+            alt={img.alt}
+            class="carousel-slide rounded-2xl cursor-pointer logo-glow flex-shrink-0 h-[450px] md:h-[625px]"
+            style="aspect-ratio: 4/7; object-fit: cover; box-shadow: 0 4px 20px rgba(0,0,0,0.1);"
+          />
+        ))}
+      </div>
+    </div>
+
+    <Lightbox />
+    <p class="text-lg text-center max-w-[600px] mb-4 opacity-80 px-4">
+      Search the Bible, save your favorite verses, add personal notes, and
+      create beautiful, shareable images of scripture.
+    </p>
+    <h2 class="text-2xl font-extrabold mb-2">Ready to get started?</h2>
+    <AppStoreButtons size="large" />
+  </div>
+</BaseLayout>

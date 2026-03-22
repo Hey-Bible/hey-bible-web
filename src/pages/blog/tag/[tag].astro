@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  const tags = [...new Set(allPosts.flatMap(post => post.data.tags))];
+  return tags.map(tag => ({
+    params: { tag: tag.toLowerCase() },
+    props: { tag, posts: allPosts
+      .filter(post => !post.data.draft && post.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`${tag} Posts | Hey Bible Blog`}
+  description={`Blog posts tagged with ${tag}.`}
+>
+  <div class="max-w-5xl mx-auto px-4 pt-4 pb-12">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-2">
+      {tag}
+      <span class="text-lg font-normal opacity-60 ml-2">({posts.length} {posts.length === 1 ? 'post' : 'posts'})</span>
+    </h1>
+    <p class="text-center mb-8">
+      <a href="/blog" class="glow-hover font-bold">&larr; All posts</a>
+    </p>
+
+    <div class="grid grid-cols-1 gap-6 max-w-2xl mx-auto w-full">
+      {posts.map((post: any) => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          heroImage={post.data.heroImage}
+          tags={post.data.tags}
+          slug={post.id}
+        />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

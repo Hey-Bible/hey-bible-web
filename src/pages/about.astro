@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About | Hey Bible"
+  description="Hey Bible is a free Bible verse search app built by Working Dev's Hero LLC. Save favorites, add notes, and create shareable scripture images."
+>
+  <div class="flex flex-col items-center pt-4 pb-12 px-4">
+    <h1>About</h1>
+    <div
+      class="w-[120px] h-[120px] rounded-full flex items-center justify-center mb-6 logo-glow"
+      style={`background: var(--color-retro-surface-card); box-shadow: 0 4px 20px rgba(var(--color-retro-glow-rgb), 0.15); border: 3px solid var(--color-retro-secondary);`}
+    >
+      <img class="w-[70px]" src="/img/logo-small.png" alt="Hey Bible app logo" />
+    </div>
+    <div class="max-w-[600px] text-justify prose-content space-y-6">
+      <p>
+        <a href="https://heybible.app">Hey Bible</a> is a free and easy to use
+        app for searching Bible verses built by Working Dev's Hero LLC.
+      </p>
+      <p>
+        With Hey Bible you can save your favorite verses, add notes, and
+        create beautiful, unique images of your favorite Bible verses and
+        share them with your friends.
+      </p>
+      <p>
+        <a href="https://workingdevshero.com" target="_blank" rel="noopener noreferrer"
+          >Working Dev's Hero LLC</a
+        >
+        is a contracting and consulting company specializing in AI
+        and AI assisted software development.
+      </p>
+    </div>
+
+    <div class="flex gap-6 mt-8">
+      <a href="https://www.facebook.com/heybibleapp/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+        <img src="/img/facebook-brands-solid.svg" alt="Facebook" class="social-icon" />
+      </a>
+      <a href="https://instagram.com/heybibleapp" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="/img/instagram-brands-solid.svg" alt="Instagram" class="social-icon" />
+      </a>
+      <a href="https://x.com/heybibleapp" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <img src="/img/x-brands-solid.svg" alt="X (Twitter)" class="social-icon" />
+      </a>
+      <a href="https://github.com/hey-bible" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <img src="/img/github-brands-solid.svg" alt="GitHub" class="social-icon" />
+      </a>
+    </div>
+  </div>
+</BaseLayout>

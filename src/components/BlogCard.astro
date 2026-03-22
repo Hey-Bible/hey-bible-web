@@ -1,0 +1,52 @@
+---
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  heroImage?: string;
+  tags?: string[];
+  slug: string;
+}
+
+const { title, description, pubDate, heroImage, tags, slug } = Astro.props;
+---
+
+<a href={`/blog/${slug}`} class="block no-underline group">
+  <article
+    class="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+    style={`background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);`}
+  >
+    {heroImage && (
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full h-48 object-cover"
+      />
+    )}
+    <div class="p-5">
+      {tags && tags.length > 0 && (
+        <div class="flex gap-2 mb-2">
+          {tags.map(tag => (
+            <span
+              class="text-xs font-bold px-2 py-0.5 rounded-full"
+              style={`background: var(--color-retro-primary); color: #ffffff;`}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+      <h3 class="text-lg font-extrabold mb-1 group-hover:opacity-80 transition-opacity" style={`color: var(--color-retro-text);`}>
+        {title}
+      </h3>
+      <p class="text-xs opacity-60 mb-2" style={`color: var(--color-retro-text);`}>
+        <FormattedDate date={pubDate} />
+      </p>
+      <p class="text-sm opacity-75 leading-relaxed" style={`color: var(--color-retro-text);`}>
+        {description}
+      </p>
+    </div>
+  </article>
+</a>

@@ -1,0 +1,43 @@
+---
+const links = [
+  { href: '/about', label: 'About', mobileOnly: false },
+  { href: '/features', label: 'Features', mobileOnly: false, hideOnMobile: true },
+  { href: '/blog', label: 'Blog', mobileOnly: false, hideOnMobile: true },
+  { href: '/privacy', label: 'Privacy', mobileOnly: false },
+  { href: 'https://app.youform.com/forms/o1pfzrgp', label: 'Support', external: true, mobileOnly: false },
+  { href: '/terms', label: 'Terms', mobileOnly: false },
+];
+---
+
+<footer
+  class="border-t py-6"
+  style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
+>
+  <nav class="flex flex-col items-center gap-4 px-4">
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-2">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-semibold no-underline glow-hover',
+            { 'hidden sm:inline': link.hideOnMobile }
+          ]}
+          style={`color: var(--color-retro-text);`}
+          target={link.external ? '_blank' : undefined}
+          rel={link.external ? 'noopener noreferrer' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="https://workingdevshero.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-semibold no-underline glow-hover whitespace-nowrap"
+        style={`color: var(--color-retro-text);`}
+      >
+        Built with &#10084;&#65039; by Working Dev's Hero
+      </a>
+    </div>
+  </nav>
+</footer>

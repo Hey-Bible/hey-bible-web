@@ -1,0 +1,111 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const pathname = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/features', label: 'Features' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b backdrop-blur-md"
+  style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
+>
+  <nav class="relative flex justify-between items-center w-full px-4 py-3">
+    <div class="flex items-center gap-2">
+      <a href="/" class="flex items-center gap-2 no-underline glow-hover">
+        <img src="/img/logo-small.png" alt="" class="w-8 h-8" />
+        <span class="text-lg font-extrabold" style={`color: var(--color-retro-text);`}>Hey Bible</span>
+      </a>
+    </div>
+    <span
+      class="hidden md:inline-flex items-center gap-2.5 text-sm font-semibold px-4 py-1.5 rounded-full absolute left-1/2 -translate-x-1/2"
+      style={`color: var(--color-retro-text); background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); opacity: 0.85;`}
+    >
+      <span class="leading-none" style="font-size: 0.75rem; margin-top: -4px;">&#9962;</span>
+      <span class="leading-none">All proceeds support local churches and food banks</span>
+    </span>
+    <div class="flex gap-4 items-center">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-bold no-underline glow-hover hidden sm:inline',
+            { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
+          ]}
+          style={`color: var(--color-retro-text);`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <ThemeToggle />
+      <a href="https://heybible.app" class="login-button text-sm hidden sm:inline">Login</a>
+      <!-- Hamburger button (mobile only) -->
+      <button
+        id="hamburger-btn"
+        class="sm:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] cursor-pointer"
+        aria-label="Open menu"
+      >
+        <span class="hamburger-line block w-5 rounded-full transition-all duration-300" style={`background: var(--color-retro-text); height: 2px;`}></span>
+        <span class="hamburger-line block w-5 rounded-full transition-all duration-300" style={`background: var(--color-retro-text); height: 2px;`}></span>
+        <span class="hamburger-line block w-5 rounded-full transition-all duration-300" style={`background: var(--color-retro-text); height: 2px;`}></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="sm:hidden hidden flex-col items-center py-4 gap-3 border-t"
+    style={`border-color: var(--color-retro-secondary);`}
+  >
+    {navLinks.map(link => (
+      <a
+        href={link.href}
+        class:list={[
+          'text-base font-bold no-underline glow-hover',
+          { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
+        ]}
+        style={`color: var(--color-retro-text);`}
+      >
+        {link.label}
+      </a>
+    ))}
+    <a href="https://heybible.app" class="login-button text-sm">Login</a>
+    <span
+      class="inline-flex items-center gap-2.5 text-xs font-semibold px-3 py-1 rounded-full"
+      style={`color: var(--color-retro-text); background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); opacity: 0.85;`}
+    >
+      <span class="leading-none" style="font-size: 0.65rem; margin-top: -4px;">&#9962;</span>
+      <span class="leading-none">All proceeds support local churches and food banks</span>
+    </span>
+  </div>
+</header>
+
+<script>
+  function initHamburger() {
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', () => {
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', isOpen);
+      menu.classList.toggle('flex', !isOpen);
+      btn.setAttribute('aria-label', isOpen ? 'Open menu' : 'Close menu');
+      // Animate hamburger lines to X
+      const lines = btn.querySelectorAll('.hamburger-line');
+      lines[0]?.classList.toggle('rotate-45', !isOpen);
+      lines[0]?.classList.toggle('translate-y-[4px]', !isOpen);
+      lines[1]?.classList.toggle('opacity-0', !isOpen);
+      lines[2]?.classList.toggle('-rotate-45', !isOpen);
+      lines[2]?.classList.toggle('-translate-y-[4px]', !isOpen);
+    });
+  }
+
+  initHamburger();
+  document.addEventListener('astro:after-swap', initHamburger);
+</script>

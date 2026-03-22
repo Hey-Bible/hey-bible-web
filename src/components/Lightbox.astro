@@ -1,0 +1,93 @@
+---
+---
+
+<div id="lightbox" class="lightbox">
+  <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+  <button class="lightbox-nav lightbox-prev" aria-label="Previous image">&larr;</button>
+  <div class="lightbox-content">
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+  <button class="lightbox-nav lightbox-next" aria-label="Next image">&rarr;</button>
+</div>
+
+<script>
+  function initLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const lightboxPrev = document.querySelector('.lightbox-prev');
+    const lightboxNext = document.querySelector('.lightbox-next');
+    const slides = document.querySelectorAll('.carousel-slide');
+
+    if (!lightbox || !lightboxImg || !slides.length) return;
+
+    const imageSources = Array.from(slides).map(s => (s as HTMLImageElement).src);
+    const imageAlts = Array.from(slides).map(s => (s as HTMLImageElement).alt);
+    let lightboxCurrent = 0;
+
+    function openLightbox(index: number) {
+      lightboxCurrent = index;
+      lightboxImg.src = imageSources[lightboxCurrent];
+      lightboxImg.alt = imageAlts[lightboxCurrent];
+      lightbox!.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox!.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function showLightboxSlide(index: number) {
+      if (index < 0) index = imageSources.length - 1;
+      if (index >= imageSources.length) index = 0;
+      lightboxCurrent = index;
+      lightboxImg.src = imageSources[lightboxCurrent];
+      lightboxImg.alt = imageAlts[lightboxCurrent];
+    }
+
+    slides.forEach((slide, i) => {
+      slide.addEventListener('click', () => openLightbox(i));
+    });
+
+    lightboxClose!.addEventListener('click', closeLightbox);
+    lightboxPrev!.addEventListener('click', (e) => { e.stopPropagation(); showLightboxSlide(lightboxCurrent - 1); });
+    lightboxNext!.addEventListener('click', (e) => { e.stopPropagation(); showLightboxSlide(lightboxCurrent + 1); });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox!.classList.contains('active')) {
+        closeLightbox();
+      }
+      if (lightbox!.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') showLightboxSlide(lightboxCurrent - 1);
+        if (e.key === 'ArrowRight') showLightboxSlide(lightboxCurrent + 1);
+      }
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = (e as TouchEvent).changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      touchEndX = (e as TouchEvent).changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          showLightboxSlide(lightboxCurrent + 1);
+        } else {
+          showLightboxSlide(lightboxCurrent - 1);
+        }
+      }
+    }, { passive: true });
+  }
+
+  initLightbox();
+  document.addEventListener('astro:after-swap', initLightbox);
+</script>
