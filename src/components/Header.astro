@@ -62,20 +62,12 @@ const navLinks = [
     class="sm:hidden hidden flex-col items-center py-4 gap-3 border-t"
     style={`border-color: var(--color-retro-secondary);`}
   >
-    <a
-      href="/"
-      class:list={[
-        'text-base font-bold no-underline glow-hover',
-        { 'opacity-75': pathname === '/' }
-      ]}
-      style={`color: var(--color-retro-text);`}
-    >Home</a>
     {navLinks.map(link => (
       <a
         href={link.href}
         class:list={[
           'text-base font-bold no-underline glow-hover',
-          { 'opacity-75': pathname.startsWith(link.href) }
+          { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
         ]}
         style={`color: var(--color-retro-text);`}
       >
