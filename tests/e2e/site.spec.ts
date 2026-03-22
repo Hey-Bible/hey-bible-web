@@ -89,7 +89,7 @@ test.describe("Footer mobile (Issue #12)", () => {
 test.describe("Features page (Issue #11)", () => {
   test("all 6 cards render", async ({ page }) => {
     await page.goto("/features");
-    const cards = page.locator("[class*='rounded-2xl'] h3");
+    const cards = page.locator(".feature-card");
     await expect(cards).toHaveCount(6);
   });
 

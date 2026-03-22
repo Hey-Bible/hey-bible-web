@@ -13,13 +13,20 @@ const navLinks = [
   class="sticky top-0 z-50 border-b backdrop-blur-md"
   style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
 >
-  <nav class="flex justify-between items-center w-full px-4 py-3">
+  <nav class="relative flex justify-between items-center w-full px-4 py-3">
     <div class="flex items-center gap-2">
       <a href="/" class="flex items-center gap-2 no-underline glow-hover">
         <img src="/img/logo-small.png" alt="" class="w-8 h-8" />
         <span class="text-lg font-extrabold" style={`color: var(--color-retro-text);`}>Hey Bible</span>
       </a>
     </div>
+    <span
+      class="hidden md:inline-flex items-center gap-2.5 text-sm font-semibold px-4 py-1.5 rounded-full absolute left-1/2 -translate-x-1/2"
+      style={`color: var(--color-retro-text); background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); opacity: 0.85;`}
+    >
+      <span class="leading-none" style="font-size: 0.75rem; margin-top: -4px;">&#9962;</span>
+      <span class="leading-none">All proceeds support local churches and food banks</span>
+    </span>
     <div class="flex gap-4 items-center">
       {navLinks.map(link => (
         <a
