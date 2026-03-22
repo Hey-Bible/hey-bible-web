@@ -22,7 +22,7 @@ const { tag, posts } = Astro.props;
   title={`${tag} Posts | Hey Bible Blog`}
   description={`Blog posts tagged with ${tag}.`}
 >
-  <div class="max-w-5xl mx-auto px-4 py-12">
+  <div class="max-w-5xl mx-auto px-4 pt-4 pb-12">
     <h1 class="text-3xl md:text-4xl font-extrabold mb-2">
       {tag}
       <span class="text-lg font-normal opacity-60 ml-2">({posts.length} {posts.length === 1 ? 'post' : 'posts'})</span>
@@ -31,7 +31,7 @@ const { tag, posts } = Astro.props;
       <a href="/blog" class="glow-hover font-bold">&larr; All posts</a>
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 gap-6 max-w-2xl mx-auto w-full">
       {posts.map((post: any) => (
         <BlogCard
           title={post.data.title}
