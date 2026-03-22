@@ -401,10 +401,12 @@ h2 { font-size: 1.6rem; }
     opacity: 0;
     transition: opacity 0.5s ease;
     border-radius: 0;
+    pointer-events: none;
 }
 
 .carousel-slide.active {
     opacity: 1;
+    pointer-events: auto;
 }
 
 .carousel-arrow {
