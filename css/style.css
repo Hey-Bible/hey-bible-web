@@ -288,7 +288,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--retro-text);
 }
 
-h1 { font-size: 2rem; margin: 0.75rem 0; }
+h1 { font-size: 2rem; margin: 0.75rem 0; text-align: center; }
 h2 { font-size: 1.6rem; }
 
 /* ═══════════════════════════════════════════
