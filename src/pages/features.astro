@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import AppStoreButtons from '../components/AppStoreButtons.astro';
+
+const features = [
+  {
+    icon: '🔍',
+    title: 'Search & Favorites',
+    description: 'Search any verse and save your favorites for quick access.',
+    screenshot: '/img/screenshots/2-search.png',
+  },
+  {
+    icon: '📝',
+    title: 'Personal Notes',
+    description: 'Add your own notes to any verse for deeper study.',
+    screenshot: '/img/screenshots/4-verse.png',
+  },
+  {
+    icon: '💬',
+    title: 'AI Chat',
+    description: 'Ask questions about scripture and get thoughtful answers.',
+  },
+  {
+    icon: '📱',
+    title: 'iOS Widget',
+    description: 'Get a daily verse right on your home screen.',
+  },
+  {
+    icon: '🎨',
+    title: 'Verse Art',
+    description: 'Create beautiful, shareable images of your favorite verses.',
+    screenshot: '/img/screenshots/5-images.png',
+  },
+  {
+    icon: '🔗',
+    title: 'Sharing',
+    description: 'Share verses and art with friends and family.',
+    screenshot: '/img/screenshots/6-image.png',
+  },
+];
+---
+
+<BaseLayout
+  title="Features | Hey Bible"
+  description="Explore all the features of Hey Bible — search, favorites, notes, AI chat, widgets, verse art, and sharing."
+>
+  <div class="flex flex-col items-center py-12 px-4">
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Everything You Need to Study Scripture</h1>
+    <p class="text-lg text-center max-w-[600px] mb-10 opacity-80">
+      Hey Bible packs powerful tools into a simple, beautiful app.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl w-full mb-12">
+      {features.map(f => (
+        <FeatureCard
+          icon={f.icon}
+          title={f.title}
+          description={f.description}
+          screenshot={f.screenshot}
+        />
+      ))}
+    </div>
+
+    <div class="text-center">
+      <h2 class="text-2xl font-extrabold mb-4">Ready to get started?</h2>
+      <AppStoreButtons size="large" />
+    </div>
+  </div>
+</BaseLayout>

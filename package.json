@@ -1,10 +1,14 @@
 {
   "name": "hey-bible-web",
-  "version": "1.0.0",
-  "description": "placeholder site for heybible.app",
-  "main": "index.html",
+  "type": "module",
+  "version": "2.0.0",
+  "description": "Hey Bible — Your Complete Bible Companion",
   "scripts": {
-    "start": "http-server ."
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -20,7 +24,15 @@
     "url": "https://github.com/bobbyg603/hey-bible-web/issues"
   },
   "homepage": "https://github.com/bobbyg603/hey-bible-web#readme",
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.7.1",
+    "astro": "^5.7.10"
+  },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "@playwright/test": "^1.52.0",
+    "@tailwindcss/vite": "^4.1.4",
+    "tailwindcss": "^4.1.4",
+    "vitest": "^3.1.1"
   }
 }

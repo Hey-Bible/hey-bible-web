@@ -1,0 +1,40 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const pathname = Astro.url.pathname;
+
+const navLinks = [
+  { href: '/features', label: 'Features' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b backdrop-blur-md"
+  style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
+>
+  <nav class="flex justify-between items-center w-full px-4 py-3">
+    <div class="flex items-center gap-2">
+      <a href="/" class="flex items-center gap-2 no-underline glow-hover">
+        <img src="/img/logo-small.png" alt="" class="w-8 h-8" />
+        <span class="text-lg font-extrabold" style={`color: var(--color-retro-text);`}>Hey Bible</span>
+      </a>
+    </div>
+    <div class="flex gap-4 items-center">
+      {navLinks.map(link => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-bold no-underline glow-hover hidden sm:inline',
+            { 'opacity-75': pathname.startsWith(link.href) }
+          ]}
+          style={`color: var(--color-retro-text);`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <ThemeToggle />
+      <a href="https://heybible.app" class="login-button text-sm">Login</a>
+    </div>
+  </nav>
+</header>

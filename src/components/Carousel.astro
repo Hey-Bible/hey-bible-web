@@ -1,0 +1,73 @@
+---
+interface Props {
+  images: { src: string; alt: string }[];
+}
+
+const { images } = Astro.props;
+---
+
+<div class="carousel relative w-[70%] max-w-[280px] mx-auto my-2">
+  <button class="carousel-arrow carousel-arrow-left" aria-label="Previous slide">&larr;</button>
+  <div class="carousel-container">
+    {images.map((img, i) => (
+      <img
+        src={img.src}
+        alt={img.alt}
+        class:list={['carousel-slide', { active: i === 0 }]}
+        style="cursor: pointer;"
+      />
+    ))}
+  </div>
+  <button class="carousel-arrow carousel-arrow-right" aria-label="Next slide">&rarr;</button>
+  <div class="carousel-dots">
+    {images.map((_, i) => (
+      <span class:list={['dot', { active: i === 0 }]} />
+    ))}
+  </div>
+</div>
+
+<script>
+  function initCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.carousel-arrow-left');
+    const nextBtn = document.querySelector('.carousel-arrow-right');
+    if (!slides.length || !prevBtn || !nextBtn) return;
+
+    let current = 0;
+    let interval: ReturnType<typeof setInterval>;
+
+    function showSlide(index: number) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+        dots[i]?.classList.toggle('active', i === index);
+      });
+      current = index;
+    }
+
+    function nextSlide() {
+      showSlide((current + 1) % slides.length);
+    }
+
+    function prevSlide() {
+      showSlide((current - 1 + slides.length) % slides.length);
+    }
+
+    function startAutoplay() {
+      interval = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoplay() {
+      clearInterval(interval);
+    }
+
+    nextBtn.addEventListener('click', () => { stopAutoplay(); nextSlide(); startAutoplay(); });
+    prevBtn.addEventListener('click', () => { stopAutoplay(); prevSlide(); startAutoplay(); });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAutoplay(); showSlide(i); startAutoplay(); }));
+
+    startAutoplay();
+  }
+
+  initCarousel();
+  document.addEventListener('astro:after-swap', initCarousel);
+</script>

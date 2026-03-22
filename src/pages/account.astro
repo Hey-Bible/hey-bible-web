@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Account | Hey Bible"
+  description="Manage or delete your Hey Bible account and associated data."
+  noindex={true}
+>
+  <div class="flex flex-col items-center justify-center pb-4 flex-1">
+    <div class="w-[400px] max-w-full px-4 prose-content">
+      <img class="logo-glow w-[100px] max-w-full" src="/img/logo-small.png" alt="Hey Bible app logo" />
+      <h2>Account</h2>
+      <p>
+        In accordance with the App Store and Google Play Store policies,
+        Working Dev's Hero LLC provides a way to delete your Hey Bible account
+        and all associated data.
+      </p>
+      <p>To delete your account, please follow the steps below.</p>
+      <ol>
+        <li>Log into <a href="https://heybible.app">Hey Bible</a></li>
+        <li>
+          Navigate to the
+          <a href="https://heybible.app/account">Account</a> page
+        </li>
+        <li>Tap the "Remove Account" button</li>
+        <li>Confirm the deletion by clicking "Remove"</li>
+      </ol>
+      <p>
+        When you remove your account, your name, email, verses, favorites, and
+        images will be deleted immediately.
+      </p>
+      <p>Thank you for using Hey Bible!</p>
+    </div>
+  </div>
+</BaseLayout>

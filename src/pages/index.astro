@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Carousel from '../components/Carousel.astro';
+import Lightbox from '../components/Lightbox.astro';
+import AppStoreButtons from '../components/AppStoreButtons.astro';
+
+const carouselImages = [
+  { src: '/img/carousel-3.jpg', alt: 'John 13:34' },
+  { src: '/img/carousel-2.jpg', alt: 'Luke 9:23' },
+  { src: '/img/carousel-5.jpg', alt: '1 John 3:16' },
+  { src: '/img/carousel-1.jpg', alt: '1 Corinthians 3:8-9' },
+  { src: '/img/carousel-4.jpg', alt: 'Acts 4:11' },
+];
+---
+
+<BaseLayout title="Hey Bible - Your Complete Bible Companion">
+  <div class="flex flex-col items-center justify-center pb-4 flex-1">
+    <h1>Your Complete Bible Companion — Search, Study, Share & Create</h1>
+    <Carousel images={carouselImages} />
+    <Lightbox />
+    <p class="text-lg max-w-[600px] mx-auto mt-2 mb-2 px-4 text-center">
+      Search the Bible, save your favorite verses, add personal notes, and
+      create beautiful, shareable images of scripture.
+    </p>
+    <AppStoreButtons size="large" />
+  </div>
+</BaseLayout>

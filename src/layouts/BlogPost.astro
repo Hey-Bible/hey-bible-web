@@ -1,0 +1,57 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  author: string;
+  heroImage?: string;
+  tags: string[];
+}
+
+const { title, description, pubDate, updatedDate, author, heroImage, tags } = Astro.props;
+---
+
+<BaseLayout title={`${title} | Hey Bible Blog`} description={description} image={heroImage}>
+  <article class="max-w-3xl mx-auto px-4 py-12">
+    {heroImage && (
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full rounded-2xl mb-8"
+        style="box-shadow: 0 4px 20px rgba(0,0,0,0.1);"
+      />
+    )}
+    <div class="mb-8">
+      {tags.length > 0 && (
+        <div class="flex gap-2 mb-3">
+          {tags.map(tag => (
+            <a
+              href={`/blog/tag/${tag.toLowerCase()}`}
+              class="text-xs font-bold px-3 py-1 rounded-full no-underline"
+              style={`background: var(--color-retro-primary); color: #ffffff;`}
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+      <h1 class="text-3xl md:text-4xl font-extrabold text-left mb-2">{title}</h1>
+      <p class="text-sm opacity-60">
+        By {author} &middot; <FormattedDate date={pubDate} />
+        {updatedDate && (
+          <span> &middot; Updated <FormattedDate date={updatedDate} /></span>
+        )}
+      </p>
+    </div>
+    <div class="blog-prose">
+      <slot />
+    </div>
+    <div class="mt-12 pt-6" style={`border-top: 1px solid var(--color-retro-secondary);`}>
+      <a href="/blog" class="glow-hover font-bold">&larr; Back to Blog</a>
+    </div>
+  </article>
+</BaseLayout>
