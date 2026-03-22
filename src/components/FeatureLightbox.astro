@@ -4,15 +4,15 @@
 <div id="feature-lightbox" class="lightbox">
   <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
   <button class="lightbox-nav lightbox-prev" aria-label="Previous feature">&larr;</button>
-  <div class="lightbox-content" style="max-width: 400px;">
+  <div class="lightbox-content" style="width: 320px; max-width: 90vw;">
     <div
       id="feature-lightbox-card"
-      class="rounded-2xl p-6 w-full"
-      style={`background: var(--color-retro-surface-card);`}
+      class="rounded-2xl p-6 w-full flex flex-col"
+      style={`background: var(--color-retro-surface-card); min-height: 200px;`}
     >
       <h3 id="feature-lightbox-title" class="text-xl font-extrabold mb-2" style={`color: var(--color-retro-text);`}></h3>
       <p id="feature-lightbox-desc" class="text-sm leading-relaxed opacity-80 mb-4" style={`color: var(--color-retro-text);`}></p>
-      <img id="feature-lightbox-img" src="" alt="" class="rounded-xl mx-auto" style="box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-height: 70vh;" />
+      <img id="feature-lightbox-img" src="" alt="" class="rounded-xl mx-auto flex-1 object-contain" style="box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-height: 60vh; width: 100%;" />
     </div>
   </div>
   <button class="lightbox-nav lightbox-next" aria-label="Next feature">&rarr;</button>

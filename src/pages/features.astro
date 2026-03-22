@@ -50,12 +50,9 @@ const features = [
 >
   <div class="flex flex-col items-center pt-4 pb-4">
     <h1 class="text-3xl md:text-4xl font-extrabold mb-2 px-4">Everything You Need to Study Scripture</h1>
-    <p class="text-lg text-center max-w-[600px] mb-4 opacity-80 px-4">
-      Hey Bible packs powerful tools into a simple, beautiful app.
-    </p>
 
-    <div class="w-full mb-6 md:overflow-x-scroll" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
-      <div class="flex flex-col md:flex-row gap-6 px-4 md:py-4 items-stretch md:w-max">
+    <div class="w-full mb-6 overflow-x-scroll" style="-webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      <div class="flex flex-row gap-6 px-4 py-4 items-stretch w-max">
         {features.map(f => (
           <FeatureCard
             icon={f.icon}
@@ -68,6 +65,10 @@ const features = [
     </div>
 
     <FeatureLightbox />
+
+    <p class="text-lg text-center max-w-[600px] mb-4 opacity-80 px-4">
+      Hey Bible packs powerful tools into a simple, beautiful app.
+    </p>
 
     <div class="text-center">
       <h2 class="text-2xl font-extrabold mb-4">Ready to get started?</h2>

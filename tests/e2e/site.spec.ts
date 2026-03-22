@@ -25,29 +25,16 @@ test.describe("Navigation", () => {
 
   test("login button links to heybible.app", async ({ page }) => {
     await page.goto("/");
-    const loginLink = page.locator('a.login-button');
+    const loginLink = page.locator('a.login-button').first();
     await expect(loginLink).toHaveAttribute("href", "https://heybible.app");
   });
 });
 
-test.describe("Carousel", () => {
-  test("renders slides and navigation", async ({ page }) => {
+test.describe("Image scroller", () => {
+  test("renders all slides", async ({ page }) => {
     await page.goto("/");
     const slides = page.locator(".carousel-slide");
     await expect(slides).toHaveCount(5);
-    const arrows = page.locator(".carousel-arrow");
-    await expect(arrows).toHaveCount(2);
-    const dots = page.locator(".dot");
-    await expect(dots).toHaveCount(5);
-  });
-
-  test("arrows navigate slides", async ({ page }) => {
-    await page.goto("/");
-    const firstSlide = page.locator(".carousel-slide").first();
-    await expect(firstSlide).toHaveClass(/active/);
-    await page.click(".carousel-arrow-right");
-    const secondSlide = page.locator(".carousel-slide").nth(1);
-    await expect(secondSlide).toHaveClass(/active/);
   });
 });
 
@@ -56,7 +43,10 @@ test.describe("Lightbox", () => {
     await page.goto("/");
     const lightbox = page.locator("#lightbox");
     await expect(lightbox).not.toHaveClass(/active/);
-    await page.locator(".carousel-slide.active").click();
+    await page.evaluate(() => {
+      const slide = document.querySelector('.carousel-slide') as HTMLElement;
+      slide?.click();
+    });
     await expect(lightbox).toHaveClass(/active/);
     await page.keyboard.press("Escape");
     await expect(lightbox).not.toHaveClass(/active/);

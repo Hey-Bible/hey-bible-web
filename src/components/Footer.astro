@@ -1,11 +1,11 @@
 ---
 const links = [
-  { href: '/about', label: 'About' },
-  { href: '/features', label: 'Features' },
-  { href: '/blog', label: 'Blog' },
-  { href: '/privacy', label: 'Privacy' },
-  { href: 'https://app.youform.com/forms/o1pfzrgp', label: 'Support', external: true },
-  { href: '/terms', label: 'Terms' },
+  { href: '/about', label: 'About', mobileOnly: false },
+  { href: '/features', label: 'Features', mobileOnly: false, hideOnMobile: true },
+  { href: '/blog', label: 'Blog', mobileOnly: false, hideOnMobile: true },
+  { href: '/privacy', label: 'Privacy', mobileOnly: false },
+  { href: 'https://app.youform.com/forms/o1pfzrgp', label: 'Support', external: true, mobileOnly: false },
+  { href: '/terms', label: 'Terms', mobileOnly: false },
 ];
 ---
 
@@ -18,7 +18,10 @@ const links = [
       {links.map(link => (
         <a
           href={link.href}
-          class="text-sm font-semibold no-underline glow-hover"
+          class:list={[
+            'text-sm font-semibold no-underline glow-hover',
+            { 'hidden sm:inline': link.hideOnMobile }
+          ]}
           style={`color: var(--color-retro-text);`}
           target={link.external ? '_blank' : undefined}
           rel={link.external ? 'noopener noreferrer' : undefined}
