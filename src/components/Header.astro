@@ -7,6 +7,7 @@ const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/features', label: 'Features' },
   { href: '/blog', label: 'Blog' },
+  { href: 'https://podcast.heybible.org', label: 'Podcast', external: true },
 ];
 ---
 
@@ -37,6 +38,8 @@ const navLinks = [
             { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
           ]}
           style={`color: var(--color-retro-text);`}
+          target={link.external ? '_blank' : undefined}
+          rel={link.external ? 'noopener noreferrer' : undefined}
         >
           {link.label}
         </a>
@@ -70,6 +73,8 @@ const navLinks = [
           { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
         ]}
         style={`color: var(--color-retro-text);`}
+        target={link.external ? '_blank' : undefined}
+        rel={link.external ? 'noopener noreferrer' : undefined}
       >
         {link.label}
       </a>
