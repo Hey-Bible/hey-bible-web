@@ -18,8 +18,10 @@ describe("Static build output", () => {
       "privacy/index.html",
       "terms/index.html",
       "features/index.html",
+      "agents/index.html",
       "blog/index.html",
       "blog/welcome/index.html",
+      "blog/the-bible-for-ai-agents/index.html",
       "blog/tag/update/index.html",
     ];
 
@@ -117,7 +119,7 @@ describe("Static build output", () => {
     it("contains carousel slides", () => {
       const html = readPage("index.html");
       expect(html).toContain("carousel-slide");
-      expect(html).toContain("carousel-3.jpg");
+      expect(html).toContain("carousel-3.webp");
     });
 
     it("contains lightbox", () => {
@@ -130,6 +132,72 @@ describe("Static build output", () => {
       const html = readPage("index.html");
       expect(html).toContain("SoftwareApplication");
       expect(html).toContain("schema.org");
+    });
+  });
+
+  describe("AI agent gateway", () => {
+    it("homepage links to the agents page with an 'AI Agents' CTA badge", () => {
+      const html = readPage("index.html");
+      expect(html).toContain('href="/agents"');
+      expect(html).toContain("Build with");
+      expect(html).toContain("AI Agents");
+    });
+
+    it("header nav includes a For Agents link", () => {
+      const html = readPage("index.html");
+      expect(html).toContain("For Agents");
+    });
+
+    it("features page surfaces the developer/agent section", () => {
+      const html = readPage("features/index.html");
+      expect(html).toContain("For Developers &amp; AI Agents");
+      expect(html).toContain("MCP Server");
+      expect(html).toContain("Agent Skill");
+      expect(html).toContain("CLI");
+    });
+
+    it("agents page describes every connection method", () => {
+      const html = readPage("agents/index.html");
+      expect(html).toContain("gateway for giving AI agents access to the Bible");
+      expect(html).toContain("@hey-bible/cli");
+      expect(html).toContain("@hey-bible/mcp");
+      expect(html).toContain("@hey-bible/client");
+      expect(html).toContain("ClawHub");
+      expect(html).toContain("api.heybible.app");
+    });
+
+    it("agents page has a developer-focused SEO title", () => {
+      const html = readPage("agents/index.html");
+      expect(html).toContain("<title>Hey Bible for AI Agents");
+    });
+
+    it("agents page has a copy button on each command block", () => {
+      const html = readPage("agents/index.html");
+      // one copy button per connection method (4)
+      expect((html.match(/class="copy-btn/g) || []).length).toBe(4);
+      expect(html).toContain('aria-label="Copy command"');
+    });
+
+    it("offers four ways to connect", () => {
+      const html = readPage("agents/index.html");
+      expect(html).toContain("Four ways to connect");
+      expect(html).toContain("REST API &amp; SDK");
+    });
+
+    it("marks off-site links with an external-link icon (not on internal links)", () => {
+      const agents = readPage("agents/index.html");
+      // external-link icon on the 2 hero buttons + 1 bottom CTA; the method
+      // cards intentionally use a plain arrow (reads better in the cards)
+      expect((agents.match(/external-link-icon/g) || []).length).toBe(3);
+      // in-site nav uses a plain arrow, not the external icon
+      const home = readPage("index.html");
+      expect(home).not.toContain("external-link-icon");
+    });
+
+    it("publishes the launch blog post", () => {
+      const html = readPage("blog/the-bible-for-ai-agents/index.html");
+      expect(html).toContain("The Bible, for AI Agents");
+      expect(html).toContain("Moses");
     });
   });
 

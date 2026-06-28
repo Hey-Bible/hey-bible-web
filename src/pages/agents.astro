@@ -1,0 +1,205 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ExternalLinkIcon from '../components/ExternalLinkIcon.astro';
+
+const methods = [
+  {
+    icon: '🤖',
+    title: 'Agent Skill',
+    badge: 'ClawHub',
+    description:
+      'Install the hey-bible skill and any OpenClaw-compatible agent gets first-class access to Scripture — no glue code.',
+    code: `openclaw skills install @hey-bible/hey-bible`,
+    href: 'https://clawhub.ai/hey-bible/skills/hey-bible',
+    cta: 'Browse on ClawHub',
+  },
+  {
+    icon: '🔌',
+    title: 'MCP Server',
+    badge: '@hey-bible/mcp',
+    description:
+      'A Model Context Protocol server for Claude Desktop and every MCP-native client. Point your agent at it and go.',
+    code: `npx -y @hey-bible/mcp`,
+    href: 'https://docs.heybible.app/developers/mcp-server',
+    cta: 'MCP docs',
+  },
+  {
+    icon: '⌨️',
+    title: 'CLI',
+    badge: '@hey-bible/cli',
+    description:
+      'Look up verses from your terminal or any automation. Every command speaks --json, so agents parse it instantly.',
+    code: `npx -y @hey-bible/cli search John 3 --json`,
+    href: 'https://docs.heybible.app/developers/cli',
+    cta: 'CLI docs',
+  },
+  {
+    icon: '🌐',
+    title: 'REST API & SDK',
+    badge: '@hey-bible/client',
+    description:
+      'A simple, authenticated REST API at api.heybible.app — call it raw, or use the fully typed TypeScript SDK generated from its OpenAPI spec.',
+    code: `npm install @hey-bible/client`,
+    href: 'https://docs.heybible.app/developers/nodejs-client',
+    cta: 'API & SDK docs',
+  },
+];
+
+const capabilities = [
+  'Look up any verse or chapter across multiple translations',
+  'Browse the 66 books with codes and chapter counts',
+  'List available Bible translations',
+  "Read a user's favorites, notes, AI verse images, chats, and tags",
+  'Structured JSON responses, built for LLMs',
+];
+---
+
+<BaseLayout
+  title="Hey Bible for AI Agents — The Bible Gateway for AI"
+  description="Give your AI agent access to the Bible. One gateway, every integration: an OpenClaw skill, an MCP server, a CLI, a typed SDK, and a REST API — all powered by Hey Bible."
+>
+  <div class="flex flex-col items-center pt-6 pb-10 px-4">
+    <!-- Hero -->
+    <h1 class="text-3xl md:text-5xl font-extrabold text-center max-w-[800px]">
+      The one-stop gateway for giving AI agents access to the Bible
+    </h1>
+    <p class="text-lg text-center max-w-[640px] mt-4 mb-8 opacity-80">
+      Skill, MCP server, CLI, or the REST API &amp; SDK — connect your agent to
+      Scripture the way that fits your stack. Same Bible, same data, your choice
+      of door.
+    </p>
+    <div class="flex flex-wrap gap-3 justify-center items-center mb-12">
+      <a href="https://docs.heybible.app" class="login-button text-base inline-flex items-center justify-center leading-none" style="padding: 0.625rem 1.5rem; border: 1px solid transparent;" target="_blank" rel="noopener noreferrer">Read the docs<ExternalLinkIcon /></a>
+      <a
+        href="https://heybible.app"
+        class="text-base font-bold no-underline glow-hover px-5 py-2.5 rounded-full inline-flex items-center justify-center leading-none"
+        style="color: var(--color-retro-text); border: 1px solid var(--color-retro-secondary);"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Get an API key<ExternalLinkIcon />
+      </a>
+    </div>
+
+    <!-- Connection methods -->
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-2 text-center">Four ways to connect</h2>
+    <p class="text-base text-center max-w-[560px] mb-8 opacity-70">
+      Every option is backed by the same Hey Bible API and authenticated with a
+      single API key.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-[900px]">
+      {methods.map((m) => (
+        <div
+          class="rounded-2xl p-5 flex flex-col"
+          style="background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-extrabold" style="color: var(--color-retro-text);">{m.icon} {m.title}</h3>
+            <code class="text-xs opacity-70" style="color: var(--color-retro-text);">{m.badge}</code>
+          </div>
+          <p class="text-sm leading-relaxed opacity-80 mb-3" style="color: var(--color-retro-text);">{m.description}</p>
+          <div class="relative mb-3">
+            <pre
+              class="text-xs rounded-xl p-3 pr-12 overflow-x-auto"
+              style="background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+            ><code>{m.code}</code></pre>
+            <button
+              type="button"
+              class="copy-btn absolute top-1 right-1 inline-flex items-center justify-center w-8 h-8 rounded-md cursor-pointer"
+              style="background: var(--color-retro-surface-bar); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+              aria-label="Copy command"
+              title="Copy command"
+            >
+              <svg class="copy-icon w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="9" y="9" width="11" height="11" rx="2" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 15V5a2 2 0 0 1 2-2h10" />
+              </svg>
+              <svg class="check-icon w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </button>
+          </div>
+          <a
+            href={m.href}
+            class="text-sm font-bold no-underline glow-hover mt-auto"
+            style="color: var(--color-retro-text);"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {m.cta} →
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <!-- Capabilities -->
+    <h2 class="text-2xl md:text-3xl font-extrabold mt-14 mb-6 text-center">What your agent can do</h2>
+    <ul class="w-full max-w-[640px] flex flex-col gap-3">
+      {capabilities.map((c) => (
+        <li
+          class="flex items-start gap-3 rounded-xl p-3 text-sm"
+          style="background: var(--color-retro-surface-card); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+        >
+          <span aria-hidden="true">✦</span>
+          <span class="opacity-90">{c}</span>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA -->
+    <div class="text-center mt-14">
+      <h2 class="text-2xl font-extrabold mb-3">Start building</h2>
+      <p class="text-base max-w-[520px] mx-auto mb-5 opacity-80">
+        Grab an API key from your Hey Bible account, then pick a door above. The
+        full reference lives in the docs.
+      </p>
+      <a href="https://docs.heybible.app" class="login-button text-base" target="_blank" rel="noopener noreferrer">Explore the developer docs<ExternalLinkIcon /></a>
+    </div>
+  </div>
+
+  <style>
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
+    }
+    .copy-btn .check-icon {
+      display: none;
+    }
+    .copy-btn.copied .copy-icon {
+      display: none;
+    }
+    .copy-btn.copied .check-icon {
+      display: inline;
+      color: #16a34a;
+    }
+  </style>
+
+  <script>
+    function initCopyButtons() {
+      document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = "true";
+        btn.addEventListener("click", async () => {
+          const code = btn.parentElement?.querySelector("code");
+          const text = code?.textContent ?? "";
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.classList.add("copied");
+            btn.setAttribute("aria-label", "Copied");
+            window.setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.setAttribute("aria-label", "Copy command");
+            }, 1500);
+          } catch {
+            /* clipboard unavailable (e.g. insecure context) — no-op */
+          }
+        });
+      });
+    }
+
+    initCopyButtons();
+    document.addEventListener("astro:after-swap", initCopyButtons);
+  </script>
+</BaseLayout>

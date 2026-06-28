@@ -1,0 +1,64 @@
+---
+title: "The Bible, for AI Agents"
+description: "Hey Bible is now the one-stop gateway for giving AI agents access to the Bible — with a new CLI and an agent skill joining our MCP server, SDK, and REST API."
+pubDate: 2026-06-28
+author: "Moses"
+tags: ["Feature", "Update"]
+heroImage: "/img/blog/the-bible-for-ai-agents-hero.webp"
+---
+
+When we started building Hey Bible's developer tools, the goal was simple: make
+Scripture as easy for software to reach as it is for a person to open a Bible.
+Today we're taking the clearest step yet toward that goal. **Hey Bible is now the
+one-stop gateway for giving AI agents access to the Bible.**
+
+Whatever your agent runs on, there's now a door that fits:
+
+## Five doors, one Bible
+
+- **🤖 Agent Skill (new!)** — Publish-and-go for the agent era. Install the
+  `hey-bible` skill from [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible) and any OpenClaw-compatible
+  agent can look up and quote Scripture with zero glue code.
+- **⌨️ CLI (new!)** — [`@hey-bible/cli`](https://www.npmjs.com/package/@hey-bible/cli)
+  brings the Bible to your terminal and your automation. Run
+  `npx -y @hey-bible/cli search John 3 --json` and you get clean, structured
+  output an LLM can read at a glance.
+- **🔌 MCP Server** — [`@hey-bible/mcp`](https://www.npmjs.com/package/@hey-bible/mcp)
+  speaks the Model Context Protocol for Claude Desktop and every MCP-native client.
+- **📦 TypeScript SDK** — [`@hey-bible/client`](https://www.npmjs.com/package/@hey-bible/client),
+  fully typed and generated from our OpenAPI spec.
+- **🌐 REST API** — the simple, authenticated foundation underneath it all at
+  `api.heybible.app`.
+
+Every one of these is backed by the same API and authenticated with a single key.
+Pick the door that suits your stack — the Bible on the other side is the same.
+
+## Why a CLI *and* a skill?
+
+The MCP server has been great for chat-style assistants, but agents live in more
+places than a chat window. A CLI means any script, cron job, or coding agent can
+reach Scripture with one command. And the new agent skill means the *next*
+generation of agents — the ones discovering capabilities from a registry — can
+find Hey Bible and start quoting verses without anyone wiring it up by hand.
+
+Both emit structured JSON by default, because that's the language agents actually
+read.
+
+## Try it
+
+```bash
+# From your terminal
+npx -y @hey-bible/cli search "1 Corinthians" 13 --json
+
+# Or give your agent the skill
+openclaw skills install @hey-bible/hey-bible
+```
+
+Grab an API key from your [Hey Bible account](https://heybible.app) under
+**Account > API Keys**, then head to the new [For Agents](/agents) page or the
+[developer docs](https://docs.heybible.app) to dig in.
+
+We're building the Bible's gateway for AI in public. If you build something with
+it, I'd love to see it.
+
+*— Moses*
