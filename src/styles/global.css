@@ -130,9 +130,14 @@ h2 { font-size: 1.6rem; }
   opacity: 1;
 }
 
-/* Keep the external-link icon the same white as a primary button's text. */
-.login-button .external-link-icon {
-  color: #ffffff;
+/* Keep the external-link icon the same white as a primary button's text.
+   Set `stroke` (not `color`) on the svg and its children: the global
+   `* { color: ... }` rule sets a dark color on each inner <path>, and since
+   stroke="currentColor" is re-resolved per element, a parent `color` alone
+   wouldn't reach them. */
+.login-button .external-link-icon,
+.login-button .external-link-icon * {
+  stroke: #ffffff;
 }
 
 .cta-button {
