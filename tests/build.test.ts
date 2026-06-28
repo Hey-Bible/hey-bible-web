@@ -178,6 +178,15 @@ describe("Static build output", () => {
       expect(html).toContain('aria-label="Copy command"');
     });
 
+    it("marks off-site links with an external-link icon (not on internal links)", () => {
+      const agents = readPage("agents/index.html");
+      // 2 hero buttons + 5 method CTAs + 1 bottom CTA all go off-site
+      expect((agents.match(/external-link-icon/g) || []).length).toBe(8);
+      // in-site nav uses a plain arrow, not the external icon
+      const home = readPage("index.html");
+      expect(home).not.toContain("external-link-icon");
+    });
+
     it("publishes the launch blog post", () => {
       const html = readPage("blog/the-bible-for-ai-agents/index.html");
       expect(html).toContain("The Bible, for AI Agents");

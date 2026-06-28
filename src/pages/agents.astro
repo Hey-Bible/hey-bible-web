@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ExternalLinkIcon from '../components/ExternalLinkIcon.astro';
 
 const methods = [
   {
@@ -85,13 +86,15 @@ const capabilities = [
       of door.
     </p>
     <div class="flex flex-wrap gap-3 justify-center items-center mb-12">
-      <a href="https://docs.heybible.app" class="login-button text-base inline-flex items-center justify-center leading-none" style="padding: 0.625rem 1.5rem; border: 1px solid transparent;">Read the docs</a>
+      <a href="https://docs.heybible.app" class="login-button text-base inline-flex items-center justify-center leading-none" style="padding: 0.625rem 1.5rem; border: 1px solid transparent;" target="_blank" rel="noopener noreferrer">Read the docs<ExternalLinkIcon /></a>
       <a
         href="https://heybible.app"
         class="text-base font-bold no-underline glow-hover px-5 py-2.5 rounded-full inline-flex items-center justify-center leading-none"
         style="color: var(--color-retro-text); border: 1px solid var(--color-retro-secondary);"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        Get an API key
+        Get an API key<ExternalLinkIcon />
       </a>
     </div>
 
@@ -119,7 +122,7 @@ const capabilities = [
             ><code>{m.code}</code></pre>
             <button
               type="button"
-              class="copy-btn absolute top-2 right-2 inline-flex items-center justify-center w-8 h-8 rounded-md cursor-pointer"
+              class="copy-btn absolute top-1 right-1 inline-flex items-center justify-center w-8 h-8 rounded-md cursor-pointer"
               style="background: var(--color-retro-surface-bar); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
               aria-label="Copy command"
               title="Copy command"
@@ -140,7 +143,7 @@ const capabilities = [
             target="_blank"
             rel="noopener noreferrer"
           >
-            {m.cta} →
+            {m.cta}<ExternalLinkIcon />
           </a>
         </div>
       ))}
@@ -167,7 +170,7 @@ const capabilities = [
         Grab an API key from your Hey Bible account, then pick a door above. The
         full reference lives in the docs.
       </p>
-      <a href="https://docs.heybible.app" class="login-button text-base">Explore the developer docs</a>
+      <a href="https://docs.heybible.app" class="login-button text-base" target="_blank" rel="noopener noreferrer">Explore the developer docs<ExternalLinkIcon /></a>
     </div>
   </div>
 
