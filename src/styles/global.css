@@ -463,6 +463,14 @@ li {
   opacity: 0.85;
 }
 
+/* Code blocks (Shiki <pre>): inset the text from the edges and round the corners. */
+.blog-prose pre {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
 /* ═══════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════ */
