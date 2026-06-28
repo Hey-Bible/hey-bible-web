@@ -38,12 +38,19 @@ const carouselImages = [
     <h2 class="text-2xl font-extrabold mb-2">Ready to get started?</h2>
     <AppStoreButtons size="large" />
 
+    <!-- Outline "badge" mirroring the app-store badges (same 50px height) but
+         clearly distinct: hollow/outlined for the developer & AI-agent path. -->
     <a
       href="/agents"
-      class="mt-3 inline-flex items-center justify-center gap-1.5 text-sm font-bold no-underline glow-hover px-5 py-2 rounded-full leading-none"
-      style="color: var(--color-retro-text); border: 1px solid var(--color-retro-secondary);"
+      class="mt-3 inline-flex items-center justify-center gap-2 no-underline glow-hover"
+      style="height: 50px; width: 167px; padding: 0 14px; border: 1.5px solid var(--color-retro-secondary); border-radius: 10px; color: var(--color-retro-text);"
+      aria-label="For AI agents"
     >
-      🤖 For AI agents →
+      <span class="text-2xl leading-none" aria-hidden="true">🤖</span>
+      <span class="flex flex-col text-left leading-tight">
+        <span class="text-[0.6rem] uppercase tracking-wide opacity-80">Built for</span>
+        <span class="text-base font-extrabold">AI Agents</span>
+      </span>
     </a>
   </div>
 </BaseLayout>
