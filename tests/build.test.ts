@@ -173,15 +173,21 @@ describe("Static build output", () => {
 
     it("agents page has a copy button on each command block", () => {
       const html = readPage("agents/index.html");
-      // one copy button per connection method (5)
-      expect((html.match(/class="copy-btn/g) || []).length).toBe(5);
+      // one copy button per connection method (4)
+      expect((html.match(/class="copy-btn/g) || []).length).toBe(4);
       expect(html).toContain('aria-label="Copy command"');
+    });
+
+    it("offers four ways to connect", () => {
+      const html = readPage("agents/index.html");
+      expect(html).toContain("Four ways to connect");
+      expect(html).toContain("REST API &amp; SDK");
     });
 
     it("marks off-site links with an external-link icon (not on internal links)", () => {
       const agents = readPage("agents/index.html");
-      // 2 hero buttons + 5 method CTAs + 1 bottom CTA all go off-site
-      expect((agents.match(/external-link-icon/g) || []).length).toBe(8);
+      // 2 hero buttons + 4 method CTAs + 1 bottom CTA all go off-site
+      expect((agents.match(/external-link-icon/g) || []).length).toBe(7);
       // in-site nav uses a plain arrow, not the external icon
       const home = readPage("index.html");
       expect(home).not.toContain("external-link-icon");
