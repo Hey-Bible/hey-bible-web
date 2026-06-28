@@ -171,6 +171,13 @@ describe("Static build output", () => {
       expect(html).toContain("<title>Hey Bible for AI Agents");
     });
 
+    it("agents page has a copy button on each command block", () => {
+      const html = readPage("agents/index.html");
+      // one copy button per connection method (5)
+      expect((html.match(/class="copy-btn/g) || []).length).toBe(5);
+      expect(html).toContain('aria-label="Copy command"');
+    });
+
     it("publishes the launch blog post", () => {
       const html = readPage("blog/the-bible-for-ai-agents/index.html");
       expect(html).toContain("The Bible, for AI Agents");
