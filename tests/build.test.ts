@@ -186,8 +186,9 @@ describe("Static build output", () => {
 
     it("marks off-site links with an external-link icon (not on internal links)", () => {
       const agents = readPage("agents/index.html");
-      // 2 hero buttons + 4 method CTAs + 1 bottom CTA all go off-site
-      expect((agents.match(/external-link-icon/g) || []).length).toBe(7);
+      // external-link icon on the 2 hero buttons + 1 bottom CTA; the method
+      // cards intentionally use a plain arrow (reads better in the cards)
+      expect((agents.match(/external-link-icon/g) || []).length).toBe(3);
       // in-site nav uses a plain arrow, not the external icon
       const home = readPage("index.html");
       expect(home).not.toContain("external-link-icon");
