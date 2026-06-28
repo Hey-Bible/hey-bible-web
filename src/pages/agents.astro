@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const methods = [
+  {
+    icon: '🤖',
+    title: 'Agent Skill',
+    badge: 'ClawHub',
+    description:
+      'Install the hey-bible skill and any OpenClaw-compatible agent gets first-class access to Scripture — no glue code.',
+    code: `clawhub install hey-bible`,
+    href: 'https://clawhub.ai',
+    cta: 'Browse on ClawHub',
+  },
+  {
+    icon: '🔌',
+    title: 'MCP Server',
+    badge: '@hey-bible/mcp',
+    description:
+      'A Model Context Protocol server for Claude Desktop and every MCP-native client. Point your agent at it and go.',
+    code: `npx -y @hey-bible/mcp`,
+    href: 'https://docs.heybible.app/developers/mcp-server',
+    cta: 'MCP docs',
+  },
+  {
+    icon: '⌨️',
+    title: 'CLI',
+    badge: '@hey-bible/cli',
+    description:
+      'Look up verses from your terminal or any automation. Every command speaks --json, so agents parse it instantly.',
+    code: `npx -y @hey-bible/cli search John 3 --json`,
+    href: 'https://docs.heybible.app/developers/cli',
+    cta: 'CLI docs',
+  },
+  {
+    icon: '📦',
+    title: 'TypeScript SDK',
+    badge: '@hey-bible/client',
+    description:
+      'A fully typed client generated from our OpenAPI spec. Build your own integrations on a solid foundation.',
+    code: `npm install @hey-bible/client`,
+    href: 'https://docs.heybible.app/developers/nodejs-client',
+    cta: 'SDK docs',
+  },
+  {
+    icon: '🌐',
+    title: 'REST API',
+    badge: 'api.heybible.app',
+    description:
+      'A simple, authenticated REST API behind everything else. Generate clients in 50+ languages from the OpenAPI spec.',
+    code: `curl -H "X-Hey-Bible-Api-Key: $KEY" \\
+  "https://api.heybible.app/search?book=John&chapter=3"`,
+    href: 'https://docs.heybible.app/api',
+    cta: 'API reference',
+  },
+];
+
+const capabilities = [
+  'Look up any verse or chapter across multiple translations',
+  'Browse the 66 books with codes and chapter counts',
+  'List available Bible translations',
+  "Read a user's favorites, notes, AI verse images, chats, and tags",
+  'Structured JSON responses, built for LLMs',
+];
+---
+
+<BaseLayout
+  title="Hey Bible for AI Agents — The Bible Gateway for AI"
+  description="Give your AI agent access to the Bible. One gateway, every integration: an OpenClaw skill, an MCP server, a CLI, a typed SDK, and a REST API — all powered by Hey Bible."
+>
+  <div class="flex flex-col items-center pt-6 pb-10 px-4">
+    <!-- Hero -->
+    <span
+      class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wide px-3 py-1 rounded-full mb-4"
+      style="color: var(--color-retro-text); background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); opacity: 0.85;"
+    >
+      For developers &amp; AI agents
+    </span>
+    <h1 class="text-3xl md:text-5xl font-extrabold text-center max-w-[800px]">
+      The one-stop gateway for giving AI agents access to the Bible
+    </h1>
+    <p class="text-lg text-center max-w-[640px] mt-4 mb-8 opacity-80">
+      Skill, MCP server, CLI, SDK, or raw REST API — connect your agent to
+      Scripture the way that fits your stack. Same Bible, same data, your choice
+      of door.
+    </p>
+    <div class="flex flex-wrap gap-3 justify-center mb-12">
+      <a href="https://docs.heybible.app" class="login-button text-base">Read the docs</a>
+      <a
+        href="https://heybible.app"
+        class="text-base font-bold no-underline glow-hover px-5 py-2.5 rounded-full"
+        style="color: var(--color-retro-text); border: 1px solid var(--color-retro-secondary);"
+      >
+        Get an API key
+      </a>
+    </div>
+
+    <!-- Connection methods -->
+    <h2 class="text-2xl md:text-3xl font-extrabold mb-2 text-center">Five ways to connect</h2>
+    <p class="text-base text-center max-w-[560px] mb-8 opacity-70">
+      Every option is backed by the same Hey Bible API and authenticated with a
+      single API key.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-[900px]">
+      {methods.map((m) => (
+        <div
+          class="rounded-2xl p-5 flex flex-col"
+          style="background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-lg font-extrabold" style="color: var(--color-retro-text);">{m.icon} {m.title}</h3>
+            <code class="text-xs opacity-70" style="color: var(--color-retro-text);">{m.badge}</code>
+          </div>
+          <p class="text-sm leading-relaxed opacity-80 mb-3" style="color: var(--color-retro-text);">{m.description}</p>
+          <pre
+            class="text-xs rounded-xl p-3 overflow-x-auto mb-3"
+            style="background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+          ><code>{m.code}</code></pre>
+          <a
+            href={m.href}
+            class="text-sm font-bold no-underline glow-hover mt-auto"
+            style="color: var(--color-retro-text);"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {m.cta} →
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <!-- Capabilities -->
+    <h2 class="text-2xl md:text-3xl font-extrabold mt-14 mb-6 text-center">What your agent can do</h2>
+    <ul class="w-full max-w-[640px] flex flex-col gap-3">
+      {capabilities.map((c) => (
+        <li
+          class="flex items-start gap-3 rounded-xl p-3 text-sm"
+          style="background: var(--color-retro-surface-card); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+        >
+          <span aria-hidden="true">✦</span>
+          <span class="opacity-90">{c}</span>
+        </li>
+      ))}
+    </ul>
+
+    <!-- CTA -->
+    <div class="text-center mt-14">
+      <h2 class="text-2xl font-extrabold mb-3">Start building</h2>
+      <p class="text-base max-w-[520px] mx-auto mb-5 opacity-80">
+        Grab an API key from your Hey Bible account, then pick a door above. The
+        full reference lives in the docs.
+      </p>
+      <a href="https://docs.heybible.app" class="login-button text-base">Explore the developer docs</a>
+    </div>
+  </div>
+</BaseLayout>

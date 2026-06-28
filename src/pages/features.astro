@@ -4,6 +4,29 @@ import FeatureCard from '../components/FeatureCard.astro';
 import FeatureLightbox from '../components/FeatureLightbox.astro';
 import AppStoreButtons from '../components/AppStoreButtons.astro';
 
+const developerFeatures = [
+  {
+    icon: '🤖',
+    title: 'Agent Skill',
+    description: 'Install the hey-bible skill from ClawHub and your AI agent can quote Scripture instantly.',
+  },
+  {
+    icon: '🔌',
+    title: 'MCP Server',
+    description: 'A Model Context Protocol server for Claude Desktop and every MCP-native client.',
+  },
+  {
+    icon: '⌨️',
+    title: 'CLI',
+    description: 'Look up verses from your terminal or automation, with --json output built for agents.',
+  },
+  {
+    icon: '🌐',
+    title: 'API & SDK',
+    description: 'A typed TypeScript SDK and a REST API behind it all — the gateway for AI agents.',
+  },
+];
+
 const features = [
   {
     icon: '🔍',
@@ -72,9 +95,25 @@ const features = [
 
     <FeatureLightbox />
 
-    <p class="text-lg text-center max-w-[600px] mb-4 opacity-80 px-4">
+    <p class="text-lg text-center max-w-[600px] mb-10 opacity-80 px-4">
       Hey Bible packs powerful tools into a simple, beautiful app.
     </p>
+
+    <!-- For developers & AI agents -->
+    <div class="w-full max-w-[900px] px-4 mb-10">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-2 text-center">For Developers &amp; AI Agents</h2>
+      <p class="text-base text-center mb-6 opacity-80">
+        Hey Bible is also the one-stop gateway for giving AI agents access to the Bible.
+      </p>
+      <div class="flex flex-row flex-wrap gap-6 justify-center items-stretch">
+        {developerFeatures.map(f => (
+          <FeatureCard icon={f.icon} title={f.title} description={f.description} />
+        ))}
+      </div>
+      <div class="text-center mt-6">
+        <a href="/agents" class="login-button text-base">Explore the agent gateway →</a>
+      </div>
+    </div>
 
     <div class="text-center">
       <h2 class="text-2xl font-extrabold mb-4">Ready to get started?</h2>
