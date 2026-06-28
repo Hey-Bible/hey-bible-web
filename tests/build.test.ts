@@ -139,7 +139,7 @@ describe("Static build output", () => {
     it("homepage links to the agents page with an 'AI Agents' CTA badge", () => {
       const html = readPage("index.html");
       expect(html).toContain('href="/agents"');
-      expect(html).toContain("Built for");
+      expect(html).toContain("Build with");
       expect(html).toContain("AI Agents");
     });
 
