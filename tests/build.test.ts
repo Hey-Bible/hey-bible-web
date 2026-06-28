@@ -136,10 +136,10 @@ describe("Static build output", () => {
   });
 
   describe("AI agent gateway", () => {
-    it("homepage links to the agents page with gateway messaging", () => {
+    it("homepage links to the agents page with a 'For AI agents' CTA", () => {
       const html = readPage("index.html");
       expect(html).toContain('href="/agents"');
-      expect(html).toContain("Building with AI agents?");
+      expect(html).toContain("For AI agents");
     });
 
     it("header nav includes a For Agents link", () => {
