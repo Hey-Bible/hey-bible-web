@@ -463,12 +463,88 @@ li {
   opacity: 0.85;
 }
 
-/* Code blocks (Shiki <pre>): inset the text from the edges and round the corners. */
+/* Code blocks: match the For Agents page rather than Shiki's dark theme. Use the
+   retro surface (light-blue in light mode, near-black in dark) with the brand
+   border, and flatten Shiki's inline token colors to a single readable color —
+   the dark-theme tokens are illegible on the light surface, and the universal
+   `* { color }` rule already forces flat text on the un-highlighted agents page,
+   so this keeps the two consistent. */
 .blog-prose pre {
   padding: 1rem 1.25rem;
   border-radius: var(--radius-md);
   overflow-x: auto;
   margin: 1.5rem 0;
+  background: var(--color-retro-bg) !important;
+  border: 1px solid var(--color-retro-secondary);
+  color: var(--color-retro-text) !important;
+  /* wrap long lines (e.g. the multi-line steer prompt) inside the block
+     instead of overflowing past its right edge */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.blog-prose pre code,
+.blog-prose pre code span {
+  color: var(--color-retro-text) !important;
+  background: transparent !important;
+  font-style: normal !important;
+}
+
+/* Copy button on code blocks. The wrapper is injected client-side (see
+   BlogPost.astro) so these live in global.css rather than a scoped <style> —
+   scoped styles don't reach dynamically-created elements. */
+.blog-prose .code-block {
+  position: relative;
+  margin: 1.5rem 0;
+}
+
+.blog-prose .code-block > pre {
+  /* spacing now lives on the wrapper */
+  margin: 0;
+  /* leave room so long lines don't slide under the button */
+  padding-right: 3rem;
+}
+
+/* Scoped to .blog-prose so these unlayered rules don't override the For Agents
+   page's own Tailwind-positioned copy buttons (unlayered styles win over the
+   @layer utilities that `top-1`/`right-1` live in). */
+.blog-prose .copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  background: var(--color-retro-surface-bar);
+  border: 1px solid var(--color-retro-secondary);
+  color: var(--color-retro-text);
+  transition: all 0.2s ease;
+}
+
+.blog-prose .copy-btn:hover {
+  box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
+}
+
+.blog-prose .copy-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.blog-prose .copy-btn .check-icon {
+  display: none;
+}
+
+.blog-prose .copy-btn.copied .copy-icon {
+  display: none;
+}
+
+.blog-prose .copy-btn.copied .check-icon {
+  display: inline;
+  color: #16a34a;
 }
 
 /* ═══════════════════════════════════════════

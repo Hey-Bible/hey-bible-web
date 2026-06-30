@@ -1,0 +1,125 @@
+---
+title: "Give Your AI Agent a Bible in 5 Minutes"
+description: "A quick, hands-on guide to connecting an OpenClaw or Hermes agent to Scripture with the new Hey Bible agent skill — plus the CLI underneath it, and how to get an API key."
+pubDate: 2026-06-29
+author: "Moses"
+tags: ["Tutorial", "Feature"]
+heroImage: "/img/blog/give-your-agent-a-bible-hero.webp"
+---
+
+Last week we [opened the gateway](/blog/the-bible-for-ai-agents): Hey Bible is now
+a one-stop way to give AI agents access to the Bible. This post is the hands-on
+follow-up. If you already have an [OpenClaw](https://openclaw.ai)- or
+Hermes-compatible agent running, you can have it quoting Scripture in about five
+minutes. Here's the whole path, start to finish.
+
+## What you'll need
+
+- An OpenClaw-compatible agent (OpenClaw, Hermes, or anything that installs skills
+  from [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible)).
+- A Hey Bible API key (free — we'll grab one in step 1).
+- A terminal, if you'd rather drive the CLI directly.
+
+## Step 1 — Get an API key
+
+Everything Hey Bible exposes is authenticated with a single key.
+
+1. Log in to [heybible.app](https://heybible.app).
+2. Open the **Account** page.
+3. Under **API Keys**, click **+** to create a key, then **Copy**.
+
+Keep it somewhere safe — treat it like a password, and never commit it to version
+control. We'll hand it to your agent through an environment variable in a moment.
+
+```bash
+export HEY_BIBLE_API_KEY=your_api_key_here
+```
+
+## Step 2 — Install the skill
+
+The easiest path is to **hand your agent a prompt** and let it install the skill
+itself. ClawHub publishes a scoped, safety-aware steer prompt — paste it into
+your agent's chat and it will inspect the skill, verify the package, and install
+it carefully:
+
+```text
+Before installing anything, inspect the ClawHub skill metadata and setup requirements.
+If the skill asks you to install a third-party package or CLI, verify its source, maintainer, and package contents before running the install command.
+Install the skill "Hey Bible" (@hey-bible/hey-bible) from ClawHub only after those checks pass.
+Skill page: https://clawhub.ai/hey-bible/skills/hey-bible
+Keep the work scoped to this skill only.
+After install, help me finish setup from verified skill metadata.
+Required env vars: HEY_BIBLE_API_KEY
+Required binaries: node, npx
+Use only the metadata you can verify from ClawHub; do not invent missing requirements.
+Ask before making any broader environment changes.
+```
+
+The skill declares the [`@hey-bible/cli`](https://www.npmjs.com/package/@hey-bible/cli)
+package as its dependency, so a compatible runtime — OpenClaw, Hermes, and friends
+all resolve skills from the same [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible)
+registry — installs everything it needs automatically. No glue code, no wiring up
+a tool by hand.
+
+**Prefer the command line?** If you have access to the shell your agent runs in,
+you can install the skill directly instead:
+
+```bash
+openclaw skills install @hey-bible/hey-bible
+```
+
+Either way, make sure `HEY_BIBLE_API_KEY` is set in the environment your agent
+runs in — and you're ready to go.
+
+## Step 3 — Ask your agent for a verse
+
+Now talk to your agent like you normally would:
+
+- "What does John 3:16 say?"
+- "Read me Psalm 23 in the KJV."
+- "Pull up my favorite verses tagged 'faith'."
+- "Summarize 1 Corinthians 13."
+
+Behind the scenes the skill calls the Hey Bible CLI, which returns structured JSON
+your agent can read and reason over directly. It can look up any verse or chapter
+across translations, browse the 66 books, list available Bibles, and read your
+saved favorites, notes, AI-generated verse images, chats, and tags.
+
+## Prefer the terminal? Skip straight to the CLI
+
+The skill is a thin layer over [`@hey-bible/cli`](https://www.npmjs.com/package/@hey-bible/cli),
+so you can use the same thing from any script, cron job, or coding agent without
+installing a skill at all. Run it on demand with `npx` — no global install needed:
+
+```bash
+# Look up a verse range (defaults to ESV)
+npx -y @hey-bible/cli search John 3 --start-verse 16 --end-verse 18
+
+# A whole chapter in a specific translation
+npx -y @hey-bible/cli search Psalms 23 --bible-id kjv
+
+# Raw JSON — the format agents and scripts actually want
+npx -y @hey-bible/cli search "1 Corinthians" 13 --json
+```
+
+Every command supports `--json` for clean, machine-readable output, and reads the
+same `HEY_BIBLE_API_KEY` you set in step 1. Run `hey-bible --help` (or
+`npx -y @hey-bible/cli --help`) to see all eight commands.
+
+## One honest note on scope
+
+Today the gateway is **read-centric**: your agent can look up Scripture and read
+the data you've saved in Hey Bible. It can't yet write notes or create favorites on
+your behalf. That keeps the surface area safe and predictable — and it covers the
+thing agents need most, which is reliable access to the text itself.
+
+## Where to go next
+
+- The [For Agents](/agents) page lays out all the ways to connect — skill, MCP
+  server, CLI, SDK, and the REST API.
+- The [developer docs](https://docs.heybible.app) have the full command reference
+  and a guide for each door.
+
+Connect something to Scripture this week — and if you build it, I'd love to see it.
+
+*— Moses*

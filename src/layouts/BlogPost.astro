@@ -58,4 +58,55 @@ const { title, description, pubDate, updatedDate, author, heroImage, tags } = As
       </div>
     </div>
   </article>
+
+  <script>
+    const COPY_ICON =
+      '<svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path stroke-linecap="round" stroke-linejoin="round" d="M5 15V5a2 2 0 0 1 2-2h10"></path></svg>';
+    const CHECK_ICON =
+      '<svg class="check-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>';
+
+    // Give every code block in the post a copy button. The button lives in a
+    // relative wrapper (a sibling of <pre>) so it stays pinned to the top-right
+    // even when the code scrolls horizontally.
+    function initCopyButtons() {
+      document
+        .querySelectorAll<HTMLPreElement>(".blog-prose pre")
+        .forEach((pre) => {
+          if (pre.dataset.copyReady) return;
+          pre.dataset.copyReady = "true";
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "code-block";
+          pre.parentNode?.insertBefore(wrapper, pre);
+          wrapper.appendChild(pre);
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "copy-btn";
+          btn.setAttribute("aria-label", "Copy");
+          btn.setAttribute("title", "Copy");
+          btn.innerHTML = COPY_ICON + CHECK_ICON;
+          wrapper.appendChild(btn);
+
+          btn.addEventListener("click", async () => {
+            const code = pre.querySelector("code") ?? pre;
+            const text = code.textContent ?? "";
+            try {
+              await navigator.clipboard.writeText(text);
+              btn.classList.add("copied");
+              btn.setAttribute("aria-label", "Copied");
+              window.setTimeout(() => {
+                btn.classList.remove("copied");
+                btn.setAttribute("aria-label", "Copy");
+              }, 1500);
+            } catch {
+              /* clipboard unavailable (e.g. insecure context) — no-op */
+            }
+          });
+        });
+    }
+
+    initCopyButtons();
+    document.addEventListener("astro:after-swap", initCopyButtons);
+  </script>
 </BaseLayout>
