@@ -58,4 +58,50 @@ const { title, description, pubDate, updatedDate, author, heroImage, tags } = As
       </div>
     </div>
   </article>
+
+  <style>
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
+    }
+    .copy-btn .check-icon {
+      display: none;
+    }
+    .copy-btn.copied .copy-icon {
+      display: none;
+    }
+    .copy-btn.copied .check-icon {
+      display: inline;
+      color: #16a34a;
+    }
+  </style>
+
+  <script>
+    function initCopyButtons() {
+      document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = "true";
+        btn.addEventListener("click", async () => {
+          const code = btn.parentElement?.querySelector("code");
+          const text = code?.textContent ?? "";
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.classList.add("copied");
+            btn.setAttribute("aria-label", "Copied");
+            window.setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.setAttribute("aria-label", "Copy prompt");
+            }, 1500);
+          } catch {
+            /* clipboard unavailable */
+          }
+        });
+      });
+    }
+
+    initCopyButtons();
+    document.addEventListener("astro:after-swap", initCopyButtons);
+  </script>
 </BaseLayout>
