@@ -37,24 +37,10 @@ export HEY_BIBLE_API_KEY=your_api_key_here
 
 ## Step 2 — Install the skill
 
-The fastest path for an agent is the **agent skill**. From a shell your agent
-runtime can see:
-
-```bash
-openclaw skills install @hey-bible/hey-bible
-```
-
-That's it. The skill declares the [`@hey-bible/cli`](https://www.npmjs.com/package/@hey-bible/cli)
-package as its dependency, so a compatible runtime — OpenClaw, Hermes, and friends
-all resolve skills from the same [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible)
-registry — installs everything it needs automatically. No glue code, no wiring up
-a tool by hand.
-
-Make sure `HEY_BIBLE_API_KEY` is set in the environment your agent runs in.
-
-**Recommended: hand your agent this prompt.** ClawHub publishes a scoped,
-safety-aware steer prompt — paste it into your agent's chat and it will inspect
-the skill, verify the package, and install it carefully:
+The easiest path is to **hand your agent a prompt** and let it install the skill
+itself. ClawHub publishes a scoped, safety-aware steer prompt — paste it into
+your agent's chat and it will inspect the skill, verify the package, and install
+it carefully:
 
 ```text
 Before installing anything, inspect the ClawHub skill metadata and setup requirements.
@@ -69,7 +55,21 @@ Use only the metadata you can verify from ClawHub; do not invent missing require
 Ask before making any broader environment changes.
 ```
 
-You're ready to go.
+The skill declares the [`@hey-bible/cli`](https://www.npmjs.com/package/@hey-bible/cli)
+package as its dependency, so a compatible runtime — OpenClaw, Hermes, and friends
+all resolve skills from the same [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible)
+registry — installs everything it needs automatically. No glue code, no wiring up
+a tool by hand.
+
+**Prefer the command line?** If you have access to the shell your agent runs in,
+you can install the skill directly instead:
+
+```bash
+openclaw skills install @hey-bible/hey-bible
+```
+
+Either way, make sure `HEY_BIBLE_API_KEY` is set in the environment your agent
+runs in — and you're ready to go.
 
 ## Step 3 — Ask your agent for a verse
 
