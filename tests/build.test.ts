@@ -209,6 +209,14 @@ describe("Static build output", () => {
       expect(html).toContain("HEY_BIBLE_API_KEY");
       expect(html).toContain("read-centric");
       expect(html).toContain("Tutorial");
+      // the ClawHub steer prompt renders as a normal Shiki code block...
+      expect(html).toContain("inspect the ClawHub skill metadata");
+      expect(html).toContain("do not invent missing requirements");
+      // ...not the bespoke <pre> the draft hand-rolled (which blended into the
+      // page background in dark mode)
+      expect(html).not.toContain("text-xs rounded-xl p-3 pr-12");
+      // every code block gets a copy button injected client-side
+      expect(html).toContain("copy-btn");
     });
   });
 
