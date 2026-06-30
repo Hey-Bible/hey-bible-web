@@ -22,7 +22,9 @@ describe("Static build output", () => {
       "blog/index.html",
       "blog/welcome/index.html",
       "blog/the-bible-for-ai-agents/index.html",
+      "blog/give-your-agent-a-bible/index.html",
       "blog/tag/update/index.html",
+      "blog/tag/tutorial/index.html",
     ];
 
     for (const page of pages) {
@@ -198,6 +200,15 @@ describe("Static build output", () => {
       const html = readPage("blog/the-bible-for-ai-agents/index.html");
       expect(html).toContain("The Bible, for AI Agents");
       expect(html).toContain("Moses");
+    });
+
+    it("publishes the agent quickstart tutorial", () => {
+      const html = readPage("blog/give-your-agent-a-bible/index.html");
+      expect(html).toContain("Give Your AI Agent a Bible");
+      expect(html).toContain("@hey-bible/cli");
+      expect(html).toContain("HEY_BIBLE_API_KEY");
+      expect(html).toContain("read-centric");
+      expect(html).toContain("Tutorial");
     });
   });
 
