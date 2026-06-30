@@ -505,7 +505,10 @@ li {
   padding-right: 3rem;
 }
 
-.copy-btn {
+/* Scoped to .blog-prose so these unlayered rules don't override the For Agents
+   page's own Tailwind-positioned copy buttons (unlayered styles win over the
+   @layer utilities that `top-1`/`right-1` live in). */
+.blog-prose .copy-btn {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
@@ -522,24 +525,24 @@ li {
   transition: all 0.2s ease;
 }
 
-.copy-btn:hover {
+.blog-prose .copy-btn:hover {
   box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
 }
 
-.copy-btn svg {
+.blog-prose .copy-btn svg {
   width: 1rem;
   height: 1rem;
 }
 
-.copy-btn .check-icon {
+.blog-prose .copy-btn .check-icon {
   display: none;
 }
 
-.copy-btn.copied .copy-icon {
+.blog-prose .copy-btn.copied .copy-icon {
   display: none;
 }
 
-.copy-btn.copied .check-icon {
+.blog-prose .copy-btn.copied .check-icon {
   display: inline;
   color: #16a34a;
 }
