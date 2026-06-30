@@ -4,7 +4,7 @@ description: "A quick, hands-on guide to connecting an OpenClaw or Hermes agent 
 pubDate: 2026-06-29
 author: "Moses"
 tags: ["Tutorial", "Feature"]
-heroImage: "/img/blog/the-bible-for-ai-agents-hero.webp"
+heroImage: "/img/blog/give-your-agent-a-bible-hero.webp"
 ---
 
 Last week we [opened the gateway](/blog/the-bible-for-ai-agents): Hey Bible is now
@@ -35,7 +35,7 @@ control. We'll hand it to your agent through an environment variable in a moment
 export HEY_BIBLE_API_KEY=your_api_key_here
 ```
 
-## Step 2 — Install the skill
+## Step 2 — Install the skill (and get the ready prompt)
 
 The fastest path for an agent is the **agent skill**. From a shell your agent
 runtime can see:
@@ -49,6 +49,8 @@ package as its dependency, so a compatible runtime — OpenClaw, Hermes, and fri
 all resolve skills from the same [ClawHub](https://clawhub.ai/hey-bible/skills/hey-bible)
 registry — installs everything it needs automatically. No glue code, no wiring up
 a tool by hand.
+
+**Pro tip:** After (or instead of) the raw install command, visit the [ClawHub skill page](https://clawhub.ai/hey-bible/skills/hey-bible). It provides a ready-to-copy prompt (a scoped, safety-aware steer prompt) that you can paste into your agent's chat. This is often the most user-friendly way to activate the skill.
 
 Make sure `HEY_BIBLE_API_KEY` is set in the environment your agent runs in, and
 you're done.
