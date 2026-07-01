@@ -1,0 +1,98 @@
+---
+title: "Creative Use Cases for the Hey Bible Skill & CLI"
+description: "Now that Hey Bible gives AI agents easy access to Scripture, what can you actually build? Here are some of the most useful and creative patterns we're seeing."
+pubDate: 2026-07-01
+author: "Moses"
+tags: ["Feature", "Agents", "Developers"]
+heroImage: "/img/blog/creative-use-cases-hey-bible-skill-cli-hero.webp"
+---
+
+Now that Hey Bible is a proper gateway for AI agents, the obvious next question is: *what can you actually build with it?*
+
+The skill and CLI aren’t just another Bible API. Because they sit on top of a real user account, your agent can access not only the text of Scripture, but also the things people have already saved — their favorites, notes, tags, and even the verse art they’ve generated. That combination opens up some interesting possibilities.
+
+Here are some of the most useful and creative patterns we’re seeing (and building ourselves).
+
+## Personalized Devotional Companions
+
+Most Bible chat tools treat every user the same. With Hey Bible, your agent can become *your* companion.
+
+**Example prompts:**
+- “Using my tagged ‘anxiety’ verses and the notes I’ve written on them, give me a short reflection for this morning.”
+- “Pull the last five verses I favorited and suggest how they connect to what I’m going through right now.”
+- “Create a 7-day reading plan based on the themes in my saved notes.”
+
+This works especially well because the agent can read both the raw Scripture *and* your personal annotations in one context.
+
+## Ministry & Teaching Assistants
+
+Pastors, small group leaders, and Bible teachers are some of the earliest users.
+
+**Useful patterns:**
+- Sermon prep: “Find every passage I’ve noted on ‘forgiveness’ and suggest an outline.”
+- Small group prep: Pull a passage + relevant user notes + cross-references.
+- Curriculum generation: “Create discussion questions for Romans 8 using verses I’ve tagged ‘hope’.”
+
+The structured JSON output makes it easy to feed this data into longer workflows or templates.
+
+## Content Creation Pipelines
+
+This is where combining Hey Bible with other tools gets fun.
+
+**Examples:**
+- **Social media agents**: Pull a verse + your notes on it → generate a caption → create a prompt for an image generator (using the verse art feature as reference).
+- **Newsletter writers**: Weekly digest that includes new favorites, notes you’ve written, and a relevant “verse of the week.”
+- **Art + Scripture**: An agent that takes verses you’ve favorited and turns them into consistent visual series (great for Instagram or church graphics).
+
+Because the skill can return your own generated verse images, you can build agents that remix your existing creative work instead of starting from scratch every time.
+
+## Combining Scripture with Other Data Sources
+
+This is probably the most interesting area right now.
+
+**Real combinations people are exploring:**
+- **Calendar + Scripture**: “Look at my schedule for this week and suggest relevant verses for each major event or meeting.”
+- **Weather + Creation**: On rainy days, surface verses about rain, storms, or God’s provision in nature.
+- **News + Scripture**: Pull today’s headlines and find relevant passages (with proper context and humility).
+- **Personal journal / notes**: An agent that reads both your Hey Bible notes *and* entries from another source (Obsidian, Day One, etc.) and surfaces connections.
+- **Life events**: Birthday, anniversary, or difficult season agents that pull meaningful verses from your saved data.
+
+The CLI’s clean JSON output makes these kinds of multi-source agents much easier to build than scraping or using inconsistent public APIs.
+
+## Long-term Study & Memory Systems
+
+Because users can tag and note verses over months or years, the data becomes a personal knowledge base.
+
+**Ideas:**
+- “Show me how my understanding of this topic has changed based on the notes I’ve added over time.”
+- Theme trackers: Agents that monitor which tags you’re using most and suggest related passages.
+- Accountability or review agents: “What verses have I favorited but never written notes on?”
+
+This turns Hey Bible into more than a lookup tool — it becomes infrastructure for ongoing spiritual formation.
+
+## Automation & Lightweight Workflows
+
+Not everything needs to be a full agent. The CLI shines here:
+
+- Daily verse + your most-used tags → sent to email or Slack
+- A script that exports your favorites and notes into a personal backup or study document
+- Cron jobs that surface “verses you haven’t revisited in a while”
+
+## Current Limitations (Being Honest)
+
+Right now the skill and CLI are primarily read-oriented. Your agent can look up Scripture and read everything you’ve saved, but it can’t yet create new notes or favorites on your behalf. We’re keeping the surface area small and safe while we figure out the right permissions model.
+
+## Where This Gets Exciting
+
+The real power comes when you stop treating Hey Bible as “just the Bible” and start treating it as **your** Bible data + clean structured access.
+
+Combine it with:
+- Other skills (calendar, email, image generation, web search)
+- Your own personal data sources
+- Long-running agent memory
+
+…and you can build things that feel genuinely personal instead of generic.
+
+We’re building this in public and would love to see what you’re making. If you’ve built something interesting with the skill or CLI — even if it’s small — feel free to share it. We might feature it in a future post.
+
+*— Moses*

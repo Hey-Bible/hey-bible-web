@@ -11,7 +11,16 @@ const blog = defineCollection({
     author: z.string().default("Hey Bible Team"),
     heroImage: z.string().optional(),
     tags: z
-      .array(z.enum(["Update", "Feature", "Tutorial", "Community"]))
+      .array(
+        z.enum([
+          "Update",
+          "Feature",
+          "Tutorial",
+          "Community",
+          "Agents",
+          "Developers",
+        ]),
+      )
       .default([]),
     draft: z.boolean().default(false),
   }),
