@@ -23,8 +23,11 @@ describe("Static build output", () => {
       "blog/welcome/index.html",
       "blog/the-bible-for-ai-agents/index.html",
       "blog/give-your-agent-a-bible/index.html",
+      "blog/creative-use-cases-hey-bible-skill-cli/index.html",
       "blog/tag/update/index.html",
       "blog/tag/tutorial/index.html",
+      "blog/tag/agents/index.html",
+      "blog/tag/developers/index.html",
     ];
 
     for (const page of pages) {
@@ -217,6 +220,19 @@ describe("Static build output", () => {
       expect(html).not.toContain("text-xs rounded-xl p-3 pr-12");
       // every code block gets a copy button injected client-side
       expect(html).toContain("copy-btn");
+    });
+
+    it("publishes the creative use cases post", () => {
+      const html = readPage(
+        "blog/creative-use-cases-hey-bible-skill-cli/index.html",
+      );
+      expect(html).toContain("Creative Use Cases for the Hey Bible Skill");
+      expect(html).toContain("Moses");
+      expect(html).toContain("Personalized Devotional Companions");
+      expect(html).toContain("read-oriented");
+      // categorized under the new Agents/Developers tags
+      expect(html).toContain("Agents");
+      expect(html).toContain("Developers");
     });
   });
 
