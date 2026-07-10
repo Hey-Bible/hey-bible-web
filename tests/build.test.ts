@@ -91,6 +91,13 @@ describe("Static build output", () => {
       expect(html).toContain("app-store.svg");
       expect(html).toContain("play-store.svg");
     });
+
+    it("uses a features-specific Open Graph image", () => {
+      const html = readPage("features/index.html");
+      expect(html).toContain("/img/og-features.png");
+      // Asset must ship with the build
+      expect(existsSync(join(dist, "img/og-features.png"))).toBe(true);
+    });
   });
 
   describe("Blog", () => {
