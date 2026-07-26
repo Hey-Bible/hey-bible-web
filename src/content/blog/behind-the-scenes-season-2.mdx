@@ -7,21 +7,54 @@ tags: ["Podcast", "Behind the Scenes", "Product"]
 heroImage: "/img/blog/behind-the-scenes-season-2-hero.webp"
 ---
 
-[Season 1 of the Hey Bible Podcast](https://✝️.fm) is already out in the world: the free World English Bible, narrated and released one book at a time on a steady cadence — Spotify, Apple Podcasts, and [https://✝️.fm](https://✝️.fm).
+[Season 1 of the Hey Bible Podcast](https://✝️.fm) is already out in the world: the free World English Bible, narrated and released one book at a time. You can listen on Spotify, Apple Podcasts, [podcast.heybible.org](https://podcast.heybible.org), or the short link [https://✝️.fm](https://✝️.fm).
 
-**Season 2** is what we’re building next to it. Same free Scripture, same “press play and listen” mission, richer production: a warmer HD narrator, classical oil-painting chapter art, and slow Ken Burns video timed to the verses. This is the light product preview. For the full workshop write-up — chunking, ffmpeg, cron jobs, the scars we kept — see Moses’s post: [Hey Bible Podcast Season 2: Behind the Scenes](https://moses.codes/blog/hey-bible-podcast-season-2-behind-the-scenes).
+**Season 2** is what we’re building next — same free Scripture, richer production. This is the product-facing preview. For the full technical write-up (ffmpeg filter graphs, verse chunking, cron jobs, and the scars we kept along the way), see Moses’s longer post: [Hey Bible Podcast Season 2: Behind the Scenes](https://moses.codes/blog/hey-bible-podcast-season-2-behind-the-scenes).
 
-We’re far enough along to share a real chapter cut, not a mood board.
+## A real chapter, not a mockup
+
+We’re far enough along to share real output, not a mood board. Genesis 1 is already a finished chapter cut: oil plates, slow motion, and the full narration underneath.
 
 **[Genesis 1 video preview (~90s)](https://files.wdh.sh/download/714884994c9671a73d7e207b)**  
 **[Full Genesis 1 chapter video](https://files.wdh.sh/download/4d41fc9a5fb69eeed71ac8be)** · **[Audio only](https://files.wdh.sh/download/94f6e3d87b4bc0431177133a)**
 
-What’s different is less a single feature and more a small factory. Nightly, Venice generates verse audio with MiniMax HD **DeepVoiceMan** — warmer and fuller than Season 1’s Bill track — and we keep every verse MP3 forever, stitching chapter audio only when a chapter is complete. A little later, a second job picks up chapters that already have audio: it groups verses into ~18–30 second chunks on verse boundaries, paints an oil still per chunk with **Grok Imagine**, animates each still with a gentle Ken Burns zoom and pan, crossfades the segments, and lays the chapter narration underneath. Two jobs on purpose so a long video render never blocks tomorrow’s verses.
+What’s new in Season 2 is less a single switch and more a small stack working together. The narrator is MiniMax HD **DeepVoiceMan** through Venice — warmer and fuller than Season 1’s Bill track. Chapter art is classical European old-master **oil painting**, stills from **Grok Imagine**, wide and quiet rather than flashy. On top of that, each chapter becomes **video**: slow **Ken Burns** motion across those plates, timed to the verse audio so the picture changes with the reading instead of on an arbitrary clock. And the work is split into **two nightly jobs** — audio first, then photos and video — so a long render never blocks tomorrow’s verses.
 
-We tried photoreal landscapes along the way. They felt like stock footage next to the text. The look we locked is quieter: classical European **oil painting**, wide 16:9 plates, no frames or borders, motion slow enough to sit with — more museum wing than trailer. No drama tracks. No multi-voice cast. Just clear Scripture and pictures that move at the pace of the words.
+## How the factory works
 
-Season 2 doesn’t launch publicly until Season 1 finishes all **66 books**. We’re generating S2 in parallel so that day isn’t a cold start; S1 keeps its Sunday release rhythm, and S2 stays behind a release gate until that finish line.
+**Job 1 runs in the evening and handles audio.** It generates verse MP3s with Venice TTS, keeps every verse forever (the permanent library rule from Season 1 still stands), and stitches chapter audio only when a chapter’s verses are complete. Hundreds of verses can land in a good night; if a file already exists, we skip it and move on.
 
-Until then, Season 1 is ready whenever you are — [https://✝️.fm](https://✝️.fm), [podcast.heybible.org](https://podcast.heybible.org), or *The Hey Bible Podcast* on Spotify and Apple. And if you want the engineering deep dive, it’s all on [moses.codes](https://moses.codes/blog/hey-bible-podcast-season-2-behind-the-scenes).
+**Job 2 starts a little later and handles media.** For chapters that already have audio, it groups verses into roughly **18–30 second** chunks on verse boundaries, paints an oil still per chunk, animates each still with a gentle Ken Burns zoom and pan, crossfades the segments, and muxes the chapter narration underneath. No drama tracks. No multi-voice cast. Just clear Scripture, gallery-quiet art, and motion slow enough to sit with.
 
-Same mission as always: a free Bible you can press play on. Season 2 just adds pictures that move with the words.
+That split is intentional. Early on we tried doing speech and long ffmpeg in one sitting; the video side is simply too slow and too easy to interrupt. Audio stays a fast, repeatable batch. Media grinds after the narration has already earned its chapter file.
+
+## Style choices
+
+We tried photoreal landscapes. They felt like stock footage next to the text — too “travel channel,” not enough “this was made on purpose.”
+
+The lock we kept is quieter:
+
+- Classical **oil painting** look  
+- Wide **16:9** plates  
+- **No frames or borders**  
+- Gentle motion (smooth ease, not whip-pans)
+
+It should feel like walking a museum wing while someone reads Genesis — not like a trailer. Prompts stay content-aware so the art follows the passage, and if a still gets blocked we fall back to a safer landscape rather than stalling the whole chapter.
+
+## When Season 2 launches
+
+**After Season 1 finishes all 66 books.**
+
+We’re generating S2 in parallel so launch isn’t a cold start. Season 1 keeps its Sunday release rhythm; Season 2 stays behind a release gate until that finish line. We won’t overwrite S1 library objects or confuse the feed people are already subscribed to — when S2 ships, it should feel like a true second season of the same show, not a replacement.
+
+## Listen now, dig deeper later
+
+Until S2 is public, Season 1 is ready whenever you are:
+
+- [https://✝️.fm](https://✝️.fm)  
+- [podcast.heybible.org](https://podcast.heybible.org)  
+- Spotify & Apple Podcasts: *The Hey Bible Podcast*
+
+And if you want the engineering deep dive — DeepVoiceMan via Venice, Grok Imagine prompts, verse-boundary chunking, the ffmpeg Ken Burns stack, why media runs as a script-only cron — it’s all in the longer article on [moses.codes](https://moses.codes/blog/hey-bible-podcast-season-2-behind-the-scenes).
+
+Same mission as always: a free Bible you can press play on. Season 2 just adds pictures that move at the pace of the words.
