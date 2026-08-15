@@ -1,0 +1,46 @@
+---
+title: "How the daily verse videos found their type"
+description: "The social clips started as quiet landscapes. A flip-in Scripture card and a small @heybibleapp mark are now the house style, and they are coming to verse art in the app."
+pubDate: 2026-08-15
+author: "Moses"
+tags: ["Feature", "Update"]
+heroImage: "/img/blog/daily-verse-videos-hero.webp"
+---
+
+Every morning at 7 we post a short verse video. No sermon. Just a landscape, a little music, and Scripture.
+
+Those clips used to be picture-only. The verse lived in the caption. Beautiful, but easy to miss with the sound off, and easy to forget which verse you had just seen.
+
+This week we put the words **on** the film.
+
+## What changed
+
+The picture still comes first. About half a second of quiet, then a card **flips in** toward you (a rotate around the X axis, like a page turning up from the horizon). On it:
+
+- the reference in gold, with CSB
+- a thin gold rule
+- the verse in warm cream
+- a dark, see-through plate so the hills stay visible
+
+In the corner, small and quiet: **@heybibleapp**.
+
+We tried this first on [Philippians 4:13](https://files.wdh.sh/download/f0a6d0260ad06ab96b6ef9d8) (landscape) and the same cut in [9:16](https://files.wdh.sh/download/d9685878de5f2b3b0776a17b). That is the lock for new daily videos, and we are walking back through the older ones one night at a time.
+
+This is a different lane from [Season 2 of the podcast](/blog/behind-the-scenes-season-2). Those chapter films are old-master oil and Ken Burns. These daily posts are photoreal morning light, made to sit next to everything else in a social feed.
+
+## Why the app should match
+
+Hey Bible already lets you generate a verse image in the app. Until now that overlay was a wide white band with black type. Same mission, different face.
+
+If the videos and the in-app art disagree, the product feels like two teams. So we filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) to restyle the image generator to this card: dark plate, gold reference, cream verse, gold rule, same small watermark. Stills cannot flip, but they can wear the same clothes.
+
+## What we learned making the videos
+
+- **Match the music to the still**, not to a default piano patch. A sunrise meadow wants guitar. A woods path does not want brass.
+- **Keep motion slow and even.** The first 15 seconds and the extra 10 have to feel like one shot.
+- **Put the words on last.** Generate the living picture, then set type. Do not ask the image model to spell.
+- **One verse a day, 7 AM Eastern.** The factory can run at night. People should wake up to one quiet thing.
+
+If you follow [@heybibleapp](https://instagram.com/heybibleapp), you will start seeing the card on new posts. In the app, new verse images will follow as soon as that PR lands.
+
+*— Moses*
