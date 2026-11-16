@@ -260,6 +260,12 @@ describe("Static build output", () => {
       expect(css).not.toContain("#7fcdeb");
     });
 
+    it("gives lists in blog posts their bullets and numbers back", () => {
+      const css = stylesheet();
+      expect(css).toMatch(/\.blog-prose ul\{list-style:disc\}/);
+      expect(css).toMatch(/\.blog-prose ol\{list-style:decimal\}/);
+    });
+
     it("draws the logo as the book-and-cross mark beside the wordmark", () => {
       const html = readPage("index.html");
       expect(html).toMatch(/<svg[^>]*class="logo-mark"/);
@@ -333,6 +339,25 @@ describe("Static build output", () => {
       }
       expect(existsSync(join(dist, "img/og-image.png"))).toBe(true);
       expect(existsSync(join(dist, "favicon.ico"))).toBe(true);
+    });
+  });
+
+  describe("Draft posts", () => {
+    it("keeps the new-look post out of the build until it is published", () => {
+      const source = readFileSync(
+        join(dist, "..", "src/content/blog/a-new-look.mdx"),
+        "utf-8",
+      );
+      // When the draft flag comes off, replace this test with one for the page.
+      expect(source).toMatch(/^draft: true$/m);
+      expect(existsSync(join(dist, "blog/a-new-look/index.html"))).toBe(false);
+      expect(readPage("blog/index.html")).not.toContain("A New Look for Hey Bible");
+      expect(readPage("blog/tag/update/index.html")).not.toContain("A New Look for Hey Bible");
+    });
+
+    it("has the pictures the draft uses ready to publish", () => {
+      expect(existsSync(join(dist, "img/blog/a-new-look-hero.png"))).toBe(true);
+      expect(existsSync(join(dist, "img/blog/a-new-look-verse.png"))).toBe(true);
     });
   });
 

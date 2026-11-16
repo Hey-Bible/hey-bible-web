@@ -568,6 +568,14 @@ li {
   padding-left: 1.5rem;
 }
 
+/* Tailwind's reset takes list markers away; posts need them back */
+.blog-prose ul { list-style: disc; }
+.blog-prose ol { list-style: decimal; }
+
+.blog-prose li::marker {
+  color: var(--color-retro-primary);
+}
+
 .blog-prose img {
   border-radius: var(--radius-md);
   max-width: 100%;
