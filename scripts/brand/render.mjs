@@ -23,6 +23,8 @@ const night = `${post}?night&ref=${encodeURIComponent('Psalm 4:8 · KJV')}&text=
 /** [source, width, height, output] */
 export const jobs = [
   ['brand/og-image.html', 1200, 630, 'public/img/og-image.png'],
+  ['brand/blog-sticker-look-hero.html', 1600, 900, 'public/img/blog/a-new-look-hero.png'],
+  [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],
   ['brand/social/x-header.html', 1500, 500, `${social}/x-header.png`],
   // The same header is served from the site, where older links point.
