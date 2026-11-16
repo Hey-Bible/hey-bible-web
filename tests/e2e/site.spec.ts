@@ -153,6 +153,39 @@ test.describe("Storybook Sticker theme", () => {
     }
   });
 
+  test("the giving note sits in the middle of the page on a wide screen", async ({ page }) => {
+    for (const width of [1440, 1728]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const pill = await page.locator("header .charity-pill").first().boundingBox();
+      const pageWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const centre = pill!.x + pill!.width / 2;
+      expect(Math.abs(centre - pageWidth / 2), `centred at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("the navigation links stay on one line beside the giving note", async ({ page }) => {
+    for (const width of [1024, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const link = page.locator('header nav a[href="/agents"]');
+      const box = await link.boundingBox();
+      const lineHeight = await link.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+      expect(box!.height, `"For Agents" is one line at ${width}px`).toBeLessThan(lineHeight * 1.5);
+    }
+  });
+
+  test("the header does not make the page scroll sideways", async ({ page }) => {
+    for (const width of [390, 640, 768, 1024, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow, `no sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
+    }
+  });
+
   test("the hero sheep is hidden on a phone and shown on a desktop", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");

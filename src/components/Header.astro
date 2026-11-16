@@ -17,11 +17,15 @@ const navLinks = [
   class="sticky top-0 z-50 border-b backdrop-blur-md"
   style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
 >
-  <nav class="flex justify-between items-center gap-3 w-full px-4 py-3">
+  <!-- From 1024px up the bar is three columns, with equal ones either side, so
+       the giving note sits in the middle of the page. If the links need more
+       room than their share, their column grows and the note gives way
+       instead of sliding under them. -->
+  <nav class="flex justify-between items-center w-full px-4 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-3">
     <div class="flex items-center gap-2">
       <a href="/" class="flex items-center gap-2 no-underline glow-hover">
         <LogoMark size={28} />
-        <span class="logo-wordmark text-xl" style={`color: var(--color-retro-text);`}>Hey Bible</span>
+        <span class="logo-wordmark text-xl whitespace-nowrap" style={`color: var(--color-retro-text);`}>Hey Bible</span>
       </a>
     </div>
     <span
@@ -30,12 +34,12 @@ const navLinks = [
       <span class="leading-none" style="font-size: 0.75rem; margin-top: -4px;">&#9962;</span>
       <span class="leading-none">All proceeds support local churches and food banks</span>
     </span>
-    <div class="flex gap-4 items-center">
+    <div class="flex gap-4 items-center lg:col-start-3 lg:justify-self-end">
       {navLinks.map(link => (
         <a
           href={link.href}
           class:list={[
-            'text-sm font-bold no-underline glow-hover hidden sm:inline',
+            'text-sm font-bold no-underline glow-hover hidden sm:inline whitespace-nowrap',
             { 'opacity-75': link.href === '/' ? pathname === '/' : pathname.startsWith(link.href) }
           ]}
           style={`color: var(--color-retro-text);`}
