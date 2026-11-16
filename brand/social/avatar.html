@@ -1,0 +1,24 @@
+<!doctype html>
+<!-- Profile picture for X, Instagram and Facebook: 1024×1024. Those sites crop
+     it to a circle, so the mark stays well inside the middle. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible profile picture</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <style>
+      .canvas {
+        width: 1024px;
+        height: 1024px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      [data-art='mark'] { width: 400px; color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <div class="canvas"><span data-art="mark"></span></div>
+    <script src="../art.js"></script>
+  </body>
+</html>

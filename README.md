@@ -19,3 +19,19 @@ Hey Bible is available on the [App Store](https://apps.apple.com/us/app/hey-bibl
 ### Support
 
 If you have any questions or feedback, please fill out [this form](https://app.youform.com/forms/o1pfzrgp) and we'll get back to you as soon as possible.
+
+## Brand images
+
+The share image, favicons, logo and social graphics are drawn from sources in
+this repository, in the Storybook Sticker look the app uses.
+
+- `brand/` holds the sources: `og-image.html`, and under `brand/social/` the
+  profile picture, X header, Facebook cover and a post template
+  (`post.html`, which takes its words from the address — see the notes at the
+  top of that file).
+- `npm run brand` renders them. It writes the share image, favicons and logo
+  into `public/img/`, and the social graphics into `brand/social/png/`, which
+  is not part of the published site.
+
+It needs ImageMagick 7 and a browser for Playwright (`npx playwright install
+chromium`, or Google Chrome).

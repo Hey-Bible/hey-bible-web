@@ -15,8 +15,7 @@ const { title, description, pubDate, heroImage, tags, slug } = Astro.props;
 
 <a href={`/blog/${slug}`} class="block no-underline group">
   <article
-    class="rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-    style={`background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);`}
+    class="sticker-card overflow-hidden transition-all duration-300 hover:-translate-y-1"
   >
     {heroImage && (
       <img
@@ -30,15 +29,14 @@ const { title, description, pubDate, heroImage, tags, slug } = Astro.props;
         <div class="flex gap-2 mb-2">
           {tags.map(tag => (
             <span
-              class="text-xs font-bold px-2 py-0.5 rounded-full"
-              style={`background: var(--color-retro-primary); color: #ffffff;`}
+              class="sticker-pill text-xs px-2.5 py-0.5"
             >
               {tag}
             </span>
           ))}
         </div>
       )}
-      <h3 class="text-lg font-extrabold mb-1 group-hover:opacity-80 transition-opacity" style={`color: var(--color-retro-text);`}>
+      <h3 class="text-xl mb-1 group-hover:opacity-80 transition-opacity" style={`color: var(--color-retro-text);`}>
         {title}
       </h3>
       <p class="text-xs opacity-60 mb-2" style={`color: var(--color-retro-text);`}>

@@ -69,11 +69,10 @@ const capabilities = [
       of door.
     </p>
     <div class="flex flex-wrap gap-3 justify-center items-center mb-12">
-      <a href="https://docs.heybible.app" class="login-button text-base inline-flex items-center justify-center leading-none" style="padding: 0.625rem 1.5rem; border: 1px solid transparent;" target="_blank" rel="noopener noreferrer">Read the docs<ExternalLinkIcon /></a>
+      <a href="https://docs.heybible.app" class="login-button text-base inline-flex items-center justify-center leading-none" style="padding: 0.625rem 1.5rem;" target="_blank" rel="noopener noreferrer">Read the docs<ExternalLinkIcon /></a>
       <a
         href="https://heybible.app"
-        class="text-base font-bold no-underline glow-hover px-5 py-2.5 rounded-full inline-flex items-center justify-center leading-none"
-        style="color: var(--color-retro-text); border: 1px solid var(--color-retro-secondary);"
+        class="sticker-pill-outline text-base no-underline glow-hover px-5 py-2.5 inline-flex items-center justify-center leading-none"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -90,8 +89,7 @@ const capabilities = [
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-[900px]">
       {methods.map((m) => (
         <div
-          class="rounded-2xl p-5 flex flex-col"
-          style="background: var(--color-retro-surface-card); box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--color-retro-secondary);"
+          class="sticker-card p-5 flex flex-col"
         >
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-lg font-extrabold" style="color: var(--color-retro-text);">{m.icon} {m.title}</h3>
@@ -101,12 +99,12 @@ const capabilities = [
           <div class="relative mb-3">
             <pre
               class="text-xs rounded-xl p-3 pr-12 overflow-x-auto"
-              style="background: var(--color-retro-bg); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+              style="background: var(--color-retro-code-bg); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
             ><code>{m.code}</code></pre>
             <button
               type="button"
               class="copy-btn absolute top-1 right-1 inline-flex items-center justify-center w-8 h-8 rounded-md cursor-pointer"
-              style="background: var(--color-retro-surface-bar); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+              style="background: var(--color-retro-surface-card); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
               aria-label="Copy command"
               title="Copy command"
             >
@@ -137,10 +135,10 @@ const capabilities = [
     <ul class="w-full max-w-[640px] flex flex-col gap-3">
       {capabilities.map((c) => (
         <li
-          class="flex items-start gap-3 rounded-xl p-3 text-sm"
-          style="background: var(--color-retro-surface-card); border: 1px solid var(--color-retro-secondary); color: var(--color-retro-text);"
+          class="capability flex items-start gap-3 p-3 text-sm"
+          style="background: var(--color-retro-surface-card); border: 3px solid var(--color-sticker-edge); border-radius: var(--radius-sm); box-shadow: var(--sticker-shadow-sm); color: var(--color-retro-text);"
         >
-          <span aria-hidden="true">✦</span>
+          <span aria-hidden="true" style="color: var(--color-retro-primary);">✦</span>
           <span class="opacity-90">{c}</span>
         </li>
       ))}
@@ -162,7 +160,7 @@ const capabilities = [
       transition: all 0.2s ease;
     }
     .copy-btn:hover {
-      box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
+      box-shadow: var(--sticker-shadow-sm);
     }
     .copy-btn .check-icon {
       display: none;

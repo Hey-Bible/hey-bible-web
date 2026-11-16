@@ -17,14 +17,14 @@ const { title, description, pubDate, updatedDate, author, heroImage, tags } = As
 
 <BaseLayout title={`${title} | Hey Bible Blog`} description={description} image={heroImage}>
   <article class="max-w-3xl mx-auto px-4 py-12">
-    <div class="rounded-2xl overflow-hidden" style={`background: var(--color-retro-surface-card); box-shadow: 0 4px 24px rgba(0,0,0,0.08); border: 1px solid var(--color-retro-secondary);`}>
+    <div class="sticker-card overflow-hidden">
       <div class="p-6 md:p-10">
         {heroImage && (
           <img
             src={heroImage}
             alt={title}
             class="w-full rounded-2xl mb-8"
-            style="box-shadow: 0 4px 20px rgba(0,0,0,0.1);"
+            style="box-shadow: var(--sticker-shadow-sm);"
           />
         )}
         <div class="mb-8">
@@ -33,15 +33,14 @@ const { title, description, pubDate, updatedDate, author, heroImage, tags } = As
               {tags.map(tag => (
                 <a
                   href={`/blog/tag/${tag.toLowerCase()}`}
-                  class="text-xs font-bold px-3 py-1 rounded-full no-underline"
-                  style={`background: var(--color-retro-primary); color: #ffffff;`}
+                  class="sticker-pill text-xs px-3 py-1 no-underline"
                 >
                   {tag}
                 </a>
               ))}
             </div>
           )}
-          <h1 class="text-3xl md:text-4xl font-extrabold text-left mb-2">{title}</h1>
+          <h1 class="text-3xl md:text-4xl mb-2" style="text-align: left;">{title}</h1>
           <p class="text-sm opacity-60">
             By {author} &middot; <FormattedDate date={pubDate} />
             {updatedDate && (

@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- X (Twitter) header: 1500×500. The profile picture covers the bottom-left
+     corner and X trims a strip off the top and bottom on some screens, so the
+     words sit in the middle and to the right. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible X header</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <style>
+      .canvas {
+        width: 1500px;
+        height: 500px;
+        padding: 0 150px 0 430px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .lockup { --logo: 92px; }
+      .tagline { margin: 26px 0 0; font-size: 34px; color: var(--soft-ink); }
+      .sticker { --cut: 6px; width: 330px; transform: rotate(3deg); }
+    </style>
+  </head>
+  <body>
+    <div class="canvas">
+      <span class="decor" data-art="sprig-sage" style="width: 130px; left: 300px; top: -40px; transform: rotate(190deg)"></span>
+      <span class="decor" data-art="sprig-rose" style="width: 130px; right: -26px; bottom: -30px; transform: rotate(-20deg)"></span>
+      <span class="sticker" data-art="sun" style="position: absolute; --cut: 4px; width: 84px; left: 120px; top: 70px; transform: rotate(-8deg)"></span>
+      <div>
+        <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
+        <p class="tagline">Search, study and share Scripture</p>
+      </div>
+      <span class="sticker" data-art="meadow"></span>
+    </div>
+    <script src="../art.js"></script>
+  </body>
+</html>

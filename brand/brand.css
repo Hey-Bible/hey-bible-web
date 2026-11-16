@@ -1,0 +1,92 @@
+/* Shared by the brand image sources in this folder. The colours and type
+   mirror src/styles/global.css. */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@700;800&display=swap');
+
+:root {
+  --page: #f3e8d6;
+  --card: #fbf4e6;
+  --ink: #43302a;
+  --soft-ink: #6b5347;
+  --terracotta: #a4573e;
+  --sage: #9db08a;
+  --rose: #e8b3a0;
+  --sky: #bcd9e6;
+  --wheat: #e8c277;
+  --edge: #ffffff;
+  --shadow: rgba(67, 48, 42, 0.2);
+}
+
+/* The sticker sheet at night */
+.night {
+  --page: #232b3d;
+  --card: #2e384e;
+  --ink: #f3e8d6;
+  --soft-ink: #c9bfae;
+  --terracotta: #e8c277;
+  --edge: #f3e8d6;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+html,
+body {
+  margin: 0;
+}
+
+.canvas {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: var(--page);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+}
+
+[data-art] {
+  display: block;
+  flex: none;
+}
+
+[data-art] svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.lockup {
+  display: flex;
+  align-items: center;
+  /* The mark is 16 wide and 19 tall; --logo is its height */
+  gap: calc(var(--logo) * 0.5);
+  color: var(--ink);
+}
+
+.lockup [data-art='mark'] {
+  width: calc(var(--logo) * 16 / 19);
+}
+
+.wordmark {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: var(--logo);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* The die-cut: a white edge all the way round the art, then a soft shadow.
+   --cut is the width of the edge. The edge stays white at night. */
+.sticker {
+  filter: drop-shadow(var(--cut) 0 0 #fff) drop-shadow(calc(var(--cut) * -1) 0 0 #fff)
+    drop-shadow(0 var(--cut) 0 #fff) drop-shadow(0 calc(var(--cut) * -1) 0 #fff)
+    drop-shadow(0 calc(var(--cut) * 2) calc(var(--cut) * 2.2) rgba(67, 48, 42, 0.22));
+}
+
+.decor {
+  position: absolute;
+  opacity: 0.6;
+}
+
+.night .decor {
+  opacity: 0.8;
+}
