@@ -90,6 +90,17 @@ describe("Brand images", () => {
     }
   });
 
+  it("fills the search asset's open ground with soft sprigs and stars that show in the still", () => {
+    const page = readFileSync(join(root, "brand/store/hero.html"), "utf-8");
+    const css = readFileSync(join(root, "brand/motion.css"), "utf-8");
+    expect(page.match(/class="loose soft search-only" data-art="sprig-/g)?.length ?? 0).toBeGreaterThanOrEqual(6);
+    expect(page.match(/class="loose m-glint[^"]* search-only" data-art="star"/g)?.length ?? 0).toBeGreaterThanOrEqual(8);
+    // Unlike .m-twinkle, these stars are not hidden at rest, so the poster has them too
+    const rule = css.match(/\.m-glint \{([^}]*)\}/)?.[1] ?? "";
+    expect(rule).not.toMatch(/opacity:\s*0\s*;/);
+    expect(css).toMatch(/@keyframes m-glint-a\s*\{\s*0%, 100% \{[^}]*opacity: 1/);
+  });
+
   it("labels every verse as World English Bible, which is free to set in a picture", () => {
     const sources = ["brand/store/hero.html", "brand/social/post.html", "scripts/brand/render.mjs"];
     let labels = 0;

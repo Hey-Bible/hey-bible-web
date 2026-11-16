@@ -123,6 +123,28 @@
   90%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
 }
 
+/* Stars that are in the still image: always there, each gently pulsing */
+.m-glint {
+  transform-origin: 50% 50%;
+  animation-name: m-glint-a;
+}
+.m-glint.b { animation-name: m-glint-b; }
+.m-glint.c { animation-name: m-glint-c; }
+@keyframes m-glint-a {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(0.68) rotate(18deg); opacity: 0.6; }
+}
+@keyframes m-glint-b {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  30% { transform: scale(0.7) rotate(-16deg); opacity: 0.6; }
+  68% { transform: scale(1.1) rotate(6deg); opacity: 1; }
+}
+@keyframes m-glint-c {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  24% { transform: scale(1.1) rotate(-6deg); opacity: 1; }
+  72% { transform: scale(0.7) rotate(16deg); opacity: 0.6; }
+}
+
 /* The sun's eight rays turn one place round, so the end meets the start */
 .m-rays {
   transform-origin: 50% 50%;
