@@ -15,6 +15,11 @@ function pngSize(path: string): [number, number] {
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
 }
 
+/** Whether a stylesheet moves the class: a rule for it, or keyframes with its name. */
+function definesMotion(css: string, name: string): boolean {
+  return new RegExp(`(\\.|@keyframes\\s+)${name}(?![\\w-])[^{}]*\\{`).test(css);
+}
+
 describe("Brand images", () => {
   it("has a source page for every image", () => {
     for (const [source] of jobs as [string, number, number, string][]) {
@@ -57,6 +62,45 @@ describe("Brand images", () => {
         expect(drawn, `${file} asks for "${name}", which brand/art.js does not draw`).toBe(true);
       }
     }
+  });
+
+  it("puts the shepherd in the meadow with the sheep", () => {
+    const art = readFileSync(join(root, "brand/art.js"), "utf-8");
+    const meadow = art.slice(art.indexOf("  meadow: () =>"), art.indexOf("  moon: () =>"));
+    expect(meadow).toContain("person('shepherd')");
+    expect(meadow).toContain("m-sheep");
+    expect(meadow).toContain("m-lamb");
+  });
+
+  it("has motion for every moving part the art and pages name", () => {
+    const css = readFileSync(join(root, "brand/motion.css"), "utf-8");
+    const files = ["brand/art.js", "brand/og-image.html", "brand/store/hero.html"];
+    const named = new Set<string>();
+    for (const file of files) {
+      const text = readFileSync(join(root, file), "utf-8");
+      for (const [, classes] of text.matchAll(/class="([^"]*)"/g)) {
+        for (const name of classes.split(/\s+/)) if (name.startsWith("m-")) named.add(name);
+      }
+    }
+    expect(named.has("m-shepherd")).toBe(true);
+    // A page may also keep motion of its own beside the shared stylesheet
+    const styles = css + files.map((file) => readFileSync(join(root, file), "utf-8")).join("\n");
+    for (const name of named) {
+      expect(definesMotion(styles, name), `no motion is defined for .${name}`).toBe(true);
+    }
+  });
+
+  it("labels every verse as World English Bible, which is free to set in a picture", () => {
+    const sources = ["brand/store/hero.html", "brand/social/post.html", "scripts/brand/render.mjs"];
+    let labels = 0;
+    for (const file of sources) {
+      const text = readFileSync(join(root, file), "utf-8");
+      for (const [label, translation] of text.matchAll(/[A-Z1-3][A-Za-z ]* \d+:\d+ · ([A-Z]+)/g)) {
+        expect(translation, `${file}: "${label}"`).toBe("WEB");
+        labels++;
+      }
+    }
+    expect(labels, "expected to find verse labels in the brand sources").toBeGreaterThan(6);
   });
 
   describe("share videos", () => {

@@ -6,14 +6,15 @@
 
   What it says comes from the address:
     text   the verse or message
-    ref    the label above it, for example "Psalm 23:1 · KJV"
-    art    sheep, meadow, sun or moon (default meadow)
+    ref    the label above it, for example "Psalm 23:1 · WEB"
+    art    any drawing in ../art.js: meadow, sheep, shepherd, bible, dove,
+           lamp, cross, sun, moon and so on (default meadow)
     night  add this for the dark version
 
   Example:
-    post.html?ref=Psalm 23:1 · KJV&text=The Lord is my shepherd; I shall not want.
+    post.html?ref=Psalm 23:1 · WEB&text=Yahweh is my shepherd: I shall lack nothing.
 
-  Use a public-domain translation (KJV, WEB) unless the translation's licence
+  Use a public-domain translation (WEB, KJV) unless the translation's licence
   allows the verse to be set in a picture.
 -->
 <html lang="en">
@@ -107,12 +108,12 @@
     </div>
     <script>
       const params = new URLSearchParams(location.search);
-      const text = params.get('text') || 'The Lord is my shepherd; I shall not want.';
+      const text = params.get('text') || 'Yahweh is my shepherd: I shall lack nothing.';
       const night = params.has('night');
       document.getElementById('canvas').classList.toggle('night', night);
       document.getElementById('canvas').classList.toggle('tall', innerHeight / innerWidth > 1.5);
       document.getElementById('art').dataset.art = params.get('art') || (night ? 'moon' : 'meadow');
-      document.getElementById('ref').textContent = params.get('ref') || 'Psalm 23:1 · KJV';
+      document.getElementById('ref').textContent = params.get('ref') || 'Psalm 23:1 · WEB';
       const textEl = document.getElementById('text');
       textEl.textContent = text;
       textEl.classList.toggle('long', text.length > 140);

@@ -13,11 +13,11 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 export const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const social = 'brand/social/png';
 const post = 'brand/social/post.html';
-const wide = `${post}?ref=${encodeURIComponent('John 10:27 · KJV')}&text=${encodeURIComponent(
+const wide = `${post}?ref=${encodeURIComponent('John 10:27 · WEB')}&text=${encodeURIComponent(
   'My sheep hear my voice, and I know them, and they follow me.',
 )}&art=sheep`;
-const night = `${post}?night&ref=${encodeURIComponent('Psalm 4:8 · KJV')}&text=${encodeURIComponent(
-  'I will both lay me down in peace, and sleep: for thou, Lord, only makest me dwell in safety.',
+const night = `${post}?night&ref=${encodeURIComponent('Psalm 4:8 · WEB')}&text=${encodeURIComponent(
+  'In peace I will both lay myself down and sleep, for you, Yahweh alone, make me live in safety.',
 )}`;
 
 /** [source, width, height, output] */
