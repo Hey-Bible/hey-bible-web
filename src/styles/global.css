@@ -1,46 +1,91 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════
-   Hey Bible — Retro-Flat Design Tokens
+   Hey Bible — Storybook Sticker Design Tokens
+   The values mirror the app: hey-bible-app docs/storybook-sticker-theme.md
    ═══════════════════════════════════════════ */
 
 @theme {
-  --color-retro-bg: #E8F6FA;
-  --color-retro-text: #1a2833;
-  --color-retro-primary: #7FCDEB;
-  --color-retro-primary-rgb: 127, 205, 235;
-  --color-retro-secondary: #A8DAED;
-  --color-retro-secondary-rgb: 168, 218, 237;
-  --color-retro-tertiary: #B8D4F1;
-  --color-retro-surface-bar: #f4fbfd;
-  --color-retro-surface-card: #ffffff;
-  --color-retro-glow-rgb: 127, 205, 235;
-  --color-retro-charity-bg-start: #E8F6FA;
-  --color-retro-charity-bg-mid: #d4f0e0;
-  --color-retro-charity-text: #2c7a4e;
-  --color-retro-charity-border: #a8e6cf;
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
+  --color-retro-bg: #F3E8D6;
+  --color-retro-text: #43302A;
+  --color-retro-text-soft: #6B5347;
+  --color-retro-primary: #A4573E;
+  --color-retro-primary-rgb: 164, 87, 62;
+  --color-retro-primary-contrast: #ffffff;
+  /* Hairline dividers and quiet outlines */
+  --color-retro-secondary: rgba(67, 48, 42, 0.16);
+  --color-retro-secondary-rgb: 67, 48, 42;
+  --color-retro-tertiary: #BCD9E6;
+  --color-retro-surface-bar: #F3E8D6;
+  --color-retro-surface-card: #FBF4E6;
+  --color-retro-code-bg: #ffffff;
+  /* Hover shadow colour */
+  --color-retro-glow-rgb: 67, 48, 42;
+  --color-retro-charity-bg-start: #DCE5D0;
+  --color-retro-charity-bg-mid: #DCE5D0;
+  --color-retro-charity-text: #43302A;
+  --color-retro-charity-border: #ffffff;
+  --color-sticker-edge: #ffffff;
+  --color-sticker-ink: #43302A;
+  --color-sticker-tint-sage: #DCE5D0;
+  --color-sticker-tint-wheat: #F5E3BB;
+  --color-sticker-tint-rose: #F6DDD2;
+  --color-sticker-tint-sky: #CFE3EC;
+  --color-sticker-heading: #43302A;
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 30px;
   --radius-pill: 999px;
+  --font-heading: 'Fredoka', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-/* ── Dark Mode Tokens ── */
+:root {
+  --sticker-edge-width: 5px;
+  --sticker-shadow: 0 10px 22px rgba(67, 48, 42, 0.17);
+  --sticker-shadow-sm: 0 4px 10px rgba(67, 48, 42, 0.14);
+  /* Olive sprigs tucked into the page edges */
+  --page-decor-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='72' viewBox='0 0 64 72' opacity='0.6'%3E%3Cpath d='M32 70 C32 50 30 30 34 6' fill='none' stroke='%239DB08A' stroke-width='2.5' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='52' rx='10' ry='5' transform='rotate(35 22 52)' fill='%239DB08A'/%3E%3Cellipse cx='43' cy='44' rx='10' ry='5' transform='rotate(-35 43 44)' fill='%239DB08A'/%3E%3Cellipse cx='22' cy='32' rx='9' ry='4.5' transform='rotate(35 22 32)' fill='%239DB08A'/%3E%3Cellipse cx='43' cy='24' rx='9' ry='4.5' transform='rotate(-35 43 24)' fill='%239DB08A'/%3E%3Cellipse cx='34' cy='9' rx='4.5' ry='8' fill='%239DB08A'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='72' viewBox='0 0 64 72' opacity='0.6'%3E%3Cpath d='M32 70 C32 50 30 30 34 6' fill='none' stroke='%23C9A98F' stroke-width='2.5' stroke-linecap='round'/%3E%3Cellipse cx='22' cy='52' rx='10' ry='5' transform='rotate(35 22 52)' fill='%23E8B3A0'/%3E%3Cellipse cx='43' cy='44' rx='10' ry='5' transform='rotate(-35 43 44)' fill='%23E8B3A0'/%3E%3Cellipse cx='22' cy='32' rx='9' ry='4.5' transform='rotate(35 22 32)' fill='%23E8B3A0'/%3E%3Cellipse cx='43' cy='24' rx='9' ry='4.5' transform='rotate(-35 43 24)' fill='%23E8B3A0'/%3E%3Cellipse cx='34' cy='9' rx='4.5' ry='8' fill='%23E8B3A0'/%3E%3C/svg%3E");
+  --page-decor-position: right -14px top 34%, left -16px top 66%;
+  --page-decor-size: 70px 80px, 60px 68px;
+}
+
+/* ── Dark Mode Tokens: the sticker sheet at night ── */
 html[data-theme="dark"] {
-  --color-retro-bg: #000000;
-  --color-retro-text: #ffffff;
-  --color-retro-primary: #428cff;
-  --color-retro-primary-rgb: 66, 140, 255;
-  --color-retro-secondary: rgba(255, 255, 255, 0.12);
-  --color-retro-secondary-rgb: 255, 255, 255;
-  --color-retro-tertiary: #6a64ff;
-  --color-retro-surface-bar: #1a1a1a;
-  --color-retro-surface-card: #1c1c1d;
-  --color-retro-glow-rgb: 255, 255, 255;
-  --color-retro-charity-bg-start: #1a3d2e;
-  --color-retro-charity-bg-mid: #0d3320;
-  --color-retro-charity-text: #90ee90;
-  --color-retro-charity-border: #2d5a3f;
+  --color-retro-bg: #232B3D;
+  --color-retro-text: #F3E8D6;
+  --color-retro-text-soft: #C9BFAE;
+  --color-retro-primary: #E8B3A0;
+  --color-retro-primary-rgb: 232, 179, 160;
+  --color-retro-primary-contrast: #232B3D;
+  --color-retro-secondary: rgba(243, 232, 214, 0.18);
+  --color-retro-secondary-rgb: 243, 232, 214;
+  --color-retro-tertiary: #BCD9E6;
+  --color-retro-surface-bar: #232B3D;
+  --color-retro-surface-card: #2E384E;
+  --color-retro-code-bg: #232B3D;
+  --color-retro-glow-rgb: 0, 0, 0;
+  --color-retro-charity-bg-start: #B9CBA5;
+  --color-retro-charity-bg-mid: #B9CBA5;
+  --color-retro-charity-text: #232B3D;
+  --color-retro-charity-border: #F3E8D6;
+  --color-sticker-edge: #F3E8D6;
+  --color-sticker-tint-sage: #B9CBA5;
+  --color-sticker-tint-wheat: #E8C277;
+  --color-sticker-tint-rose: #E8B3A0;
+  --color-sticker-tint-sky: #BCD9E6;
+  --color-sticker-heading: #E8C277;
+  --sticker-edge-width: 3px;
+  --sticker-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  --sticker-shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.3);
+  /* Star speckles in the side gutters, clear of anything you read */
+  --page-decor-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' opacity='0.8'%3E%3Cpath d='M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z' fill='%23E8C277'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' opacity='0.7'%3E%3Cpath d='M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z' fill='%23F3E8D6'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' opacity='0.6'%3E%3Cpath d='M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z' fill='%23E8B3A0'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' opacity='0.5'%3E%3Cpath d='M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z' fill='%23F3E8D6'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' opacity='0.6'%3E%3Cpath d='M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z' fill='%23E8C277'/%3E%3C/svg%3E");
+  --page-decor-position: left 3px top 9%, right 3px top 22%, left 2px top 46%, right 2px top 63%, left 3px top 84%;
+  --page-decor-size: 12px 12px, 10px 10px, 11px 11px, 10px 10px, 12px 12px;
 }
 
 /* ═══════════════════════════════════════════
@@ -60,16 +105,25 @@ body {
   font-size: 18px;
   line-height: 1.6;
 
-  /* Subtle wave background — light */
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Cpath d='M0 30 Q25 10 50 30 T100 30' fill='none' stroke='%23B8D4F1' stroke-width='0.8' stroke-opacity='0.25'/%3E%3Cpath d='M0 45 Q25 25 50 45 T100 45' fill='none' stroke='%23A8DAED' stroke-width='0.6' stroke-opacity='0.18'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px auto;
+  /* Sprigs by day, stars at night; they stay put while the page scrolls */
+  background-image: var(--page-decor-image);
+  background-repeat: no-repeat;
+  background-position: var(--page-decor-position);
+  background-size: var(--page-decor-size);
+  background-attachment: fixed;
 }
 
-html[data-theme="dark"] body {
-  background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60' viewBox='0 0 100 60'%3E%3Cpath d='M0 30 Q25 10 50 30 T100 30' fill='none' stroke='%23808080' stroke-width='1' stroke-opacity='0.2'/%3E%3Cpath d='M0 45 Q25 25 50 45 T100 45' fill='none' stroke='%23999999' stroke-width='0.8' stroke-opacity='0.15'/%3E%3C/svg%3E");
+/* Below this width the content column reaches the page edges, so the sprigs
+   would sit on top of text. The night stars are small enough to stay in the
+   padding, and they scroll with the page (iOS ignores `fixed` anyway). */
+@media (max-width: 1199px) {
+  :root {
+    --page-decor-image: none;
+  }
+
+  body {
+    background-attachment: scroll;
+  }
 }
 
 a {
@@ -83,79 +137,171 @@ a:hover {
 }
 
 /* ═══════════════════════════════════════════
-   HEADINGS
+   HEADINGS — rounded Fredoka
+   These rules are unlayered, so they win over Tailwind's font utilities
+   (.font-extrabold and friends) wherever a heading still carries one.
    ═══════════════════════════════════════════ */
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-weight: 600;
   color: var(--color-retro-text);
 }
 
-h1 { font-size: 2rem; margin: 0.75rem 0; text-align: center; }
+/* Page and section headings turn wheat at night. Card titles set their own
+   colour and stay cream. */
+h1, h2 {
+  color: var(--color-sticker-heading);
+}
+
+h1 { font-size: 2rem; margin: 0.75rem 0; text-align: center; line-height: 1.15; }
 h2 { font-size: 1.6rem; }
 
+.logo-wordmark {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
 /* ═══════════════════════════════════════════
-   GLOW EFFECTS
+   STICKERS
+   ═══════════════════════════════════════════ */
+
+/* A card cut out like a sticker: pale fill, a white edge, a soft shadow.
+   !important because the cards also carry Tailwind radius and shadow classes. */
+.sticker-card {
+  background: var(--color-retro-surface-card);
+  border: var(--sticker-edge-width) solid var(--color-sticker-edge) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--sticker-shadow) !important;
+}
+
+/* A pastel pill: tags, badges, small labels. Ink text in both modes; the
+   children are named too because the base `*` rule colours every element. */
+.sticker-pill {
+  background: var(--color-sticker-tint-sage);
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+}
+
+.sticker-pill,
+.sticker-pill * {
+  color: var(--color-sticker-ink) !important;
+}
+
+/* The giving note in the header: a long line, so it is set a little lighter */
+.charity-pill {
+  font-weight: 700;
+}
+
+/* Quiet copy: dates, bylines, ledes. A colour tuned for the page rather than
+   faded ink, which drops under AA on cream. The children are named because the
+   base `*` rule colours every element. */
+.text-soft,
+.text-soft * {
+  color: var(--color-retro-text-soft);
+}
+
+/* A quiet outlined pill, for the options that are not the current one */
+.sticker-pill-outline {
+  background: transparent;
+  color: var(--color-retro-text);
+  border: 2px solid var(--color-retro-secondary);
+  border-radius: var(--radius-pill);
+  font-weight: 800;
+}
+
+/* Die-cut art: a white edge all the way round, then a soft shadow. The edge
+   stays white at night, like a real sticker on a dark page. */
+.sticker-art {
+  pointer-events: none;
+  flex: none;
+  filter: drop-shadow(3px 0 0 #fff) drop-shadow(-3px 0 0 #fff)
+    drop-shadow(0 3px 0 #fff) drop-shadow(0 -3px 0 #fff)
+    drop-shadow(0 5px 5px rgba(67, 48, 42, 0.22));
+}
+
+/* In a layer so Tailwind's `hidden` and responsive display classes still win */
+@layer components {
+  .sticker-art {
+    display: inline-block;
+  }
+}
+
+.sticker-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Verse images and screenshots are stuck down like photos in an album */
+.carousel-slide {
+  border: var(--sticker-edge-width) solid var(--color-sticker-edge);
+  box-shadow: var(--sticker-shadow) !important;
+}
+
+/* ═══════════════════════════════════════════
+   HOVER
    ═══════════════════════════════════════════ */
 
 .glow-hover {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .glow-hover:hover {
-  text-shadow: 0 0 6px rgba(var(--color-retro-glow-rgb), 0.6), 0 0 12px rgba(var(--color-retro-glow-rgb), 0.3);
+  color: var(--color-retro-primary) !important;
   transform: translateY(-1px);
 }
 
 /* ═══════════════════════════════════════════
-   BUTTONS
+   BUTTONS — terracotta pills cut out with the sticker edge
    ═══════════════════════════════════════════ */
 
 .login-button {
   background: var(--color-retro-primary);
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: 0.5rem 1.5rem;
-  color: #ffffff !important;
-  font-weight: 700;
-  transition: all 0.3s ease;
+  border: 3px solid var(--color-sticker-edge);
+  border-radius: var(--radius-pill);
+  padding: 0.4rem 1.4rem;
+  color: var(--color-retro-primary-contrast) !important;
+  font-weight: 800;
+  box-shadow: var(--sticker-shadow-sm);
+  transition: all 0.2s ease;
   text-decoration: none;
 }
 
 .login-button:hover {
-  text-shadow: 0 0 4px rgba(var(--color-retro-glow-rgb), 0.5), 0 0 8px rgba(var(--color-retro-glow-rgb), 0.3);
-  box-shadow: 0 0 10px rgba(var(--color-retro-glow-rgb), 0.4), 0 0 20px rgba(var(--color-retro-glow-rgb), 0.2);
   transform: translateY(-2px);
-  color: #ffffff !important;
+  color: var(--color-retro-primary-contrast) !important;
   opacity: 1;
 }
 
-/* Keep the external-link icon the same white as a primary button's text.
+/* Keep the external-link icon the same colour as a primary button's text.
    Set `stroke` (not `color`) on the svg and its children: the global
    `* { color: ... }` rule sets a dark color on each inner <path>, and since
    stroke="currentColor" is re-resolved per element, a parent `color` alone
    wouldn't reach them. */
 .login-button .external-link-icon,
 .login-button .external-link-icon * {
-  stroke: #ffffff;
+  stroke: var(--color-retro-primary-contrast);
 }
 
 .cta-button {
   display: inline-block;
   background: var(--color-retro-primary);
-  color: #ffffff !important;
+  color: var(--color-retro-primary-contrast) !important;
   padding: 1rem 2.5rem;
-  border-radius: var(--radius-lg);
+  border: 4px solid var(--color-sticker-edge);
+  border-radius: var(--radius-pill);
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 800;
   text-decoration: none;
   margin: 1rem 0;
-  transition: all 0.3s ease;
+  box-shadow: var(--sticker-shadow-sm);
+  transition: all 0.2s ease;
 }
 
 .cta-button:hover {
-  text-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 15px rgba(var(--color-retro-glow-rgb), 0.5), 0 0 30px rgba(var(--color-retro-glow-rgb), 0.3);
   transform: translateY(-2px);
   opacity: 1;
 }
@@ -171,7 +317,7 @@ h2 { font-size: 1.6rem; }
 }
 
 .app-store-icon:hover {
-  filter: drop-shadow(0 0 8px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 16px rgba(var(--color-retro-glow-rgb), 0.3));
+  filter: drop-shadow(0 6px 8px rgba(var(--color-retro-glow-rgb), 0.25));
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -219,7 +365,6 @@ h2 { font-size: 1.6rem; }
 }
 
 .lightbox-content img:hover {
-  filter: drop-shadow(0 0 10px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 20px rgba(var(--color-retro-glow-rgb), 0.3));
   transform: scale(1.02);
 }
 
@@ -315,26 +460,23 @@ h2 { font-size: 1.6rem; }
 
 /* ═══════════════════════════════════════════
    SOCIAL ICONS
+   The icons are black SVGs, so a filter tints them: warm ink by day, cream at
+   night.
    ═══════════════════════════════════════════ */
 
 .social-icon {
   height: 1.8rem;
   width: auto;
-  filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%);
-  transition: all 0.3s ease;
+  filter: invert(18%) sepia(22%) saturate(900%) hue-rotate(335deg) brightness(95%);
+  transition: all 0.2s ease;
 }
 
 html[data-theme="dark"] .social-icon {
-  filter: invert(100%) brightness(2);
+  filter: invert(96%) sepia(18%) saturate(420%) hue-rotate(332deg) brightness(98%);
 }
 
 .social-icon:hover {
-  filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%) drop-shadow(0 0 8px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 16px rgba(var(--color-retro-glow-rgb), 0.3));
   transform: translateY(-2px) scale(1.1);
-}
-
-html[data-theme="dark"] .social-icon:hover {
-  filter: invert(100%) brightness(2) drop-shadow(0 0 8px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 16px rgba(var(--color-retro-glow-rgb), 0.3));
 }
 
 /* ═══════════════════════════════════════════
@@ -342,32 +484,23 @@ html[data-theme="dark"] .social-icon:hover {
    ═══════════════════════════════════════════ */
 
 .icon-filter {
-  filter: invert(15%) sepia(20%) saturate(1200%) hue-rotate(170deg) brightness(95%) contrast(90%);
+  filter: invert(18%) sepia(22%) saturate(900%) hue-rotate(335deg) brightness(95%);
 }
 
 html[data-theme="dark"] .icon-filter {
-  filter: invert(100%) brightness(2);
+  filter: invert(96%) sepia(18%) saturate(420%) hue-rotate(332deg) brightness(98%);
 }
 
 /* ═══════════════════════════════════════════
-   LOGO GLOW
+   IMAGE HOVER
    ═══════════════════════════════════════════ */
 
 .logo-glow {
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .logo-glow:hover {
-  filter: drop-shadow(0 0 10px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 20px rgba(var(--color-retro-glow-rgb), 0.3));
-  transform: scale(1.05);
-}
-
-html[data-theme="dark"] .logo-glow {
-  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
-}
-
-html[data-theme="dark"] .logo-glow:hover {
-  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 0 10px rgba(var(--color-retro-glow-rgb), 0.6)) drop-shadow(0 0 20px rgba(var(--color-retro-glow-rgb), 0.3));
+  transform: scale(1.03);
 }
 
 /* ═══════════════════════════════════════════
@@ -381,7 +514,7 @@ html[data-theme="dark"] .logo-glow:hover {
 }
 
 .prose-content a:hover {
-  text-shadow: 0 0 6px rgba(var(--color-retro-glow-rgb), 0.6), 0 0 12px rgba(var(--color-retro-glow-rgb), 0.3);
+  opacity: 0.75;
 }
 
 .prose-content p {
@@ -448,6 +581,14 @@ li {
   padding-left: 1.5rem;
 }
 
+/* Tailwind's reset takes list markers away; posts need them back */
+.blog-prose ul { list-style-type: disc; }
+.blog-prose ol { list-style-type: decimal; }
+
+.blog-prose li::marker {
+  color: var(--color-retro-primary);
+}
+
 .blog-prose img {
   border-radius: var(--radius-md);
   max-width: 100%;
@@ -455,7 +596,7 @@ li {
 }
 
 .blog-prose blockquote {
-  border-left: 4px solid var(--color-retro-primary);
+  border-left: 4px solid var(--color-sticker-tint-sage);
   padding-left: 1rem;
   margin: 1.5rem 0;
   font-style: italic;
@@ -463,9 +604,18 @@ li {
   opacity: 0.85;
 }
 
+.blog-prose a {
+  font-weight: 700;
+}
+
+.blog-prose img {
+  border: var(--sticker-edge-width) solid var(--color-sticker-edge);
+  box-shadow: var(--sticker-shadow-sm);
+}
+
 /* Code blocks: match the For Agents page rather than Shiki's dark theme. Use the
-   retro surface (light-blue in light mode, near-black in dark) with the brand
-   border, and flatten Shiki's inline token colors to a single readable color —
+   code surface (white on the cream card by day, the night sky in dark) with a
+   hairline border, and flatten Shiki's inline token colors to a single readable color —
    the dark-theme tokens are illegible on the light surface, and the universal
    `* { color }` rule already forces flat text on the un-highlighted agents page,
    so this keeps the two consistent. */
@@ -474,7 +624,7 @@ li {
   border-radius: var(--radius-md);
   overflow-x: auto;
   margin: 1.5rem 0;
-  background: var(--color-retro-bg) !important;
+  background: var(--color-retro-code-bg) !important;
   border: 1px solid var(--color-retro-secondary);
   color: var(--color-retro-text) !important;
   /* wrap long lines (e.g. the multi-line steer prompt) inside the block
@@ -526,7 +676,7 @@ li {
 }
 
 .blog-prose .copy-btn:hover {
-  box-shadow: 0 0 8px rgba(var(--color-retro-glow-rgb), 0.4);
+  box-shadow: var(--sticker-shadow-sm);
 }
 
 .blog-prose .copy-btn svg {

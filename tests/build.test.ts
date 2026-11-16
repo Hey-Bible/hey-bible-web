@@ -238,6 +238,140 @@ describe("Static build output", () => {
     });
   });
 
+  describe("Storybook Sticker theme", () => {
+    const stylesheet = () => {
+      const href = readPage("index.html").match(/href="(\/_astro\/[^"]+\.css)"/)?.[1];
+      expect(href, "homepage should link a stylesheet").toBeTruthy();
+      return readFileSync(join(dist, href!), "utf-8");
+    };
+
+    it("loads Fredoka for headings alongside Nunito", () => {
+      const html = readPage("index.html");
+      expect(html).toContain("family=Fredoka");
+      expect(html).toContain("family=Nunito");
+      expect(stylesheet()).toMatch(/--font-heading:\s*["']?Fredoka/);
+    });
+
+    it("uses the cream page by day and the night sky in dark mode", () => {
+      const css = stylesheet().toLowerCase();
+      expect(css).toContain("--color-retro-bg:#f3e8d6");
+      expect(css).toMatch(/html\[data-theme="?dark"?\]\{[^}]*--color-retro-bg:#232b3d/);
+      // the old sky-blue theme is gone
+      expect(css).not.toContain("#7fcdeb");
+    });
+
+    it("gives lists in blog posts their bullets and numbers back", () => {
+      const css = stylesheet();
+      expect(css).toMatch(/\.blog-prose ul\{list-style-type:disc\}/);
+      expect(css).toMatch(/\.blog-prose ol\{list-style-type:decimal\}/);
+    });
+
+    it("draws the logo as the book-and-cross mark beside the wordmark", () => {
+      const html = readPage("index.html");
+      expect(html).toMatch(/<svg[^>]*class="logo-mark"/);
+      expect(html).toMatch(/class="logo-wordmark[^"]*"[^>]*>Hey Bible</);
+      expect(html).not.toContain("logo-small.png");
+    });
+
+    it("gives each logo mark on a page its own mask", () => {
+      const html = readPage("about/index.html");
+      const ids = [...html.matchAll(/<mask id="(logo-mark-[^"]+)"/g)].map((m) => m[1]);
+      expect(ids.length).toBe(2); // header and the About badge
+      expect(new Set(ids).size).toBe(ids.length);
+      for (const id of ids) expect(html).toContain(`mask="url(#${id})"`);
+    });
+
+    it("numbers the logo masks per page, so every build writes the same ids", () => {
+      const ids = [...readPage("about/index.html").matchAll(/<mask id="(logo-mark-[^"]+)"/g)].map((m) => m[1]);
+      expect(ids).toEqual(["logo-mark-1", "logo-mark-2"]);
+    });
+
+    it("sets quiet copy in the soft text colour rather than faded ink", () => {
+      expect(readPage("blog/welcome/index.html")).toMatch(/<p class="text-sm text-soft">\s*By /);
+      expect(readPage("blog/index.html")).toMatch(/class="text-xs text-soft mb-2"/);
+      expect(stylesheet()).toMatch(/\.text-soft,\.text-soft \*\{color:var\(--color-retro-text-soft\)\}/);
+    });
+
+    it("labels a logo that stands alone and hides the one beside the wordmark", () => {
+      const html = readPage("about/index.html");
+      expect(html).toMatch(/<svg[^>]*class="logo-mark"[^>]*aria-label="Hey Bible app logo"/);
+      expect(html).toMatch(/<svg[^>]*class="logo-mark"[^>]*aria-hidden="true"/);
+    });
+
+    it("puts a sheep sticker on the homepage, hidden from screen readers", () => {
+      const html = readPage("index.html");
+      expect(html).toMatch(/<span[^>]*class="sticker-art[^"]*"[^>]*aria-hidden="true"[^>]*data-sticker="sheep"/);
+    });
+
+    it("cuts cards out as stickers", () => {
+      expect(readPage("features/index.html")).toMatch(/class="feature-card sticker-card/);
+      expect((readPage("agents/index.html").match(/class="sticker-card/g) || []).length).toBe(4);
+      expect(readPage("blog/index.html")).toMatch(/<article[^>]*class="sticker-card/);
+      expect(readPage("blog/welcome/index.html")).toContain('class="sticker-card');
+    });
+
+    it("sets tags as ink-on-pastel pills, not white on the accent colour", () => {
+      const html = readPage("blog/welcome/index.html");
+      expect(html).toMatch(/class="sticker-pill[^"]*"[^>]*>\s*Update/);
+      expect(html).not.toContain("color: #ffffff");
+      expect(readPage("blog/index.html")).not.toContain("color: #ffffff");
+    });
+
+    it("shows the giving note as a pill in the header and the mobile menu", () => {
+      const html = readPage("index.html");
+      expect((html.match(/class="charity-pill sticker-pill/g) || []).length).toBe(2);
+    });
+
+    it("describes the default share image as 1200 by 630", () => {
+      const html = readPage("index.html");
+      expect(html).toContain('property="og:image" content="https://heybible.org/img/og-image.png"');
+      expect(html).toContain('property="og:image:width" content="1200"');
+      expect(html).toContain('property="og:image:height" content="630"');
+    });
+
+    it("leaves the size off when a post brings its own share image", () => {
+      const html = readPage("blog/welcome/index.html");
+      expect(html).toContain("welcome-hero.png");
+      expect(html).not.toContain("og:image:width");
+    });
+
+    it("sets the browser colour for day and night", () => {
+      const html = readPage("index.html");
+      expect(html).toContain('name="theme-color" content="#F3E8D6" media="(prefers-color-scheme: light)"');
+      expect(html).toContain('name="theme-color" content="#232B3D" media="(prefers-color-scheme: dark)"');
+    });
+
+    it("ships cream manifest colours and the icon files", () => {
+      const manifest = JSON.parse(readPage("site.webmanifest"));
+      expect(manifest.theme_color).toBe("#F3E8D6");
+      expect(manifest.background_color).toBe("#F3E8D6");
+      for (const icon of manifest.icons) {
+        expect(existsSync(join(dist, icon.src)), `${icon.src} should exist`).toBe(true);
+      }
+      expect(existsSync(join(dist, "img/og-image.png"))).toBe(true);
+      expect(existsSync(join(dist, "favicon.ico"))).toBe(true);
+    });
+  });
+
+  describe("Draft posts", () => {
+    it("keeps the new-look post out of the build until it is published", () => {
+      const source = readFileSync(
+        join(dist, "..", "src/content/blog/a-new-look.mdx"),
+        "utf-8",
+      );
+      // When the draft flag comes off, replace this test with one for the page.
+      expect(source).toMatch(/^draft: true$/m);
+      expect(existsSync(join(dist, "blog/a-new-look/index.html"))).toBe(false);
+      expect(readPage("blog/index.html")).not.toContain("A New Look for Hey Bible");
+      expect(readPage("blog/tag/update/index.html")).not.toContain("A New Look for Hey Bible");
+    });
+
+    it("has the pictures the draft uses ready to publish", () => {
+      expect(existsSync(join(dist, "img/blog/a-new-look-hero.png"))).toBe(true);
+      expect(existsSync(join(dist, "img/blog/a-new-look-verse.png"))).toBe(true);
+    });
+  });
+
   describe("Podcast posts", () => {
     it("publishes the Season 2 behind-the-scenes post under the Podcast tag", () => {
       const post = readPage("blog/behind-the-scenes-season-2/index.html");

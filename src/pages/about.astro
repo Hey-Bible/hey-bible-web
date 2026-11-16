@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LogoMark from '../components/LogoMark.astro';
 ---
 
 <BaseLayout
@@ -9,10 +10,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="flex flex-col items-center pt-4 pb-12 px-4">
     <h1>About</h1>
     <div
-      class="w-[120px] h-[120px] rounded-full flex items-center justify-center mb-6 logo-glow"
-      style={`background: var(--color-retro-surface-card); box-shadow: 0 4px 20px rgba(var(--color-retro-glow-rgb), 0.15); border: 3px solid var(--color-retro-secondary);`}
+      class="w-[120px] h-[120px] flex items-center justify-center mb-6 logo-glow"
+      style={`background: var(--color-retro-surface-card); border: var(--sticker-edge-width) solid var(--color-sticker-edge); border-radius: 50%; box-shadow: var(--sticker-shadow);`}
     >
-      <img class="w-[70px]" src="/img/logo-small.png" alt="Hey Bible app logo" />
+      <LogoMark size={66} label="Hey Bible app logo" />
     </div>
     <div class="max-w-[600px] text-justify prose-content space-y-6">
       <p>

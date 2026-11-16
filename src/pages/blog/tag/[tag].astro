@@ -25,7 +25,7 @@ const { tag, posts } = Astro.props;
   <div class="max-w-5xl mx-auto px-4 pt-4 pb-12">
     <h1 class="text-3xl md:text-4xl font-extrabold mb-2">
       {tag}
-      <span class="text-lg font-normal opacity-60 ml-2">({posts.length} {posts.length === 1 ? 'post' : 'posts'})</span>
+      <span class="text-lg font-normal text-soft ml-2">({posts.length} {posts.length === 1 ? 'post' : 'posts'})</span>
     </h1>
     <p class="text-center mb-8">
       <a href="/blog" class="glow-hover font-bold">&larr; All posts</a>
