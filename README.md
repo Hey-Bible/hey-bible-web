@@ -33,5 +33,5 @@ this repository, in the Storybook Sticker look the app uses.
   into `public/img/`, and the social graphics into `brand/social/png/`, which
   is not part of the published site.
 
-It needs ImageMagick 7 and a browser for Playwright (`npx playwright install
+It needs zsh, ImageMagick 7 and a browser for Playwright (`npx playwright install
 chromium`, or Google Chrome).

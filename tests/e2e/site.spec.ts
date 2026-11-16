@@ -193,4 +193,31 @@ test.describe("Storybook Sticker theme", () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await expect(page.locator(".hero-sticker")).toBeVisible();
   });
+
+  test("the day sprigs stay off the page until there is a gutter for them", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    const image = () => page.evaluate(() => getComputedStyle(document.body).backgroundImage);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    expect(await image()).toBe("none");
+    await page.setViewportSize({ width: 1280, height: 800 });
+    expect(await image()).toContain("data:image/svg+xml");
+  });
+
+  test("the browser bar follows the chosen theme, not just the system one", async ({ page }) => {
+    const colours = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll('meta[name="theme-color"]')].map((m) => m.getAttribute("content")),
+      );
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.addInitScript(() => {
+      if (!localStorage.getItem("theme")) localStorage.setItem("theme", "dark");
+    });
+    await page.goto("/");
+    expect(await colours()).toEqual(["#232B3D", "#232B3D"]);
+
+    // dark -> system, which follows the light OS setting here
+    await page.click("#theme-toggle");
+    expect(await colours()).toEqual(["#F3E8D6", "#F3E8D6"]);
+  });
 });

@@ -1,6 +1,6 @@
 #!/bin/zsh
 # Draws the Hey Bible book-and-cross mark and writes the site's favicons and
-# logo image from it. Needs ImageMagick 7 (`magick`).
+# logo image from it. Needs zsh and ImageMagick 7 (`magick`).
 #
 # Usage, from the repository root:
 #   scripts/brand/make-icons.sh      (or `npm run brand`, which also renders
@@ -8,6 +8,8 @@
 #
 # The drawing is the one in src/components/LogoMark.astro, on its 24-unit grid.
 set -e
+# printf follows the locale; ImageMagick draw coordinates need a '.' decimal point
+export LC_ALL=C
 
 ROOT=${0:A:h}/../..
 F=$ROOT/public/img/favicons

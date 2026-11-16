@@ -38,6 +38,8 @@
         ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
         : theme;
       document.documentElement.setAttribute('data-theme', resolved);
+      const color = resolved === 'dark' ? '#232B3D' : '#F3E8D6';
+      document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', color));
     }
 
     function updateIcon(theme: Theme) {

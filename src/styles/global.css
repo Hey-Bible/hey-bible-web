@@ -7,9 +7,6 @@
    brown ink, and cards cut out with a white edge and a soft shadow. Dark mode
    is the same sticker sheet at night. The values mirror the app (see
    hey-bible-app docs/storybook-sticker-theme.md).
-
-   The `retro` token names predate this theme and are kept so every page that
-   already reads them picks up the new look.
    ═══════════════════════════════════════════ */
 
 @theme {
@@ -26,7 +23,7 @@
   --color-retro-surface-bar: #F3E8D6;
   --color-retro-surface-card: #FBF4E6;
   --color-retro-code-bg: #ffffff;
-  /* Hover lift colour, where the old theme used a glow */
+  /* Hover shadow colour */
   --color-retro-glow-rgb: 67, 48, 42;
   --color-retro-charity-bg-start: #DCE5D0;
   --color-retro-charity-bg-mid: #DCE5D0;
@@ -118,6 +115,19 @@ body {
   background-position: var(--page-decor-position);
   background-size: var(--page-decor-size);
   background-attachment: fixed;
+}
+
+/* Below this width the content column reaches the page edges, so the sprigs
+   would sit on top of text. The night stars are small enough to stay in the
+   padding, and they scroll with the page (iOS ignores `fixed` anyway). */
+@media (max-width: 1199px) {
+  :root {
+    --page-decor-image: none;
+  }
+
+  body {
+    background-attachment: scroll;
+  }
 }
 
 a {
@@ -229,7 +239,7 @@ h2 { font-size: 1.6rem; }
 }
 
 /* ═══════════════════════════════════════════
-   HOVER (the class names date from the old theme's glow)
+   HOVER
    ═══════════════════════════════════════════ */
 
 .glow-hover {
@@ -479,7 +489,7 @@ html[data-theme="dark"] .icon-filter {
 }
 
 /* ═══════════════════════════════════════════
-   IMAGE HOVER (the class name dates from the old theme's glow)
+   IMAGE HOVER
    ═══════════════════════════════════════════ */
 
 .logo-glow {
