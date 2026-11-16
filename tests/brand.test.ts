@@ -34,12 +34,25 @@ describe("Brand images", () => {
       (jobs as [string, number, number, string][]).map(([, w, h, out]) => [out.split("/").pop(), `${w}x${h}`]),
     );
     expect(sizes["og-image.png"]).toBe("1200x630");
+    expect(sizes["og-features.png"]).toBe("1200x630");
     expect(sizes["avatar.png"]).toBe("1024x1024");
     expect(sizes["x-header.png"]).toBe("1500x500");
     expect(sizes["facebook-cover.png"]).toBe("1640x624");
     expect(sizes["post-square.png"]).toBe("1080x1080");
     expect(sizes["post-portrait.png"]).toBe("1080x1350");
     expect(sizes["post-story.png"]).toBe("1080x1920");
+  });
+
+  it("draws every piece of art a source page asks for", () => {
+    const art = readFileSync(join(root, "brand/art.js"), "utf-8");
+    const sources = new Set((jobs as [string, number, number, string][]).map(([source]) => source.split("?")[0]));
+    for (const file of sources) {
+      const page = readFileSync(join(root, file), "utf-8");
+      for (const [, name] of page.matchAll(/data-art="([^"]+)"/g)) {
+        const drawn = art.includes(`'${name}':`) || new RegExp(`^  ${name}:`, "m").test(art);
+        expect(drawn, `${file} asks for "${name}", which brand/art.js does not draw`).toBe(true);
+      }
+    }
   });
 
   it("keeps the favicons at their named sizes", () => {

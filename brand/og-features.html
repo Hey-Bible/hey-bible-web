@@ -1,0 +1,85 @@
+<!doctype html>
+<!-- Source for public/img/og-features.png, the 1200×630 picture shown when a
+     heybible.org/features link is shared. Render it with `npm run brand`. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible features share image</title>
+    <link rel="stylesheet" href="brand.css" />
+    <style>
+      .canvas {
+        width: 1200px;
+        height: 630px;
+        padding: 0 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 44px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .lockup { --logo: 50px; }
+      .headline {
+        margin: 22px 0 0;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        font-size: 86px;
+        line-height: 1.08;
+        white-space: nowrap;
+      }
+      .sticker { --cut: 6px; width: 236px; margin-right: 22px; transform: rotate(4deg); }
+      .features {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 16px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      /* Each feature is its own sticker: a cream card cut out with a white edge */
+      .features li {
+        box-sizing: border-box;
+        height: 186px;
+        padding: 22px 8px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        background: var(--card);
+        border: 5px solid var(--edge);
+        border-radius: 26px;
+        box-shadow: 0 8px 16px var(--shadow);
+        font-size: 22px;
+        line-height: 1.15;
+        text-align: center;
+      }
+      .features li:nth-child(odd) { transform: rotate(-1.2deg); }
+      .features li:nth-child(even) { transform: rotate(1deg); }
+      .features [data-art] { width: 76px; }
+    </style>
+  </head>
+  <body>
+    <div class="canvas">
+      <span class="decor" data-art="sprig-sage" style="width: 140px; right: -30px; top: -36px; transform: rotate(204deg)"></span>
+      <div class="top">
+        <div>
+          <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
+          <h1 class="headline">Everything You Need<br />to Study Scripture</h1>
+        </div>
+        <span class="sticker" data-art="sheep"></span>
+      </div>
+      <ul class="features">
+        <li><span data-art="icon-search"></span>Search &amp; Favorites</li>
+        <li><span data-art="icon-notes"></span>Notes</li>
+        <li><span data-art="icon-chat"></span>AI Chat</li>
+        <li><span data-art="icon-art"></span>Verse Art</li>
+        <li><span data-art="icon-translations"></span>Translations</li>
+        <li><span data-art="icon-widget"></span>iOS Widget</li>
+      </ul>
+    </div>
+    <script src="art.js"></script>
+  </body>
+</html>

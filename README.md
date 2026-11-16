@@ -25,7 +25,8 @@ If you have any questions or feedback, please fill out [this form](https://app.y
 The share image, favicons, logo and social graphics are drawn from sources in
 this repository, in the Storybook Sticker look the app uses.
 
-- `brand/` holds the sources: `og-image.html`, and under `brand/social/` the
+- `brand/` holds the sources: `og-image.html`, `og-features.html` (the share
+  image for the Features page), and under `brand/social/` the
   profile picture, X header, Facebook cover and a post template
   (`post.html`, which takes its words from the address — see the notes at the
   top of that file).
