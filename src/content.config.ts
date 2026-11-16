@@ -19,6 +19,7 @@ const blog = defineCollection({
           "Community",
           "Agents",
           "Developers",
+          "Podcast",
         ]),
       )
       .default([]),

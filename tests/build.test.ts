@@ -24,6 +24,8 @@ describe("Static build output", () => {
       "blog/the-bible-for-ai-agents/index.html",
       "blog/give-your-agent-a-bible/index.html",
       "blog/creative-use-cases-hey-bible-skill-cli/index.html",
+      "blog/behind-the-scenes-season-2/index.html",
+      "blog/tag/podcast/index.html",
       "blog/tag/update/index.html",
       "blog/tag/tutorial/index.html",
       "blog/tag/agents/index.html",
@@ -233,6 +235,17 @@ describe("Static build output", () => {
       // categorized under the new Agents/Developers tags
       expect(html).toContain("Agents");
       expect(html).toContain("Developers");
+    });
+  });
+
+  describe("Podcast posts", () => {
+    it("publishes the Season 2 behind-the-scenes post under the Podcast tag", () => {
+      const post = readPage("blog/behind-the-scenes-season-2/index.html");
+      expect(post).toContain("Behind the Scenes: Building Hey Bible Podcast Season 2");
+      expect(post).toContain('href="/blog/tag/podcast"');
+
+      const tagPage = readPage("blog/tag/podcast/index.html");
+      expect(tagPage).toContain("Behind the Scenes: Building Hey Bible Podcast Season 2");
     });
   });
 
