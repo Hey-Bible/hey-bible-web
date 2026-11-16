@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import LogoMark from '../components/LogoMark.astro';
 ---
 
 <BaseLayout
@@ -9,7 +10,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <div class="flex flex-col items-center justify-center pt-4 pb-4 flex-1">
     <div class="w-[400px] max-w-full px-4 prose-content">
-      <img class="logo-glow w-[100px] max-w-full" src="/img/logo-small.png" alt="Hey Bible app logo" />
+      <LogoMark size={84} label="Hey Bible app logo" />
       <h2>Account</h2>
       <p>
         In accordance with the App Store and Google Play Store policies,

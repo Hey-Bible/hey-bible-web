@@ -34,7 +34,7 @@ test.describe("Image scroller", () => {
   test("renders all slides", async ({ page }) => {
     await page.goto("/");
     const slides = page.locator(".carousel-slide");
-    await expect(slides).toHaveCount(5);
+    await expect(slides).toHaveCount(6);
   });
 });
 
@@ -77,10 +77,11 @@ test.describe("Footer mobile (Issue #12)", () => {
 });
 
 test.describe("Features page (Issue #11)", () => {
-  test("all 6 cards render", async ({ page }) => {
+  test("all feature cards render", async ({ page }) => {
     await page.goto("/features");
     const cards = page.locator(".feature-card");
-    await expect(cards).toHaveCount(6);
+    // 7 app features and 4 developer features
+    await expect(cards).toHaveCount(11);
   });
 
   test("CTA present with app store buttons", async ({ page }) => {
@@ -106,5 +107,142 @@ test.describe("Blog (Issue #13)", () => {
     await page.goto("/blog/tag/update");
     await expect(page.locator("main h1")).toContainText("Update");
     await expect(page.locator("main").getByText("Welcome to the Hey Bible Blog")).toBeVisible();
+  });
+});
+
+test.describe("Storybook Sticker theme", () => {
+  const background = (page: import("@playwright/test").Page) =>
+    page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+
+  test("the page is cream by day and night-sky blue in dark mode", async ({ page }) => {
+    // With no stored choice the site follows the system setting.
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.goto("/");
+    expect(await background(page)).toBe("rgb(243, 232, 214)");
+
+    await page.emulateMedia({ colorScheme: "dark" });
+    await page.reload();
+    expect(await background(page)).toBe("rgb(35, 43, 61)");
+  });
+
+  test("headings are set in Fredoka", async ({ page }) => {
+    await page.goto("/");
+    const family = await page.locator("main h1").evaluate((el) => getComputedStyle(el).fontFamily);
+    expect(family).toMatch(/^"?Fredoka/);
+  });
+
+  test("the giving note keeps ink text on its pastel pill in dark mode", async ({ page }) => {
+    await page.addInitScript(() => localStorage.setItem("theme", "dark"));
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/");
+    const pill = page.locator("header .charity-pill").first();
+    await expect(pill).toBeVisible();
+    const colour = await pill.locator("span").last().evaluate((el) => getComputedStyle(el).color);
+    expect(colour).toBe("rgb(67, 48, 42)");
+  });
+
+  test("the giving note does not overlap the navigation", async ({ page }) => {
+    for (const width of [1024, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const pill = await page.locator("header .charity-pill").first().boundingBox();
+      const home = await page.locator('header nav a[href="/"]').nth(1).boundingBox();
+      const logo = await page.locator('header nav a[href="/"]').first().boundingBox();
+      expect(pill!.x + pill!.width, `pill clears the nav at ${width}px`).toBeLessThanOrEqual(home!.x);
+      expect(pill!.x, `pill clears the logo at ${width}px`).toBeGreaterThanOrEqual(logo!.x + logo!.width);
+    }
+  });
+
+  test("the giving note sits in the middle of the page on a wide screen", async ({ page }) => {
+    for (const width of [1440, 1728]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const pill = await page.locator("header .charity-pill").first().boundingBox();
+      const pageWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      const centre = pill!.x + pill!.width / 2;
+      expect(Math.abs(centre - pageWidth / 2), `centred at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("the giving note has a row of its own on a tablet", async ({ page }) => {
+    for (const width of [640, 768, 1000]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const pill = page.locator("header nav .charity-pill");
+      await expect(pill, `shown at ${width}px`).toBeVisible();
+      const box = (await pill.boundingBox())!;
+      const login = (await page.locator("header nav .login-button").boundingBox())!;
+      expect(box.y, `below the links at ${width}px`).toBeGreaterThanOrEqual(login.y + login.height);
+      const pageWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(Math.abs(box.x + box.width / 2 - pageWidth / 2), `centred at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("the giving note wraps in the open menu on a small phone", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto("/");
+    await page.locator("#hamburger-btn").click();
+    await expect(page.locator("#mobile-menu .charity-pill")).toBeVisible();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
+  test("the navigation links stay on one line beside the giving note", async ({ page }) => {
+    for (const width of [1024, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const link = page.locator('header nav a[href="/agents"]');
+      const box = await link.boundingBox();
+      const lineHeight = await link.evaluate((el) => parseFloat(getComputedStyle(el).lineHeight));
+      expect(box!.height, `"For Agents" is one line at ${width}px`).toBeLessThan(lineHeight * 1.5);
+    }
+  });
+
+  test("the header does not make the page scroll sideways", async ({ page }) => {
+    for (const width of [390, 640, 768, 1024, 1280]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow, `no sideways scroll at ${width}px`).toBeLessThanOrEqual(0);
+    }
+  });
+
+  test("the hero sheep is hidden on a phone and shown on a desktop", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    await expect(page.locator(".hero-sticker")).toBeHidden();
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(page.locator(".hero-sticker")).toBeVisible();
+  });
+
+  test("the day sprigs stay off the page until there is a gutter for them", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "light" });
+    const image = () => page.evaluate(() => getComputedStyle(document.body).backgroundImage);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+    expect(await image()).toBe("none");
+    await page.setViewportSize({ width: 1280, height: 800 });
+    expect(await image()).toContain("data:image/svg+xml");
+  });
+
+  test("the browser bar follows the chosen theme, not just the system one", async ({ page }) => {
+    const colours = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll('meta[name="theme-color"]')].map((m) => m.getAttribute("content")),
+      );
+    await page.emulateMedia({ colorScheme: "light" });
+    await page.addInitScript(() => {
+      if (!localStorage.getItem("theme")) localStorage.setItem("theme", "dark");
+    });
+    await page.goto("/");
+    expect(await colours()).toEqual(["#232B3D", "#232B3D"]);
+
+    // dark -> system, which follows the light OS setting here
+    await page.click("#theme-toggle");
+    expect(await colours()).toEqual(["#F3E8D6", "#F3E8D6"]);
   });
 });
