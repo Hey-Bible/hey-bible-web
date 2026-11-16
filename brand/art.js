@@ -3,6 +3,9 @@
 // can place and size the art with plain CSS.
 //
 // The drawings match src/components/LogoMark.astro and Sticker.astro.
+//
+// The m-* classes mark the parts brand/motion.css moves in the share video.
+// They change nothing in a still image.
 const INK = '#5B4636';
 
 const sheep = (stroke = 2.6, detail = true) => `
@@ -19,7 +22,7 @@ const sheep = (stroke = 2.6, detail = true) => `
   <path d="M72 44.5 q2 1.8 4 0" fill="none" stroke="${INK}" stroke-width="1.8" stroke-linecap="round"/>` : ''}`;
 
 const sprig = (leaf, stem) => `
-  <svg viewBox="0 0 64 72">
+  <svg class="m-sprig" viewBox="0 0 64 72">
     <path d="M32 70 C32 50 30 30 34 6" fill="none" stroke="${stem}" stroke-width="2.5" stroke-linecap="round"/>
     <ellipse cx="22" cy="52" rx="10" ry="5" transform="rotate(35 22 52)" fill="${leaf}"/>
     <ellipse cx="43" cy="44" rx="10" ry="5" transform="rotate(-35 43 44)" fill="${leaf}"/>
@@ -48,11 +51,11 @@ const ART = {
   meadow: () => `
     <svg viewBox="0 0 220 200">
       <path d="M26 150 C4 88 40 28 110 26 C182 24 216 84 196 150 z" fill="#CFE3EC"/>
-      <circle cx="160" cy="68" r="20" fill="#E8C277" stroke="${INK}" stroke-width="2.6"/>
-      <path d="M52 74 a11 11 0 0 1 18 -9 a13 13 0 0 1 24 3 a9 9 0 0 1 2 18 h-40 a8 8 0 0 1 -4 -12z" fill="#FFFFFF"/>
+      <circle class="m-sun" cx="160" cy="68" r="20" fill="#E8C277" stroke="${INK}" stroke-width="2.6"/>
+      <path class="m-cloud" d="M52 74 a11 11 0 0 1 18 -9 a13 13 0 0 1 24 3 a9 9 0 0 1 2 18 h-40 a8 8 0 0 1 -4 -12z" fill="#FFFFFF"/>
       <path d="M12 152 C60 100 152 98 208 152 C200 184 28 186 12 152z" fill="#9DB08A" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
-      <g transform="translate(58 84)">${sheep()}</g>
-      <g transform="translate(18 108) scale(0.62)">${sheep(3.4, false)}</g>
+      <g transform="translate(58 84)"><g class="m-sheep">${sheep()}</g></g>
+      <g transform="translate(18 108) scale(0.62)"><g class="m-lamb">${sheep(3.4, false)}</g></g>
     </svg>`,
   moon: () => `
     <svg viewBox="0 0 60 60">

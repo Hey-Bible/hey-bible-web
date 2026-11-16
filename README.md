@@ -30,6 +30,12 @@ this repository, in the Storybook Sticker look the app uses.
   profile picture, X header, Facebook cover and a post template
   (`post.html`, which takes its words from the address — see the notes at the
   top of that file).
+- `npm run brand:video` renders `public/video/og.mp4`, the share image in
+  motion, from the same `og-image.html` (the movement is in
+  `brand/motion.css`; open the page with `?play` to watch it). It also needs
+  ffmpeg. The site offers it as `og:video`, which Messages plays in a link
+  preview. `worker/` answers the Range requests Apple's player makes, which
+  Cloudflare's static assets do not.
 - `npm run brand` renders them. It writes the share image, favicons and logo
   into `public/img/`, and the social graphics into `brand/social/png/`, which
   is not part of the published site.

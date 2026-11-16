@@ -343,6 +343,22 @@ describe("Static build output", () => {
       expect(html).toContain('property="og:image:height" content="630"');
     });
 
+    it("offers the moving share image wherever the default picture is used", () => {
+      const html = readPage("index.html");
+      const video = "https://heybible.org/video/og.mp4";
+      expect(html).toContain(`property="og:video" content="${video}"`);
+      expect(html).toContain(`property="og:video:secure_url" content="${video}"`);
+      expect(html).toContain('property="og:video:type" content="video/mp4"');
+      expect(html).toContain('property="og:video:width" content="1200"');
+      expect(html).toContain('property="og:video:height" content="630"');
+      expect(existsSync(join(dist, "video/og.mp4"))).toBe(true);
+    });
+
+    it("leaves the video off a page with its own share image", () => {
+      expect(readPage("features/index.html")).not.toContain("og:video");
+      expect(readPage("blog/welcome/index.html")).not.toContain("og:video");
+    });
+
     it("leaves the size off when a post brings its own share image", () => {
       const html = readPage("blog/welcome/index.html");
       expect(html).toContain("welcome-hero.png");

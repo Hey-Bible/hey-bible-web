@@ -3,6 +3,8 @@ import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 // @ts-expect-error plain JavaScript module without type declarations
 import { jobs } from "../scripts/brand/render.mjs";
+// @ts-expect-error plain JavaScript module without type declarations
+import { FPS, videos } from "../scripts/brand/render-video.mjs";
 
 const root = join(import.meta.dirname, "..");
 
@@ -53,6 +55,69 @@ describe("Brand images", () => {
         expect(drawn, `${file} asks for "${name}", which brand/art.js does not draw`).toBe(true);
       }
     }
+  });
+
+  describe("share videos", () => {
+    const all = videos as [string, number, number, number, string][];
+
+    /** The top-level boxes of an MP4 file, in order: [type, offset, size]. */
+    function boxes(bytes: Buffer): [string, number, number][] {
+      const found: [string, number, number][] = [];
+      for (let at = 0; at + 8 <= bytes.length; ) {
+        const size = bytes.readUInt32BE(at);
+        found.push([bytes.subarray(at + 4, at + 8).toString("ascii"), at, size]);
+        if (size < 8) break;
+        at += size;
+      }
+      return found;
+    }
+
+    it("has a source page for every video", () => {
+      for (const [source] of all) expect(existsSync(join(root, source)), source).toBe(true);
+    });
+
+    it("moves a picture that is also rendered as a still, so the two match", () => {
+      const stills = (jobs as [string, number, number, string][]).map(([source, w, h]) => `${source} ${w}x${h}`);
+      for (const [source, width, height] of all) expect(stills).toContain(`${source} ${width}x${height}`);
+    });
+
+    it("runs each video for the length of the loop in motion.css", () => {
+      const loop = readFileSync(join(root, "brand/motion.css"), "utf-8").match(/--loop:\s*(\d+)s/)?.[1];
+      for (const [source, , , seconds] of all) expect(String(seconds), source).toBe(loop);
+    });
+
+    it("keeps every animation paused at rest unless the page is asked to play", () => {
+      const css = readFileSync(join(root, "brand/motion.css"), "utf-8");
+      expect(css).toMatch(/\[class\^='m-'\],\s*\[class\*=' m-'\]\s*\{[^}]*animation-play-state:\s*paused/);
+    });
+
+    it("renders each video as a small MP4 that can start playing before it has all arrived", () => {
+      for (const [, width, height, seconds, output] of all) {
+        const path = join(root, output);
+        expect(existsSync(path), `${output} should exist; run npm run brand:video`).toBe(true);
+        const bytes = readFileSync(path);
+        const order = boxes(bytes).map(([type]) => type);
+        expect(order[0], output).toBe("ftyp");
+        // The index (moov) has to come before the pictures (mdat)
+        expect(order.indexOf("moov"), output).toBeLessThan(order.indexOf("mdat"));
+        // Apple caps a preview's picture and video at 10 MB together; stay far under
+        expect(bytes.length, output).toBeLessThan(1_000_000);
+
+        // The track header holds the picture size, the media header the length
+        const tkhd = bytes.indexOf("tkhd");
+        expect([bytes.readUInt32BE(tkhd + 80) >> 16, bytes.readUInt32BE(tkhd + 84) >> 16], output).toEqual([width, height]);
+        const mvhd = bytes.indexOf("mvhd");
+        const [timescale, duration] = [bytes.readUInt32BE(mvhd + 16), bytes.readUInt32BE(mvhd + 20)];
+        expect(duration / timescale, output).toBeCloseTo(seconds, 1);
+        expect(FPS).toBe(30);
+      }
+    });
+
+    it("has no sound track", () => {
+      for (const [, , , , output] of all) {
+        expect(readFileSync(join(root, output)).includes("soun"), output).toBe(false);
+      }
+    });
   });
 
   it("keeps the favicons at their named sizes", () => {
