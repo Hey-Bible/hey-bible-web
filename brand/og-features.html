@@ -10,22 +10,23 @@
       .canvas {
         width: 1200px;
         height: 630px;
-        padding: 48px 64px 50px;
+        padding: 0 64px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 44px;
       }
       .top {
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
-      .lockup { --logo: 46px; }
+      .lockup { --logo: 50px; }
       .headline {
-        margin: 26px 0 0;
+        margin: 22px 0 0;
         font-family: 'Fredoka', sans-serif;
         font-weight: 600;
-        font-size: 78px;
+        font-size: 86px;
         line-height: 1.08;
         white-space: nowrap;
       }
@@ -41,8 +42,8 @@
       /* Each feature is its own sticker: a cream card cut out with a white edge */
       .features li {
         box-sizing: border-box;
-        height: 178px;
-        padding: 20px 8px 0;
+        height: 186px;
+        padding: 22px 8px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -51,13 +52,13 @@
         border: 5px solid var(--edge);
         border-radius: 26px;
         box-shadow: 0 8px 16px var(--shadow);
-        font-size: 21px;
+        font-size: 22px;
         line-height: 1.15;
         text-align: center;
       }
       .features li:nth-child(odd) { transform: rotate(-1.2deg); }
       .features li:nth-child(even) { transform: rotate(1deg); }
-      .features [data-art] { width: 72px; }
+      .features [data-art] { width: 76px; }
     </style>
   </head>
   <body>
