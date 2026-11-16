@@ -86,6 +86,14 @@ describe("withRangeSupport", () => {
     expect((await res.arrayBuffer()).byteLength).toBe(0);
   });
 
+  it("answers a plain HEAD request with the size and no body", async () => {
+    const res = await withRangeSupport(get(undefined, "HEAD"), asset());
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Length")).toBe("100");
+    expect(res.headers.get("Accept-Ranges")).toBe("bytes");
+    expect((await res.arrayBuffer()).byteLength).toBe(0);
+  });
+
   it("passes a missing file through untouched", async () => {
     const res = await withRangeSupport(get("bytes=0-1"), new Response("not found", { status: 404 }));
     expect(res.status).toBe(404);
@@ -110,6 +118,26 @@ describe("the site's Worker", () => {
     expect(forwarded?.headers.get("Range")).toBeNull();
     expect(forwarded?.url).toBe("https://heybible.org/video/og.mp4");
     expect(res.status).toBe(206);
+  });
+
+  it("fetches with GET even for a HEAD request, because a HEAD answer from the assets has no size to cut from", async () => {
+    let forwarded: Request | undefined;
+    const env = {
+      ASSETS: {
+        fetch: async (request: Request) => {
+          forwarded = request;
+          // The asset layer answers HEAD with no body
+          return request.method === "HEAD" ? new Response(null, { status: 200 }) : asset();
+        },
+      },
+    };
+
+    const res = await worker.fetch(get("bytes=0-1", "HEAD"), env);
+
+    expect(forwarded?.method).toBe("GET");
+    expect(res.status).toBe(206);
+    expect(res.headers.get("Content-Range")).toBe("bytes 0-1/100");
+    expect((await res.arrayBuffer()).byteLength).toBe(0);
   });
 
   it("is put in front of the videos only", () => {

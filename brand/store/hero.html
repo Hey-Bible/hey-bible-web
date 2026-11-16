@@ -1,0 +1,158 @@
+<!doctype html>
+<!--
+  App Store creative assets, as a still and as an 8-second loop. One file makes
+  both shapes; it lays itself out for the window it is opened in:
+
+    3840×1646  product page header (21:9)
+    3840×2560  search results asset (3:2)
+
+  Apple crops these to fit each device and always keeps the "art safe area" in
+  the middle (1646×661 of the header, 2168×1030 of the search asset). The logo,
+  the line and the meadow stay inside it. Everything else is there for the
+  bigger screens and may be cut off.
+
+  Render with `npm run brand` (stills) and `npm run brand:video` (loops). Open
+  with ?play to watch, and ?safe to outline the safe area.
+
+  The verses are from the King James Version, which is in the public domain.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible App Store header</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <link rel="stylesheet" href="../motion.css" />
+    <style>
+      /* One unit is a 3840th of the width, so the page can be previewed small */
+      .canvas {
+        --u: calc(100vw / 3840);
+        width: 100vw;
+        height: 100vh;
+      }
+      .safe {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+        width: calc(var(--u) * 1646);
+        height: calc(var(--u) * 661);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: calc(var(--u) * 120);
+      }
+      .lockup { --logo: calc(var(--u) * 140); }
+      .tagline {
+        margin: calc(var(--u) * 44) 0 0;
+        font-size: calc(var(--u) * 54);
+        line-height: 1.25;
+        color: var(--soft-ink);
+        white-space: nowrap;
+      }
+      .meadow { --cut: calc(var(--u) * 10); width: calc(var(--u) * 540); rotate: 3deg; }
+
+      /* The search asset's safe area is bigger, so its middle is too */
+      .search .safe { width: calc(var(--u) * 2168); height: calc(var(--u) * 1030); gap: calc(var(--u) * 170); }
+      .search .lockup { --logo: calc(var(--u) * 188); }
+      .search .tagline { margin-top: calc(var(--u) * 58); font-size: calc(var(--u) * 72); }
+      .search .meadow { --cut: calc(var(--u) * 13); width: calc(var(--u) * 740); }
+
+      /* Loose pieces round the edge. Each is placed for the header with --x and
+         --y (its centre, in units), and again for the search asset. */
+      .loose {
+        position: absolute;
+        left: calc(var(--u) * var(--x));
+        top: calc(var(--u) * var(--y));
+        translate: -50% -50%;
+        width: calc(var(--u) * var(--w));
+        --cut: calc(var(--u) * 8);
+      }
+      .search .loose { left: calc(var(--u) * var(--sx)); top: calc(var(--u) * var(--sy)); width: calc(var(--u) * var(--sw, var(--w))); }
+      .plate {
+        box-sizing: border-box;
+        padding: calc(var(--u) * 44) calc(var(--u) * 48);
+        background: var(--card);
+        border: calc(var(--u) * 11) solid var(--edge);
+        border-radius: calc(var(--u) * 44);
+        box-shadow: 0 calc(var(--u) * 18) calc(var(--u) * 36) var(--shadow);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: calc(var(--u) * 24);
+        text-align: center;
+      }
+      .ref {
+        font-size: calc(var(--u) * 28);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--terracotta);
+      }
+      .text { font-size: calc(var(--u) * 46); line-height: 1.3; text-wrap: balance; }
+      .m-twinkle { color: var(--wheat); }
+      .decor { width: calc(var(--u) * 300); }
+
+      .outline { display: none; position: absolute; left: 50%; top: 50%; translate: -50% -50%; outline: calc(var(--u) * 6) dashed #c0392b; }
+      .show-safe .outline { display: block; width: calc(var(--u) * 1646); height: calc(var(--u) * 661); }
+      .show-safe.search .outline { width: calc(var(--u) * 2168); height: calc(var(--u) * 1030); }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas">
+      <span class="decor" data-art="sprig-sage" style="right: calc(var(--u) * -60); top: calc(var(--u) * -70); transform: rotate(204deg)"></span>
+      <span class="decor" data-art="sprig-rose" style="left: calc(var(--u) * -66); bottom: calc(var(--u) * -50); transform: rotate(-24deg)"></span>
+      <span class="decor" data-art="sprig-rose" style="right: calc(var(--u) * 900); bottom: calc(var(--u) * -110); transform: rotate(12deg)"></span>
+      <span class="decor" data-art="sprig-sage" style="left: calc(var(--u) * 940); top: calc(var(--u) * -120); transform: rotate(168deg)"></span>
+
+      <!-- Left of the middle -->
+      <div class="loose plate m-bob-a" style="--x: 560; --y: 470; --w: 700; --sx: 760; --sy: 400; --sw: 860; rotate: -4deg">
+        <span class="ref">Psalm 23:1 · KJV</span>
+        <span class="text">The Lord is my shepherd; I shall not want.</span>
+      </div>
+      <span class="loose sticker m-bob-b" data-art="sheep" style="--x: 700; --y: 1160; --w: 420; --sx: 560; --sy: 2130; --sw: 560; rotate: -5deg"></span>
+      <span class="loose sticker m-bob-c" data-art="cloud" style="--x: 190; --y: 880; --w: 250; --sx: 300; --sy: 1240; --sw: 330; rotate: -3deg"></span>
+
+      <!-- Right of the middle -->
+      <span class="loose sticker m-bob-b" data-art="sun" style="--x: 3210; --y: 400; --w: 330; --sx: 3180; --sy: 420; --sw: 430; rotate: 8deg"></span>
+      <div class="loose plate m-bob-b" style="--x: 3250; --y: 1140; --w: 760; --sx: 3000; --sy: 2150; --sw: 900; rotate: 3deg">
+        <span class="ref">Psalm 119:105 · KJV</span>
+        <span class="text">Thy word is a lamp unto my feet, and a light unto my path.</span>
+      </div>
+      <span class="loose sticker m-bob-c" data-art="cloud" style="--x: 3640; --y: 760; --w: 220; --sx: 3560; --sy: 1300; --sw: 300; rotate: 4deg"></span>
+
+      <!-- Only the search asset has room above and below the middle -->
+      <div class="loose plate m-bob-c search-only" style="--x: 0; --y: 0; --w: 0; --sx: 2050; --sy: 330; --sw: 980; rotate: 2deg">
+        <span class="ref">John 10:27 · KJV</span>
+        <span class="text">My sheep hear my voice, and I know them, and they follow me.</span>
+      </div>
+      <div class="loose plate m-bob-a search-only" style="--x: 0; --y: 0; --w: 0; --sx: 1760; --sy: 2220; --sw: 1020; rotate: -2deg">
+        <span class="ref">Matthew 11:28 · KJV</span>
+        <span class="text">Come unto me, all ye that labour and are heavy laden, and I will give you rest.</span>
+      </div>
+
+      <span class="loose m-twinkle" data-art="star" style="--x: 1180; --y: 250; --w: 90; --sx: 1320; --sy: 640; --sw: 110"></span>
+      <span class="loose m-twinkle b" data-art="star" style="--x: 2700; --y: 1420; --w: 80; --sx: 2700; --sy: 1930; --sw: 100; color: var(--rose)"></span>
+      <span class="loose m-twinkle c" data-art="star" style="--x: 2560; --y: 190; --w: 70; --sx: 2860; --sy: 700; --sw: 96; color: var(--sage)"></span>
+      <span class="loose m-twinkle d" data-art="star" style="--x: 1270; --y: 1430; --w: 84; --sx: 1100; --sy: 1880; --sw: 104"></span>
+
+      <div class="safe">
+        <div>
+          <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
+          <p class="tagline">Your complete Bible companion</p>
+        </div>
+        <span class="meadow sticker m-bob-a" data-art="meadow"></span>
+      </div>
+      <div class="outline"></div>
+    </div>
+    <style>
+      .canvas:not(.search) .search-only { display: none; }
+    </style>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const canvas = document.getElementById('canvas');
+      canvas.classList.toggle('search', innerWidth / innerHeight < 2);
+      canvas.classList.toggle('show-safe', params.has('safe'));
+      if (params.has('play')) document.documentElement.classList.add('play');
+    </script>
+    <script src="../art.js"></script>
+  </body>
+</html>

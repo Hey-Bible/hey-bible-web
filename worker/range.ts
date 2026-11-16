@@ -49,8 +49,9 @@ export async function withRangeSupport(request: Request, response: Response): Pr
   const headers = new Headers(response.headers);
   headers.set('Accept-Ranges', 'bytes');
 
+  const head = request.method === 'HEAD';
   const header = request.headers.get('Range');
-  if (!header) return new Response(response.body, { status: 200, headers });
+  if (!header) return new Response(head ? null : response.body, { status: 200, headers });
 
   const body = await response.arrayBuffer();
   const size = body.byteLength;
@@ -58,7 +59,7 @@ export async function withRangeSupport(request: Request, response: Response): Pr
 
   if (range === null) {
     headers.set('Content-Length', String(size));
-    return new Response(body, { status: 200, headers });
+    return new Response(head ? null : body, { status: 200, headers });
   }
   if (range === 'unsatisfiable') {
     headers.delete('Content-Length');
@@ -68,6 +69,6 @@ export async function withRangeSupport(request: Request, response: Response): Pr
 
   headers.set('Content-Range', `bytes ${range.start}-${range.end}/${size}`);
   headers.set('Content-Length', String(range.end - range.start + 1));
-  const slice = request.method === 'HEAD' ? null : body.slice(range.start, range.end + 1);
+  const slice = head ? null : body.slice(range.start, range.end + 1);
   return new Response(slice, { status: 206, headers });
 }

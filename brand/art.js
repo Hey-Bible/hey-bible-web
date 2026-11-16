@@ -47,7 +47,11 @@ const ART = {
       <rect x="4" y="2.5" width="16" height="19" rx="3.5" fill="currentColor" mask="url(#${id})"/>
     </svg>`;
   },
-  sheep: () => `<svg viewBox="0 0 96 78">${sheep()}</svg>`,
+  sheep: () => `<svg viewBox="0 0 96 78"><g class="m-sheep">${sheep()}</g></svg>`,
+  cloud: () => `
+    <svg viewBox="0 0 64 40">
+      <path d="M14 34 a10 10 0 0 1 -2 -19.8 a13 13 0 0 1 24 -5 a11 11 0 0 1 17 9 a8 8 0 0 1 -2 15.8z" fill="#FFFFFF" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
+    </svg>`,
   meadow: () => `
     <svg viewBox="0 0 220 200">
       <path d="M26 150 C4 88 40 28 110 26 C182 24 216 84 196 150 z" fill="#CFE3EC"/>
@@ -68,7 +72,7 @@ const ART = {
     </svg>`,
   sun: () => `
     <svg viewBox="0 0 60 60">
-      <path d="M30 4v6M30 50v6M4 30h6M50 30h6M11.6 11.6l4.2 4.2M44.2 44.2l4.2 4.2M11.6 48.4l4.2-4.2M44.2 15.8l4.2-4.2" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+      <path class="m-rays" d="M30 4v6M30 50v6M4 30h6M50 30h6M11.6 11.6l4.2 4.2M44.2 44.2l4.2 4.2M11.6 48.4l4.2-4.2M44.2 15.8l4.2-4.2" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
       <circle cx="30" cy="30" r="15.5" fill="#E8C277" stroke="${INK}" stroke-width="2.6"/>
       <path d="M23 28.5 q2.5 -3 5 0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
       <path d="M32 28.5 q2.5 -3 5 0" fill="none" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>

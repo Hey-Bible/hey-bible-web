@@ -16,11 +16,19 @@ import { launch, openSource, root } from './render.mjs';
 
 export const FPS = 30;
 
-/** [source, width, height, seconds, output]. `seconds` must match --loop in brand/motion.css. */
-export const videos = [['brand/og-image.html', 1200, 630, 8, 'public/video/og.mp4']];
+/**
+ * [source, width, height, seconds, output, quality]. `seconds` must match
+ * --loop in brand/motion.css. `quality` is x264's CRF: lower is better and
+ * bigger. The site's video is kept small; the App Store ones are kept sharp.
+ */
+export const videos = [
+  ['brand/og-image.html', 1200, 630, 8, 'public/video/og.mp4', 20],
+  ['brand/store/hero.html', 3840, 1646, 8, 'brand/store/app-store-header-3840x1646.mp4', 15],
+  ['brand/store/hero.html', 3840, 2560, 8, 'brand/store/app-store-search-3840x2560.mp4', 15],
+];
 
 /** H.264 that every link previewer plays: 4:2:0, the index at the front, no sound. */
-function encoder(output) {
+function encoder(output, quality) {
   const ffmpeg = spawn(
     'ffmpeg',
     [
@@ -28,7 +36,7 @@ function encoder(output) {
       '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
       '-vf', 'scale=in_range=full:out_range=tv:out_color_matrix=bt709,format=yuv420p',
       '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709',
-      '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryslow', '-crf', '20',
+      '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryslow', '-crf', String(quality),
       '-an', '-movflags', '+faststart',
       output,
     ],
@@ -43,13 +51,16 @@ function encoder(output) {
 
 async function main() {
   const browser = await launch();
-  for (const [source, width, height, seconds, output] of videos) {
+  const only = process.argv[2];
+  for (const [source, width, height, seconds, output, quality] of videos) {
+    // `npm run brand:video -- header` renders only the outputs with that word in the name
+    if (only && !output.includes(only)) continue;
     const page = await openSource(browser, source, width, height);
     const animations = await page.evaluate(() => document.getAnimations().length);
     if (!animations) throw new Error(`${source}: nothing on the page is animated`);
 
     mkdirSync(dirname(join(root, output)), { recursive: true });
-    const { ffmpeg, done } = encoder(join(root, output));
+    const { ffmpeg, done } = encoder(join(root, output), quality);
     const frames = seconds * FPS;
     for (let frame = 0; frame < frames; frame++) {
       await page.evaluate((time) => {

@@ -37,6 +37,8 @@ describe("Brand images", () => {
     );
     expect(sizes["og-image.png"]).toBe("1200x630");
     expect(sizes["og-features.png"]).toBe("1200x630");
+    expect(sizes["app-store-header-3840x1646.png"]).toBe("3840x1646");
+    expect(sizes["app-store-search-3840x2560.png"]).toBe("3840x2560");
     expect(sizes["avatar.png"]).toBe("1024x1024");
     expect(sizes["x-header.png"]).toBe("1500x500");
     expect(sizes["facebook-cover.png"]).toBe("1640x624");
@@ -58,7 +60,7 @@ describe("Brand images", () => {
   });
 
   describe("share videos", () => {
-    const all = videos as [string, number, number, number, string][];
+    const all = videos as [string, number, number, number, string, number][];
 
     /** The top-level boxes of an MP4 file, in order: [type, offset, size]. */
     function boxes(bytes: Buffer): [string, number, number][] {
@@ -100,8 +102,9 @@ describe("Brand images", () => {
         expect(order[0], output).toBe("ftyp");
         // The index (moov) has to come before the pictures (mdat)
         expect(order.indexOf("moov"), output).toBeLessThan(order.indexOf("mdat"));
-        // Apple caps a preview's picture and video at 10 MB together; stay far under
-        expect(bytes.length, output).toBeLessThan(1_000_000);
+        // Apple caps a link preview's picture and video at 10 MB together; the
+        // videos the site serves stay far under
+        if (output.startsWith("public/")) expect(bytes.length, output).toBeLessThan(1_000_000);
 
         // The track header holds the picture size, the media header the length
         const tkhd = bytes.indexOf("tkhd");
@@ -111,6 +114,27 @@ describe("Brand images", () => {
         expect(duration / timescale, output).toBeCloseTo(seconds, 1);
         expect(FPS).toBe(30);
       }
+    });
+
+    it("keeps the App Store loops within Apple's 5 to 30 seconds, and none of them in the published site", () => {
+      const store = all.filter(([, , , , output]) => output.includes("app-store"));
+      expect(store.map(([, w, h]) => `${w}x${h}`)).toEqual(["3840x1646", "3840x2560"]);
+      for (const [, , , seconds, output] of store) {
+        expect(seconds).toBeGreaterThanOrEqual(5);
+        expect(seconds).toBeLessThanOrEqual(30);
+        expect(output.startsWith("brand/store/")).toBe(true);
+      }
+    });
+
+    it("keeps the logo, line and meadow of the App Store assets inside Apple's safe area", () => {
+      const page = readFileSync(join(root, "brand/store/hero.html"), "utf-8");
+      // Header safe area 1646×661, search 2168×1030, both centred
+      expect(page).toMatch(/\.safe \{[^}]*width: calc\(var\(--u\) \* 1646\);\s*height: calc\(var\(--u\) \* 661\)/);
+      expect(page).toMatch(/\.search \.safe \{ width: calc\(var\(--u\) \* 2168\); height: calc\(var\(--u\) \* 1030\)/);
+      const safe = page.slice(page.indexOf('<div class="safe">'));
+      expect(safe).toContain('class="lockup"');
+      expect(safe).toContain('class="tagline"');
+      expect(safe).toContain('data-art="meadow"');
     });
 
     it("has no sound track", () => {

@@ -24,6 +24,9 @@ const night = `${post}?night&ref=${encodeURIComponent('Psalm 4:8 · KJV')}&text=
 export const jobs = [
   ['brand/og-image.html', 1200, 630, 'public/img/og-image.png'],
   ['brand/og-features.html', 1200, 630, 'public/img/og-features.png'],
+  // App Store creative assets: the first frame of each loop, for the poster
+  ['brand/store/hero.html', 3840, 1646, 'brand/store/app-store-header-3840x1646.png'],
+  ['brand/store/hero.html', 3840, 2560, 'brand/store/app-store-search-3840x2560.png'],
   ['brand/blog-sticker-look-hero.html', 1600, 900, 'public/img/blog/a-new-look-hero.png'],
   [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],

@@ -13,8 +13,8 @@ interface Env {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
-    // Fetch the whole file; a Range header passed through would be ignored anyway.
-    const assetRequest = new Request(request.url, { method: request.method });
-    return withRangeSupport(request, await env.ASSETS.fetch(assetRequest));
+    // Fetch the whole file; a Range header passed through would be ignored
+    // anyway. Always with GET, so a HEAD request can be told the size too.
+    return withRangeSupport(request, await env.ASSETS.fetch(new Request(request.url)));
   },
 };

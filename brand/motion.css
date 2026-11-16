@@ -112,3 +112,35 @@
   80% { opacity: 1; transform: scale(1) rotate(0deg); }
   90%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
 }
+
+/* The sun's eight rays turn one place round, so the end meets the start */
+.m-rays {
+  transform-origin: 50% 50%;
+  animation-name: m-turn;
+  animation-timing-function: linear;
+}
+@keyframes m-turn {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(45deg); }
+}
+
+/* Loose stickers and cards bob, each a little differently. Set an element's
+   resting tilt with the `rotate` property so this can move it from there. */
+.m-bob-a { animation-name: m-bob-a; }
+.m-bob-b { animation-name: m-bob-b; }
+.m-bob-c { animation-name: m-bob-c; }
+@keyframes m-bob-a {
+  0%, 50%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1.2%) rotate(1.2deg); }
+  75% { transform: translateY(1%) rotate(-1deg); }
+}
+@keyframes m-bob-b {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  35% { transform: translateY(1.4%) rotate(-1.4deg); }
+  70% { transform: translateY(-1%) rotate(0.8deg); }
+}
+@keyframes m-bob-c {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(1.5%, -1%); }
+  60% { transform: translate(-2%, 0.6%); }
+}
