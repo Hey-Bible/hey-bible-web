@@ -262,8 +262,8 @@ describe("Static build output", () => {
 
     it("gives lists in blog posts their bullets and numbers back", () => {
       const css = stylesheet();
-      expect(css).toMatch(/\.blog-prose ul\{list-style:disc\}/);
-      expect(css).toMatch(/\.blog-prose ol\{list-style:decimal\}/);
+      expect(css).toMatch(/\.blog-prose ul\{list-style-type:disc\}/);
+      expect(css).toMatch(/\.blog-prose ol\{list-style-type:decimal\}/);
     });
 
     it("draws the logo as the book-and-cross mark beside the wordmark", () => {
