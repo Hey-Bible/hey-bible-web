@@ -53,6 +53,24 @@ async function main() {
     const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
+    // fonts.ready also resolves when a face fails to load, and fonts.check()
+    // answers true when the stylesheet never arrived, so look for a loaded face
+    // for each family the text is set in. Otherwise an offline run would
+    // overwrite the committed PNGs with fallback type.
+    const missing = await page.evaluate(() => {
+      const loaded = new Set(
+        [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replace(/["']/g, '')),
+      );
+      const used = new Set();
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (!node.textContent.trim() || !node.parentElement) continue;
+        used.add(getComputedStyle(node.parentElement).fontFamily.split(',')[0].trim().replace(/["']/g, ''));
+      }
+      return ['Fredoka', 'Nunito'].filter((family) => used.has(family) && !loaded.has(family));
+    });
+    if (missing.length) throw new Error(`${source}: ${missing.join(' and ')} did not load`);
     mkdirSync(dirname(join(root, output)), { recursive: true });
     await page.screenshot({ path: join(root, output), clip: { x: 0, y: 0, width, height } });
     await page.close();

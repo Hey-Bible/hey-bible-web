@@ -164,6 +164,31 @@ test.describe("Storybook Sticker theme", () => {
     }
   });
 
+  test("the giving note has a row of its own on a tablet", async ({ page }) => {
+    for (const width of [640, 768, 1000]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto("/");
+      const pill = page.locator("header nav .charity-pill");
+      await expect(pill, `shown at ${width}px`).toBeVisible();
+      const box = (await pill.boundingBox())!;
+      const login = (await page.locator("header nav .login-button").boundingBox())!;
+      expect(box.y, `below the links at ${width}px`).toBeGreaterThanOrEqual(login.y + login.height);
+      const pageWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(Math.abs(box.x + box.width / 2 - pageWidth / 2), `centred at ${width}px`).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("the giving note wraps in the open menu on a small phone", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto("/");
+    await page.locator("#hamburger-btn").click();
+    await expect(page.locator("#mobile-menu .charity-pill")).toBeVisible();
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
   test("the navigation links stay on one line beside the giving note", async ({ page }) => {
     for (const width of [1024, 1280]) {
       await page.setViewportSize({ width, height: 800 });

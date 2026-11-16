@@ -281,6 +281,17 @@ describe("Static build output", () => {
       for (const id of ids) expect(html).toContain(`mask="url(#${id})"`);
     });
 
+    it("numbers the logo masks per page, so every build writes the same ids", () => {
+      const ids = [...readPage("about/index.html").matchAll(/<mask id="(logo-mark-[^"]+)"/g)].map((m) => m[1]);
+      expect(ids).toEqual(["logo-mark-1", "logo-mark-2"]);
+    });
+
+    it("sets quiet copy in the soft text colour rather than faded ink", () => {
+      expect(readPage("blog/welcome/index.html")).toMatch(/<p class="text-sm text-soft">\s*By /);
+      expect(readPage("blog/index.html")).toMatch(/class="text-xs text-soft mb-2"/);
+      expect(stylesheet()).toMatch(/\.text-soft,\.text-soft \*\{color:var\(--color-retro-text-soft\)\}/);
+    });
+
     it("labels a logo that stands alone and hides the one beside the wordmark", () => {
       const html = readPage("about/index.html");
       expect(html).toMatch(/<svg[^>]*class="logo-mark"[^>]*aria-label="Hey Bible app logo"/);

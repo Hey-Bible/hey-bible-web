@@ -17,23 +17,26 @@ const navLinks = [
   class="sticky top-0 z-50 border-b backdrop-blur-md"
   style={`background-color: var(--color-retro-surface-bar); border-color: var(--color-retro-secondary);`}
 >
-  <!-- From 1024px up the bar is three columns, with equal ones either side, so
-       the giving note sits in the middle of the page. If the links need more
-       room than their share, their column grows and the note gives way
-       instead of sliding under them. -->
-  <nav class="flex justify-between items-center w-full px-4 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-3">
+  <!-- From 1024px up the bar is three columns and the giving note sits in the
+       middle one. The side columns only come out equal once the links fit in
+       their share (about 1440px); below that the links' column grows and the
+       note shifts left rather than sliding under them. From 640px to 1023px
+       there is no room beside the links, so the note gets a row of its own. -->
+  <nav class="flex flex-wrap justify-between items-center gap-y-2 w-full px-4 py-3 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-3">
     <div class="flex items-center gap-2">
       <a href="/" class="flex items-center gap-2 no-underline glow-hover">
         <LogoMark size={28} />
         <span class="logo-wordmark text-xl whitespace-nowrap" style={`color: var(--color-retro-text);`}>Hey Bible</span>
       </a>
     </div>
-    <span
-      class="charity-pill sticker-pill hidden lg:inline-flex items-center gap-2 text-xs xl:text-sm px-3 xl:px-4 py-1.5"
-    >
-      <span class="leading-none" style="font-size: 0.75rem; margin-top: -4px;">&#9962;</span>
-      <span class="leading-none">All proceeds support local churches and food banks</span>
-    </span>
+    <div class="hidden sm:flex order-last basis-full justify-center lg:order-none lg:basis-auto">
+      <span
+        class="charity-pill sticker-pill inline-flex items-center gap-2 whitespace-nowrap text-xs xl:text-sm px-3 xl:px-4 py-1.5"
+      >
+        <span class="leading-none" style="font-size: 0.75rem; margin-top: -4px;">&#9962;</span>
+        <span class="leading-none">All proceeds support local churches and food banks</span>
+      </span>
+    </div>
     <div class="flex gap-4 items-center lg:col-start-3 lg:justify-self-end">
       {navLinks.map(link => (
         <a
@@ -86,10 +89,10 @@ const navLinks = [
     ))}
     <a href="https://heybible.app" class="login-button text-sm">Login</a>
     <span
-      class="charity-pill sticker-pill inline-flex items-center gap-2.5 text-xs px-3 py-1"
+      class="charity-pill sticker-pill inline-flex items-center gap-2.5 max-w-full text-xs text-center px-3 py-1"
     >
       <span class="leading-none" style="font-size: 0.65rem; margin-top: -4px;">&#9962;</span>
-      <span class="leading-none">All proceeds support local churches and food banks</span>
+      <span class="leading-snug">All proceeds support local churches and food banks</span>
     </span>
   </div>
 </header>

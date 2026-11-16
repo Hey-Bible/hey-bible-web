@@ -2,11 +2,7 @@
 
 /* ═══════════════════════════════════════════
    Hey Bible — Storybook Sticker Design Tokens
-
-   Kawaii die-cut sticker look in a muted boho nursery palette: a cream page,
-   brown ink, and cards cut out with a white edge and a soft shadow. Dark mode
-   is the same sticker sheet at night. The values mirror the app (see
-   hey-bible-app docs/storybook-sticker-theme.md).
+   The values mirror the app: hey-bible-app docs/storybook-sticker-theme.md
    ═══════════════════════════════════════════ */
 
 @theme {
@@ -196,7 +192,14 @@ h2 { font-size: 1.6rem; }
 /* The giving note in the header: a long line, so it is set a little lighter */
 .charity-pill {
   font-weight: 700;
-  white-space: nowrap;
+}
+
+/* Quiet copy: dates, bylines, ledes. A colour tuned for the page rather than
+   faded ink, which drops under AA on cream. The children are named because the
+   base `*` rule colours every element. */
+.text-soft,
+.text-soft * {
+  color: var(--color-retro-text-soft);
 }
 
 /* A quiet outlined pill, for the options that are not the current one */
