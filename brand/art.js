@@ -81,9 +81,55 @@ const ART = {
     </svg>`,
 };
 
+// Feature icons for brand/og-features.html, one per sticker on that image.
+const icon = (body) => `<svg viewBox="0 0 48 48" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+const ICONS = {
+  'icon-search': () =>
+    icon(`
+      <circle cx="19" cy="23" r="12.5" fill="#CFE3EC"/>
+      <path d="M13.5 20.5 q2 -4.5 6.5 -5" stroke="#FFFFFF" stroke-width="2.4"/>
+      <path d="M28.5 32.5 L39 43" stroke-width="5"/>
+      <path d="M38 3 l2.1 4.6 5 .6 -3.7 3.4 1 4.9 -4.4 -2.5 -4.4 2.5 1 -4.9 -3.7 -3.4 5 -.6z" fill="#E8C277" stroke-width="2"/>`),
+  'icon-notes': () =>
+    icon(`
+      <rect x="9" y="5" width="30" height="38" rx="5" fill="#FDF8EE"/>
+      <path d="M9 15 v-5 a5 5 0 0 1 5 -5 h20 a5 5 0 0 1 5 5 v5z" fill="#E8C277"/>
+      <path d="M16 23 h16 M16 29.5 h16 M16 36 h10" stroke-width="2.4"/>`),
+  'icon-chat': () =>
+    icon(`
+      <path d="M14 7 h20 a10 10 0 0 1 10 10 v6 a10 10 0 0 1 -10 10 h-12 l-9 8 v-8.6 a10 10 0 0 1 -9 -9.4 v-6 a10 10 0 0 1 10 -10z" fill="#E8B3A0"/>
+      <circle cx="16" cy="20" r="2.3" fill="${INK}" stroke="none"/>
+      <circle cx="24" cy="20" r="2.3" fill="${INK}" stroke="none"/>
+      <circle cx="32" cy="20" r="2.3" fill="${INK}" stroke="none"/>`),
+  'icon-art': () =>
+    icon(`
+      <clipPath id="icon-art-frame"><rect x="5" y="8" width="38" height="32" rx="6"/></clipPath>
+      <rect x="5" y="8" width="38" height="32" rx="6" fill="#CFE3EC" stroke="none"/>
+      <g clip-path="url(#icon-art-frame)">
+        <circle cx="33" cy="18" r="4.5" fill="#E8C277" stroke-width="2.2"/>
+        <path d="M2 42 L17 23 L26 33 L31 28 L46 42z" fill="#9DB08A" stroke-width="2.4"/>
+      </g>
+      <rect x="5" y="8" width="38" height="32" rx="6"/>`),
+  'icon-translations': () =>
+    icon(`
+      <rect x="8" y="30" width="32" height="10" rx="3" fill="#9DB08A"/>
+      <rect x="11" y="20" width="28" height="10" rx="3" fill="#E8C277"/>
+      <rect x="7" y="10" width="30" height="10" rx="3" fill="#E8B3A0"/>
+      <path d="M13 35 h6 M16 25 h6 M12 15 h6" stroke-width="2"/>`),
+  'icon-widget': () =>
+    icon(`
+      <rect x="12" y="3" width="24" height="42" rx="6" fill="#FDF8EE"/>
+      <rect x="16.5" y="10" width="15" height="12" rx="3" fill="#E8C277" stroke-width="2"/>
+      <path d="M19.5 14.5 h9 M19.5 18 h5.5" stroke-width="1.8"/>
+      <rect x="16.5" y="26" width="6" height="6" rx="2" fill="#BCD9E6" stroke="none"/>
+      <rect x="25.5" y="26" width="6" height="6" rx="2" fill="#E8B3A0" stroke="none"/>
+      <rect x="16.5" y="35" width="6" height="6" rx="2" fill="#9DB08A" stroke="none"/>
+      <rect x="25.5" y="35" width="6" height="6" rx="2" fill="#BCD9E6" stroke="none"/>`),
+};
+
 function drawArt(root = document) {
   root.querySelectorAll('[data-art]').forEach((el) => {
-    const draw = ART[el.dataset.art];
+    const draw = ART[el.dataset.art] ?? ICONS[el.dataset.art];
     if (draw && !el.firstElementChild) el.innerHTML = draw();
   });
 }

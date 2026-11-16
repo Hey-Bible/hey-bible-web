@@ -96,9 +96,16 @@ describe("Static build output", () => {
 
     it("uses a features-specific Open Graph image", () => {
       const html = readPage("features/index.html");
-      expect(html).toContain("/img/og-features.png");
+      expect(html).toContain('property="og:image" content="https://heybible.org/img/og-features.png"');
+      expect(html).toContain('name="twitter:image" content="https://heybible.org/img/og-features.png"');
       // Asset must ship with the build
       expect(existsSync(join(dist, "img/og-features.png"))).toBe(true);
+    });
+
+    it("describes the features share image as 1200 by 630", () => {
+      const html = readPage("features/index.html");
+      expect(html).toContain('property="og:image:width" content="1200"');
+      expect(html).toContain('property="og:image:height" content="630"');
     });
   });
 
