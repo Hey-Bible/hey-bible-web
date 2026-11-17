@@ -383,22 +383,28 @@ describe("Static build output", () => {
     });
   });
 
-  describe("Draft posts", () => {
-    it("keeps the new-look post out of the build until it is published", () => {
-      const source = readFileSync(
-        join(dist, "..", "src/content/blog/a-new-look.mdx"),
-        "utf-8",
-      );
-      // When the draft flag comes off, replace this test with one for the page.
-      expect(source).toMatch(/^draft: true$/m);
-      expect(existsSync(join(dist, "blog/a-new-look/index.html"))).toBe(false);
-      expect(readPage("blog/index.html")).not.toContain("A New Look for Hey Bible");
-      expect(readPage("blog/tag/update/index.html")).not.toContain("A New Look for Hey Bible");
+  describe("New-look post", () => {
+    it("publishes the post about the new look, on the blog and under its tags", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      expect(post).toContain("A New Look for Hey Bible");
+      expect(readPage("blog/index.html")).toContain("A New Look for Hey Bible");
+      expect(readPage("blog/tag/update/index.html")).toContain("A New Look for Hey Bible");
     });
 
-    it("has the pictures the draft uses ready to publish", () => {
+    it("shows the app in it, with every picture the post names in the build", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      for (const name of ["before-after", "app", "night", "verse"]) {
+        expect(post, `a-new-look-${name}.png`).toContain(`/img/blog/a-new-look-${name}.png`);
+        expect(existsSync(join(dist, `img/blog/a-new-look-${name}.png`))).toBe(true);
+      }
       expect(existsSync(join(dist, "img/blog/a-new-look-hero.png"))).toBe(true);
-      expect(existsSync(join(dist, "img/blog/a-new-look-verse.png"))).toBe(true);
+      expect(existsSync(join(dist, "img/blog/a-new-look-hero-dark.png"))).toBe(true);
+    });
+
+    it("says where the look is live today without promising a store date", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      expect(post).toContain("https://heybible.app");
+      expect(post).toContain("with the next update");
     });
   });
 

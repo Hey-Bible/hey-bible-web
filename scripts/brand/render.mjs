@@ -1,6 +1,7 @@
 // Renders the brand image sources in brand/ to PNG files.
 //
 //   npm run brand
+//   node scripts/brand/render.mjs store    only the files with "store" in their path
 //
 // Needs a browser for Playwright: either `npx playwright install chromium`, or
 // Google Chrome installed on this machine. The fonts come from Google Fonts,
@@ -23,6 +24,42 @@ const lamp = `${post}?night&art=meadow-night&ref=${encodeURIComponent('Psalm 119
   'Your word is a lamp to my feet, and a light for my path.',
 )}`;
 
+/**
+ * The store screenshots: a line of words over a picture of the app. The
+ * pictures of the app are in brand/store/captures/ (`npm run brand:capture`).
+ * [name, capture, title, sub, art, tint, extra]
+ */
+export const storeFrames = [
+  ['search', 'search', 'Find any verse', 'Seven translations in one search', 'sheep', 'sage'],
+  ['art', 'verse', 'Turn verses into art', 'Make a picture of any verse', 'sun', 'wheat'],
+  ['chat', 'chat', 'Ask about any verse', 'Chat about what you are reading', 'dove', 'sky'],
+  ['favorites', 'favorites', 'Keep the verses you love', 'Save favorites and sort them with tags', 'heart', 'rose', 'w=200'],
+  ['styles', 'gallery', 'Pick your style', 'Stickers, watercolor, stained glass and more', 'cloud', 'wheat'],
+  ['library', 'library', 'Everything in one place', 'Your notes, chats and images', 'bible', 'sage'],
+  ['feed', 'feed', 'Share with friends', 'Post a verse and say amen', 'fish', 'sky'],
+  ['night', 'search-night', 'Easy on the eyes', 'Dark mode follows your phone', 'moon', 'sky', 'night&w=230'],
+];
+
+/** The sizes the stores ask for: [folder, the captures to use, width, height] */
+export const storeSizes = [
+  ['iphone-6.9', 'phone', 1320, 2868],
+  ['ipad-13', 'tablet', 2064, 2752],
+  ['play-phone', 'android', 1080, 1920],
+];
+
+const storeJobs = storeSizes.flatMap(([folder, device, width, height]) =>
+  storeFrames.map(([name, capture, title, sub, art, tint, extra], i) => [
+    `brand/store/screenshot.html?shot=${device}/${capture}&title=${encodeURIComponent(title)}&sub=${encodeURIComponent(
+      sub,
+    )}&art=${art}&tint=${tint}${extra ? `&${extra}` : ''}`,
+    width,
+    height,
+    `brand/store/screenshots/${folder}/${i + 1}-${name}.png`,
+  ]),
+);
+
+const phones = 'brand/store/phones.html';
+
 /** [source, width, height, output] */
 export const jobs = [
   ['brand/og-image.html', 1200, 630, 'public/img/og-image.png'],
@@ -34,6 +71,11 @@ export const jobs = [
   // The same hero for the post in dark mode
   ['brand/blog-sticker-look-hero.html?night', 1600, 900, 'public/img/blog/a-new-look-hero-dark.png'],
   [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
+  // The app itself, for the same post
+  [`${phones}?shots=/img/screenshots/2-search.webp,phone/search&labels=Before,After`, 1600, 1000, 'public/img/blog/a-new-look-before-after.png'],
+  [`${phones}?shots=phone/favorites,phone/verse,phone/library`, 1600, 1000, 'public/img/blog/a-new-look-app.png'],
+  [`${phones}?night&shots=phone/search-night,phone/verse-night`, 1600, 1000, 'public/img/blog/a-new-look-night.png'],
+  ...storeJobs,
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],
   ['brand/social/x-header.html', 1500, 500, `${social}/x-header.png`],
   // The same header is served from the site, where older links point.
@@ -84,8 +126,11 @@ export async function openSource(browser, source, width, height) {
 }
 
 async function main() {
+  // `node scripts/brand/render.mjs store` renders only the files with "store" in their path
+  const filter = process.argv[2];
   const browser = await launch();
   for (const [source, width, height, output] of jobs) {
+    if (filter && !output.includes(filter)) continue;
     const page = await openSource(browser, source, width, height);
     mkdirSync(dirname(join(root, output)), { recursive: true });
     await page.screenshot({ path: join(root, output), clip: { x: 0, y: 0, width, height } });
