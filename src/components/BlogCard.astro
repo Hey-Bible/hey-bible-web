@@ -6,11 +6,12 @@ interface Props {
   description: string;
   pubDate: Date;
   heroImage?: string;
+  heroImageDark?: string;
   tags?: string[];
   slug: string;
 }
 
-const { title, description, pubDate, heroImage, tags, slug } = Astro.props;
+const { title, description, pubDate, heroImage, heroImageDark, tags, slug } = Astro.props;
 ---
 
 <a href={`/blog/${slug}`} class="block no-underline group">
@@ -21,7 +22,14 @@ const { title, description, pubDate, heroImage, tags, slug } = Astro.props;
       <img
         src={heroImage}
         alt={title}
-        class="w-full h-48 object-cover"
+        class:list={["w-full h-48 object-cover", heroImageDark && "only-light"]}
+      />
+    )}
+    {heroImage && heroImageDark && (
+      <img
+        src={heroImageDark}
+        alt={title}
+        class="w-full h-48 object-cover only-dark"
       />
     )}
     <div class="p-5">

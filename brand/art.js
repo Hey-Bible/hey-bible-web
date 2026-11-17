@@ -39,8 +39,9 @@ const WOOD = '#C99A6B';
 const BLUSH = '#E39A8A';
 
 let personCount = 0;
-// A small robed figure. `who` picks the details that tell the two apart.
-const person = (who) => {
+// A small robed figure. `who` picks the details that tell the two apart. With
+// `lamp`, the shepherd steps forward and holds an oil lamp out in front.
+const person = (who, lamp = false) => {
   const id = `robe-${personCount++}`;
   const jesus = who === 'shepherd';
   const hair = jesus ? HAIR : '#7A7069';
@@ -50,8 +51,11 @@ const person = (who) => {
   return `
     <path d="${staff}" fill="none" stroke="${INK}" stroke-width="7.4" stroke-linecap="round"/>
     <path d="${staff}" fill="none" stroke="${WOOD}" stroke-width="2.4" stroke-linecap="round"/>
-    <rect x="31" y="88" width="7" height="8" rx="3.5" fill="${INK}"/>
-    <rect x="42" y="88" width="7" height="8" rx="3.5" fill="${INK}"/>
+    ${lamp
+      ? `<rect x="30" y="88" width="7" height="8" rx="3.5" fill="${INK}"/>
+         <rect x="45" y="88.5" width="11" height="7.5" rx="3.75" fill="${INK}"/>`
+      : `<rect x="31" y="88" width="7" height="8" rx="3.5" fill="${INK}"/>
+         <rect x="42" y="88" width="7" height="8" rx="3.5" fill="${INK}"/>`}
     <clipPath id="${id}"><path d="M28 54 C25 68 23 81 22 92 q18 3 36 0 C57 81 55 68 52 54 z"/></clipPath>
     <path d="M28 54 C25 68 23 81 22 92 q18 3 36 0 C57 81 55 68 52 54 z" fill="${ROBE}"/>
     <g clip-path="url(#${id})">
@@ -62,7 +66,14 @@ const person = (who) => {
     <path d="M28 54 C25 68 23 81 22 92 q18 3 36 0 C57 81 55 68 52 54 z" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
     <path d="M31 56 q-11 1 -18 9 l4 7 q7 -6 14 -5 z" fill="${ROBE}" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
     <circle cx="12" cy="69" r="4" fill="${SKIN}" stroke="${INK}" stroke-width="2.2"/>
-    ${jesus
+    ${lamp
+      ? `<path d="M92.5 44 q7 8.5 0 16 q-7 -7.5 0 -16z" fill="#F6E3A6" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/>
+         <path d="M92.5 52 q2.6 3.4 0 6 q-2.6 -2.6 0 -6z" fill="${ROSE}"/>
+         <path d="M73 79 h11 l1.5 3.6 h-14z" fill="#C08F6E" stroke="${INK}" stroke-width="2.2" stroke-linejoin="round"/>
+         <path d="M67 72 q0 -6 9.5 -6 h4 q5.5 0 8.5 -2.6 l6 1.6 q-3.8 2.1 -4.8 6.8 q-1.6 7.6 -11.7 7.6 h-3.2 q-8.3 0 -8.3 -7.4z" fill="#D9A98B" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>
+         <path d="M49 56 q11 1 18 9 l-4 7 q-7 -6 -14 -5 z" fill="${ROBE}" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
+         <circle cx="67.5" cy="69.5" r="4" fill="${SKIN}" stroke="${INK}" stroke-width="2.2"/>`
+      : jesus
       ? `<path d="M49 56 q8 5 10 19 l-7 1.5 q-1 -8 -6 -12 z" fill="${ROBE}" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
          <circle cx="55.5" cy="77.5" r="3.8" fill="${SKIN}" stroke="${INK}" stroke-width="2.2"/>`
       : `<g transform="rotate(8 56 70)">
@@ -86,6 +97,7 @@ const person = (who) => {
 };
 
 let markCount = 0;
+let nightCount = 0;
 const ART = {
   // The book-and-cross mark, in the current text colour
   mark: () => {
@@ -117,6 +129,48 @@ const ART = {
       <g transform="translate(48 84)"><g class="m-sheep">${sheep()}</g></g>
       <g transform="translate(14 108) scale(0.62)"><g class="m-lamb">${sheep(3.4, false)}</g></g>
     </svg>`,
+  // The same hill by night. The shepherd walks ahead of the flock with a lamp,
+  // and its light falls on the path: "Your word is a lamp to my feet, and a
+  // light for my path" (Psalm 119:105). The path is drawn twice: dim all the
+  // way along, then bright inside the reach of the lamp.
+  'meadow-night': () => {
+    const id = `night-${nightCount++}`;
+    const dome = 'M26 150 C4 88 40 28 110 26 C182 24 216 84 196 150 z';
+    const hill = 'M12 152 C60 100 152 98 208 152 C200 184 28 186 12 152z';
+    const path = 'M10 160 C60 146 118 153 158 148 C180 145 196 139 212 128 L214 144 C198 151 184 156 164 159 C120 164 62 157 14 173 z';
+    const star = 'M10 1 Q10 10 19 10 Q10 10 10 19 Q10 10 1 10 Q10 10 10 1z';
+    return `
+    <svg viewBox="0 0 220 200">
+      <clipPath id="${id}-scene"><path d="${dome}"/><path d="${hill}"/></clipPath>
+      <clipPath id="${id}-hill"><path d="${hill}"/></clipPath>
+      <clipPath id="${id}-lit"><circle cx="177" cy="114" r="58"/></clipPath>
+      <path d="${dome}" fill="#3A4868"/>
+      <g transform="translate(52 46) scale(0.5)">
+        <path d="M40 6 A25 25 0 1 0 54 40 A20 20 0 0 1 40 6z" fill="#F6E3A6" stroke="${INK}" stroke-width="5.2" stroke-linejoin="round"/>
+      </g>
+      <path transform="translate(104 44) scale(0.6)" d="${star}" fill="#F6E3A6"/>
+      <path transform="translate(150 54) scale(0.45)" d="${star}" fill="#F6E3A6"/>
+      <path transform="translate(38 96) scale(0.4)" d="${star}" fill="#F6E3A6"/>
+      <circle cx="128" cy="38" r="1.3" fill="#F6E3A6"/>
+      <circle cx="84" cy="78" r="1.3" fill="#F6E3A6"/>
+      <circle cx="176" cy="84" r="1.3" fill="#F6E3A6"/>
+      <path d="${hill}" fill="#71876C"/>
+      <g clip-path="url(#${id}-scene)">
+        <circle cx="177" cy="114" r="58" fill="#F2B25C" opacity="0.12"/>
+        <circle cx="177" cy="114" r="41" fill="#F2B25C" opacity="0.16"/>
+        <circle cx="177" cy="114" r="25" fill="#F4C56C" opacity="0.26"/>
+        <circle cx="177" cy="114" r="12" fill="#F6E3A6" opacity="0.4"/>
+      </g>
+      <g clip-path="url(#${id}-hill)">
+        <path d="${path}" fill="#8C9578"/>
+        <g clip-path="url(#${id}-lit)"><path d="${path}" fill="#F0DC9C"/></g>
+      </g>
+      <path d="${hill}" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>
+      <g transform="translate(18 90) scale(0.9)"><g class="m-sheep">${sheep(2.9)}</g></g>
+      <g transform="translate(18 120) scale(0.58)"><g class="m-lamb">${sheep(3.6, false)}</g></g>
+      <g transform="translate(98 67.6) scale(0.85) rotate(3 40 95)"><g class="m-shepherd">${person('shepherd', true)}</g></g>
+    </svg>`;
+  },
   moon: () => `
     <svg viewBox="0 0 60 60">
       <path d="M40 6 A25 25 0 1 0 54 40 A20 20 0 0 1 40 6z" fill="#F6E3A6" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>

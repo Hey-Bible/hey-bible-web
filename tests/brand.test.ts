@@ -66,10 +66,81 @@ describe("Brand images", () => {
 
   it("puts the shepherd in the meadow with the sheep", () => {
     const art = readFileSync(join(root, "brand/art.js"), "utf-8");
-    const meadow = art.slice(art.indexOf("  meadow: () =>"), art.indexOf("  moon: () =>"));
+    const meadow = art.slice(art.indexOf("  meadow: () =>"), art.indexOf("  'meadow-night': () =>"));
     expect(meadow).toContain("person('shepherd')");
     expect(meadow).toContain("m-sheep");
     expect(meadow).toContain("m-lamb");
+  });
+
+  it("draws the same hill by night, with the shepherd leading the flock by lamplight", () => {
+    const art = readFileSync(join(root, "brand/art.js"), "utf-8");
+    const night = art.slice(art.indexOf("  'meadow-night': () =>"), art.indexOf("  moon: () =>"));
+    const day = art.slice(art.indexOf("  meadow: () =>"), art.indexOf("  'meadow-night': () =>"));
+    // The same dome and hill as the day scene
+    for (const shape of ["M26 150 C4 88 40 28 110 26 C182 24 216 84 196 150 z", "M12 152 C60 100 152 98 208 152 C200 184 28 186 12 152z"]) {
+      expect(day, "day scene").toContain(shape);
+      expect(night, "night scene").toContain(shape);
+    }
+    // He carries the lamp, and stands further along the hill than both sheep
+    expect(night).toContain("person('shepherd', true)");
+    const x = (part: string) => Number(night.match(new RegExp(`translate\\((\\d+(?:\\.\\d+)?) [^)]*\\)[^<]*<g class="${part}"`))?.[1]);
+    expect(x("m-shepherd")).toBeGreaterThan(x("m-sheep"));
+    expect(x("m-shepherd")).toBeGreaterThan(x("m-lamb"));
+    // The path is drawn dim, then bright inside the reach of the lamp
+    expect(night).toMatch(/<path d="\$\{path\}" fill="#8C9578"\/>/);
+    expect(night).toMatch(/clip-path="url\(#\$\{id\}-lit\)"><path d="\$\{path\}" fill="#F0DC9C"\/>/);
+    // The light never spills past the sticker's outline, where it would grow an edge
+    expect(night).toMatch(/<g clip-path="url\(#\$\{id\}-scene\)">\s*<circle/);
+    // No day sky, sun or cloud
+    expect(night).not.toContain("#CFE3EC");
+    expect(night).not.toContain("m-sun");
+    // The day shepherd is unchanged: no lamp unless asked
+    expect(day).toContain("person('shepherd')");
+    expect(art).toContain("const person = (who, lamp = false) =>");
+  });
+
+  it("has a night post of the lamp scene with Psalm 119:105, and a night hero for the new-look post", () => {
+    const all = jobs as [string, number, number, string][];
+    const lamp = all.find(([, , , output]) => output.endsWith("post-portrait-lamp.png"));
+    expect(lamp, "no lamp post job").toBeDefined();
+    const query = new URLSearchParams(lamp![0].split("?")[1]);
+    expect(query.has("night")).toBe(true);
+    expect(query.get("art")).toBe("meadow-night");
+    expect(query.get("ref")).toBe("Psalm 119:105 · WEB");
+    expect(query.get("text")).toBe("Your word is a lamp to my feet, and a light for my path.");
+    expect([lamp![1], lamp![2]]).toEqual([1080, 1350]);
+
+    const hero = all.find(([, , , output]) => output === "public/img/blog/a-new-look-hero-dark.png");
+    expect(hero?.[0]).toBe("brand/blog-sticker-look-hero.html?night");
+    const day = all.find(([, , , output]) => output === "public/img/blog/a-new-look-hero.png")!;
+    expect([hero![1], hero![2]]).toEqual([day[1], day[2]]);
+    const page = readFileSync(join(root, "brand/blog-sticker-look-hero.html"), "utf-8");
+    expect(page).toMatch(/has\('night'\)[\s\S]*classList\.add\('night'\)[\s\S]*dataset\.art = 'meadow-night'/);
+    // The switch has to run before art.js fills in the drawings
+    expect(page.indexOf("dataset.art = 'meadow-night'")).toBeLessThan(page.indexOf('<script src="art.js">'));
+  });
+
+  it("shows a post's night hero only in dark mode, and keeps the day one for link previews", () => {
+    const post = readFileSync(join(root, "src/content/blog/a-new-look.mdx"), "utf-8");
+    expect(post).toMatch(/^heroImage: "\/img\/blog\/a-new-look-hero\.png"$/m);
+    expect(post).toMatch(/^heroImageDark: "\/img\/blog\/a-new-look-hero-dark\.png"$/m);
+    expect(readFileSync(join(root, "src/content.config.ts"), "utf-8")).toMatch(/heroImageDark: z\.string\(\)\.optional\(\)/);
+
+    for (const file of ["src/layouts/BlogPost.astro", "src/components/BlogCard.astro"]) {
+      const source = readFileSync(join(root, file), "utf-8");
+      expect(source, file).toMatch(/src=\{heroImage\}[\s\S]*?heroImageDark && "only-light"/);
+      expect(source, file).toMatch(/src=\{heroImageDark\}[\s\S]*?class="[^"]*only-dark"/);
+    }
+    // Every page that lists or shows a post passes the night picture on
+    for (const file of ["src/pages/blog/[...slug].astro", "src/pages/blog/index.astro", "src/pages/blog/tag/[tag].astro"]) {
+      expect(readFileSync(join(root, file), "utf-8"), file).toContain("heroImageDark={post.data.heroImageDark}");
+    }
+    // The share image is the day picture whatever the reader's colour mode
+    expect(readFileSync(join(root, "src/layouts/BlogPost.astro"), "utf-8")).toContain("image={heroImage}>");
+
+    const css = readFileSync(join(root, "src/styles/global.css"), "utf-8");
+    expect(css).toMatch(/\.only-dark,\s*html\[data-theme="dark"\] \.only-light \{\s*display: none;/);
+    expect(css).toMatch(/html\[data-theme="dark"\] \.only-dark \{\s*display: block;/);
   });
 
   it("keeps the site's meadow sticker the same scene as the brand art", () => {

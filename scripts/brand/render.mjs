@@ -19,6 +19,9 @@ const wide = `${post}?ref=${encodeURIComponent('John 10:27 · WEB')}&text=${enco
 const night = `${post}?night&ref=${encodeURIComponent('Psalm 4:8 · WEB')}&text=${encodeURIComponent(
   'In peace I will both lay myself down and sleep, for you, Yahweh alone, make me live in safety.',
 )}`;
+const lamp = `${post}?night&art=meadow-night&ref=${encodeURIComponent('Psalm 119:105 · WEB')}&text=${encodeURIComponent(
+  'Your word is a lamp to my feet, and a light for my path.',
+)}`;
 
 /** [source, width, height, output] */
 export const jobs = [
@@ -28,6 +31,8 @@ export const jobs = [
   ['brand/store/hero.html', 3840, 1646, 'brand/store/app-store-header-3840x1646.png'],
   ['brand/store/hero.html', 3840, 2560, 'brand/store/app-store-search-3840x2560.png'],
   ['brand/blog-sticker-look-hero.html', 1600, 900, 'public/img/blog/a-new-look-hero.png'],
+  // The same hero for the post in dark mode
+  ['brand/blog-sticker-look-hero.html?night', 1600, 900, 'public/img/blog/a-new-look-hero-dark.png'],
   [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],
   ['brand/social/x-header.html', 1500, 500, `${social}/x-header.png`],
@@ -39,6 +44,7 @@ export const jobs = [
   [post, 1080, 1920, `${social}/post-story.png`],
   [wide, 1080, 1080, `${social}/post-square-sheep.png`],
   [night, 1080, 1350, `${social}/post-portrait-night.png`],
+  [lamp, 1080, 1350, `${social}/post-portrait-lamp.png`],
 ];
 
 export async function launch() {

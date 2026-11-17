@@ -1,6 +1,8 @@
 <!doctype html>
 <!-- Hero image for the blog post about the new look: 1600×900.
-     Rendered to public/img/blog/a-new-look-hero.png by `npm run brand`. -->
+     Rendered to public/img/blog/a-new-look-hero.png by `npm run brand`.
+     Add ?night for the picture the post shows in dark mode
+     (a-new-look-hero-dark.png): the night sheet, with the meadow by night. -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -24,7 +26,7 @@
     </style>
   </head>
   <body>
-    <div class="canvas">
+    <div class="canvas" id="canvas">
       <span class="decor" data-art="sprig-rose" style="width: 190px; left: -40px; bottom: -30px; transform: rotate(-24deg)"></span>
       <span class="decor" data-art="sprig-sage" style="width: 190px; right: -36px; top: -44px; transform: rotate(204deg)"></span>
       <span class="bit" data-art="sprig-sage" style="left: 262px; top: 424px; width: 78px; rotate: 30deg"></span>
@@ -39,7 +41,7 @@
       <span class="bit" data-art="star" style="left: 1506px; top: 524px; width: 28px"></span>
       <div class="row">
         <span class="sticker" data-art="sun" style="width: 190px; transform: rotate(-8deg)"></span>
-        <span class="sticker" data-art="meadow" style="width: 440px; transform: rotate(2deg)"></span>
+        <span class="sticker" id="scene" data-art="meadow" style="width: 440px; transform: rotate(2deg)"></span>
         <span class="sticker" data-art="moon" style="width: 180px; transform: rotate(8deg)"></span>
       </div>
       <div class="words">
@@ -47,6 +49,12 @@
         <p class="tagline">A friendlier look, everywhere</p>
       </div>
     </div>
+    <script>
+      if (new URLSearchParams(location.search).has('night')) {
+        document.getElementById('canvas').classList.add('night');
+        document.getElementById('scene').dataset.art = 'meadow-night';
+      }
+    </script>
     <script src="art.js"></script>
   </body>
 </html>
