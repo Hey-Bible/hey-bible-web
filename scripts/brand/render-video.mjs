@@ -25,8 +25,6 @@ export const videos = [
   ['brand/og-image.html', 1200, 630, 8, 'public/video/og.mp4', 20],
   ['brand/store/hero.html', 3840, 1646, 8, 'brand/store/app-store-header-3840x1646.mp4', 15],
   ['brand/store/hero.html', 3840, 2560, 8, 'brand/store/app-store-search-3840x2560.mp4', 15],
-  // For the blog post about the daily verse videos: the card flipping in
-  ['brand/blog-daily-verse-card.html', 1280, 720, 8, 'public/video/daily-verse-card.mp4', 26],
 ];
 
 /** H.264 that every link previewer plays: 4:2:0, the index at the front, no sound. */

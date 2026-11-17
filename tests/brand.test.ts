@@ -15,25 +15,6 @@ function pngSize(path: string): [number, number] {
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
 }
 
-/** Width and height from a JPEG file: they sit in its start-of-frame segment. */
-function jpegSize(path: string): [number, number] {
-  const bytes = readFileSync(path);
-  expect(bytes.readUInt16BE(0), `${path} should be a JPEG`).toBe(0xffd8);
-  for (let at = 2; at + 9 < bytes.length; ) {
-    expect(bytes[at], `${path}: expected a segment marker at ${at}`).toBe(0xff);
-    const marker = bytes[at + 1];
-    // SOF0 to SOF15, apart from the three that are tables rather than frames
-    if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
-      return [bytes.readUInt16BE(at + 7), bytes.readUInt16BE(at + 5)];
-    }
-    at += 2 + bytes.readUInt16BE(at + 2);
-  }
-  throw new Error(`${path}: no frame header`);
-}
-
-/** The size of a rendered image, read by the format its name gives. */
-const imageSize = (path: string) => (path.endsWith(".jpg") ? jpegSize(path) : pngSize(path));
-
 /** Whether a stylesheet moves the class: a rule for it, or keyframes with its name. */
 function definesMotion(css: string, name: string): boolean {
   return new RegExp(`(\\.|@keyframes\\s+)${name}(?![\\w-])[^{}]*\\{`).test(css);
@@ -51,7 +32,7 @@ describe("Brand images", () => {
     for (const [, width, height, output] of jobs as [string, number, number, string][]) {
       const path = join(root, output);
       expect(existsSync(path), `${output} should exist; run npm run brand`).toBe(true);
-      expect(imageSize(path), output).toEqual([width, height]);
+      expect(pngSize(path), output).toEqual([width, height]);
     }
   });
 
@@ -162,41 +143,13 @@ describe("Brand images", () => {
     expect(css).toMatch(/html\[data-theme="dark"\] \.only-dark \{\s*display: block;/);
   });
 
-  it("saves a photograph as a JPEG and every drawing as a PNG", () => {
-    const script = readFileSync(join(root, "scripts/brand/render.mjs"), "utf-8");
-    expect(script).toMatch(/output\.endsWith\('\.jpg'\) \? \{ type: 'jpeg', quality: \d+ \} : \{\}/);
-    const outputs = (jobs as [string, number, number, string][]).map(([, , , output]) => output);
-    expect(outputs.filter((output) => output.endsWith(".jpg"))).toEqual(["public/img/blog/daily-verse-videos-card.jpg"]);
-    for (const output of outputs) expect(output).toMatch(/\.(png|jpg)$/);
-    // A photograph saved as a PNG would be several times the size
-    expect(readFileSync(join(root, "public/img/blog/daily-verse-videos-card.jpg")).length).toBeLessThan(400_000);
-  });
-
-  it("draws the daily verse card to the app's measurements, with a public-domain verse", () => {
-    const page = readFileSync(join(root, "brand/blog-daily-verse-card.html"), "utf-8");
-    // The plate: 78.75% of 1280 wide, centred 59.17% of the way down 720, #12100C at 36%
-    expect(page).toMatch(/\.slot \{[^}]*left: 136px;[^}]*width: 1008px;[^}]*top: 426px;/);
-    expect(page).toMatch(/\.plate \{[^}]*background: rgba\(18, 16, 12, 0\.36\);/);
-    // Gold reference and rule, cream serif verse at 3.8% of the width
-    expect(page).toMatch(/\.ref \{[^}]*color: #e8c47a;/);
-    expect(page).toMatch(/\.rule \{[^}]*background: #e8c47a;/);
-    expect(page).toMatch(/\.verse \{[^}]*serif;[^}]*font-size: 48px;[^}]*color: #fff8eb;/);
-    expect(page).toContain(">@heybibleapp<");
-    expect(page).toMatch(/Philippians 4:13 <span class="abbr">WEB<\/span>/);
-    expect(page).toContain("I can do all things through Christ, who strengthens me.");
-    // The loop starts and ends with the card in place, so the picture is its first frame
-    const frames = page.match(/@keyframes m-vcard \{([\s\S]*?)\n      \}/)?.[1] ?? "";
-    expect(frames).toMatch(/0%, 25% \{ opacity: 1; transform: translateY\(0\) rotateX\(0deg\);/);
-    expect(frames).toMatch(/100% \{ opacity: 1; transform: translateY\(0\) rotateX\(0deg\); \}/);
-    expect(frames).toMatch(/rotateX\(8\ddeg\)/);
-  });
-
-  it("shows the card in the daily verse videos post, from files the site serves", () => {
+  it("shows a real daily verse video in its blog post, from files the site serves", () => {
     const post = readFileSync(join(root, "src/content/blog/daily-verse-videos.mdx"), "utf-8");
     const video = post.match(/<video [^>]*>/)?.[0] ?? "";
-    expect(video).toContain('src="/video/daily-verse-card.mp4"');
+    expect(video).toContain('src="/video/daily-verse-psalm-118-24.mp4"');
     expect(video).toContain('poster="/img/blog/daily-verse-videos-card.jpg"');
-    // Browsers only start a video by themselves when it is silent
+    // Browsers only start a video by themselves when it is silent; the
+    // controls let a reader turn the music on
     for (const attribute of ["autoplay", "loop", "muted", "playsinline", "controls"]) {
       expect(video, attribute).toMatch(new RegExp(`\\s${attribute}(\\s|>)`));
     }
@@ -207,6 +160,22 @@ describe("Brand images", () => {
     for (const path of local) expect(existsSync(join(root, "public", path)), path).toBe(true);
     // The example clips the first draft linked to are gone
     expect(post).not.toContain("files.wdh.sh");
+
+    // The clip: an MP4 with its index at the front, small enough for a blog
+    // page, served from /video/ where the Worker answers Range requests
+    const bytes = readFileSync(join(root, "public/video/daily-verse-psalm-118-24.mp4"));
+    expect(bytes.subarray(4, 8).toString("ascii")).toBe("ftyp");
+    expect(bytes.indexOf("moov")).toBeLessThan(bytes.indexOf("mdat"));
+    expect(bytes.length).toBeLessThan(5_000_000);
+    const wrangler = readFileSync(join(root, "wrangler.jsonc"), "utf-8");
+    expect(wrangler).toMatch(/"run_worker_first":\s*\["\/video\/\*"\]/);
+    // The before and after pictures are frames of that clip, as JPEGs
+    for (const name of ["daily-verse-videos-before.jpg", "daily-verse-videos-card.jpg"]) {
+      const picture = readFileSync(join(root, "public/img/blog", name));
+      expect(picture.readUInt16BE(0), name).toBe(0xffd8);
+      expect(picture.length, name).toBeLessThan(400_000);
+    }
+
     const css = readFileSync(join(root, "src/styles/global.css"), "utf-8");
     expect(css).toMatch(/\.blog-prose img,\s*\.blog-prose video \{[^}]*max-width: 100%;/);
   });

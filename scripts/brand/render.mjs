@@ -33,8 +33,6 @@ export const jobs = [
   ['brand/blog-sticker-look-hero.html', 1600, 900, 'public/img/blog/a-new-look-hero.png'],
   // The same hero for the post in dark mode
   ['brand/blog-sticker-look-hero.html?night', 1600, 900, 'public/img/blog/a-new-look-hero-dark.png'],
-  // A photograph, so a JPEG: the card from the daily verse videos, for its blog post
-  ['brand/blog-daily-verse-card.html', 1280, 720, 'public/img/blog/daily-verse-videos-card.jpg'],
   [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],
   ['brand/social/x-header.html', 1500, 500, `${social}/x-header.png`],
@@ -90,9 +88,7 @@ async function main() {
   for (const [source, width, height, output] of jobs) {
     const page = await openSource(browser, source, width, height);
     mkdirSync(dirname(join(root, output)), { recursive: true });
-    // Drawings are saved as PNG; an output named .jpg (a photograph) as JPEG
-    const format = output.endsWith('.jpg') ? { type: 'jpeg', quality: 88 } : {};
-    await page.screenshot({ path: join(root, output), clip: { x: 0, y: 0, width, height }, ...format });
+    await page.screenshot({ path: join(root, output), clip: { x: 0, y: 0, width, height } });
     await page.close();
     console.log(`${width}×${height}  ${output}`);
   }
