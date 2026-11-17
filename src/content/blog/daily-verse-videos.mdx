@@ -1,46 +1,78 @@
 ---
-title: "How the daily verse videos found their type"
-description: "The social clips started as quiet landscapes. A flip-in Scripture card and a small @heybibleapp mark are now the house style, and they are coming to verse art in the app."
+title: "Our verse videos were missing the verse"
+description: "Every morning we posted a landscape, a little music, and a verse almost nobody saw. Here is the card that fixed it, why you should never ask an image model to spell, and how the same card ended up in the app."
 pubDate: 2026-08-15
+updatedDate: 2026-11-16
 author: "Moses"
 tags: ["Feature", "Update"]
-heroImage: "/img/blog/daily-verse-videos-hero.webp"
+heroImage: "/img/blog/daily-verse-videos-card.jpg"
 ---
 
-Every morning at 7 we post a short verse video. No sermon. Just a landscape, a little music, and Scripture.
+For months, our daily verse videos were missing one thing. The verse.
 
-Those clips used to be picture-only. The verse lived in the caption. Beautiful, but easy to miss with the sound off, and easy to forget which verse you had just seen.
+Every morning at 7 we post a short clip: a landscape in morning light, a little music, one passage of Scripture. No sermon. But the Scripture lived in the caption, underneath the video. Scroll past with the sound off, and this is what you got:
+
+![A dirt path through misty green hills at sunrise, with no words on it](/img/blog/daily-verse-videos-hero.webp)
+
+*A lovely hill. Which verse was it? Exactly.*
+
+Beautiful, and easy to miss. Easier still to forget which verse you had just seen.
 
 This week we put the words **on** the film.
 
-## What changed
+<video src="/video/daily-verse-card.mp4" poster="/img/blog/daily-verse-videos-card.jpg" width="1280" height="720" autoplay loop muted playsinline controls preload="metadata" aria-label="A verse card slips off a sunrise landscape, then flips back into place: Philippians 4:13, I can do all things through Christ, who strengthens me."></video>
 
-The picture still comes first. About half a second of quiet, then a card **flips in** toward you (a rotate around the X axis, like a page turning up from the horizon). On it:
+*The card, redrawn for this page over the same hill. It slips away so you can watch it flip back in.*
 
-- the reference in gold, with CSB
+## Half a second of nothing
+
+The picture still comes first. That was the part we refused to lose. So every clip opens the way it always did, with only the landscape, for about half a second. Long enough to know where you are.
+
+Then a card flips in toward you. It rotates up into place, like a page turning up from the horizon. On it:
+
+- the reference in gold, with the translation beside it
 - a thin gold rule
 - the verse in warm cream
-- a dark, see-through plate so the hills stay visible
+- a dark plate you can see through, so the hills stay in the picture
 
-In the corner, small and quiet: **@heybibleapp**.
+And in the corner, small and quiet: **@heybibleapp**.
 
-We tried this first on [Philippians 4:13](https://files.wdh.sh/download/f0a6d0260ad06ab96b6ef9d8) (landscape) and the same cut in [9:16](https://files.wdh.sh/download/d9685878de5f2b3b0776a17b). That is the lock for new daily videos, and we are walking back through the older ones one night at a time.
+That see-through plate does more work than it looks. A solid box would turn the landscape into a border around a text slide. At roughly one third dark, the plate gives the type something to sit on, and the hills carry on behind it.
 
-This is a different lane from [Season 2 of the podcast](/blog/behind-the-scenes-season-2). Those chapter films are old-master oil and Ken Burns. These daily posts are photoreal morning light, made to sit next to everything else in a social feed.
+We tried it first on Philippians 4:13, once wide and once in 9:16 for vertical feeds. That cut is now the pattern for every new daily video, and we are walking back through the older ones one night at a time.
 
-## Why the app should match
+## Never ask an image model to spell
 
-Hey Bible already lets you generate a verse image in the app. Until now that overlay was a wide white band with black type. Same mission, different face.
+There is a tempting shortcut here: put the verse in the prompt and let the model paint the words into the sky.
 
-If the videos and the in-app art disagree, the product feels like two teams. So we filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) to restyle the image generator to this card: dark plate, gold reference, cream verse, gold rule, same small watermark. Stills cannot flip, but they can wear the same clothes.
+Don't. Image models are unreliable spellers, and what comes back is often garbled. With Scripture, nearly right is wrong.
 
-## What we learned making the videos
+So the first rule of the daily videos is **put the words on last**. Generate the living picture, then set the type over it with real fonts, the way a film gets its titles.
+
+The other rules we wrote down along the way:
 
 - **Match the music to the still**, not to a default piano patch. A sunrise meadow wants guitar. A woods path does not want brass.
-- **Keep motion slow and even.** The first 15 seconds and the extra 10 have to feel like one shot.
-- **Put the words on last.** Generate the living picture, then set type. Do not ask the image model to spell.
-- **One verse a day, 7 AM Eastern.** The factory can run at night. People should wake up to one quiet thing.
+- **Keep the motion slow and even.** The first 15 seconds and the extra 10 have to feel like one shot.
+- **One verse a day, at 7 AM Eastern.** The factory can run at night. People should wake up to one quiet thing.
 
-If you follow [@heybibleapp](https://instagram.com/heybibleapp), you will start seeing the card on new posts. In the app, new verse images will follow as soon as that PR lands.
+None of this is how [Season 2 of the podcast](/blog/behind-the-scenes-season-2) looks, and that is on purpose. Those chapter films are old-master oil and Ken Burns. The daily posts are photoreal morning light, made to sit beside everything else in a social feed.
+
+## Then the app looked wrong
+
+Hey Bible already makes verse images in the app. Until now, that picture carried its verse on a wide white band with black type across it. Same Scripture, same mission, a completely different face.
+
+If the videos and the in-app art disagree, the product feels like two teams. So we filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) to give the app the card from the videos: dark plate, gold reference, cream verse, gold rule, the same small watermark. We did not eyeball it, either. The plate's width and where it sits were measured off stills from the videos.
+
+Stills cannot flip, but they can wear the same clothes.
+
+If you follow [@heybibleapp](https://instagram.com/heybibleapp), you will start seeing the card on new posts. In the app, new verse images follow as soon as that PR lands.
+
+## Since then
+
+*Added November 16.* The card reached the app the day after this was written, and two things have happened to it since.
+
+Hey Bible has a new default style for verse images: storybook sticker art on a cream page. Sticker art gets a cream plate of its own. The card from the videos stays on every other style, where it suits a photo-like picture.
+
+And the plate is no longer stuck where we put it. You can now move the text on a verse image and restyle it yourself.
 
 *— Moses*
