@@ -1,0 +1,38 @@
+---
+// The Hey Bible mark: a rounded book with a cross and a page line cut out of it.
+// It is drawn in the current text colour, so it is brown ink by day and cream
+// at night. The same drawing is used in the app (hey-bible-app `app-logo`).
+import { nextLogoMarkId } from './logo-mark-id';
+
+interface Props {
+  /** Height in pixels. The mark is 16 units wide and 19 tall. */
+  size?: number;
+  /** Read aloud when the mark stands alone. Leave it out next to the wordmark. */
+  label?: string;
+  class?: string;
+}
+
+const { size = 32, label, class: className } = Astro.props;
+// Each mark needs its own mask id: two on one page would otherwise share one.
+// Counting per page keeps the ids the same from one build to the next.
+const maskId = nextLogoMarkId(Astro.request);
+---
+
+<svg
+  class:list={['logo-mark', className]}
+  viewBox="4 2.5 16 19"
+  width={Math.round((size * 16) / 19)}
+  height={size}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  aria-hidden={label ? undefined : 'true'}
+  focusable="false"
+>
+  <mask id={maskId}>
+    <rect x="0" y="0" width="24" height="24" fill="#fff" />
+    <rect x="10.8" y="5.2" width="2.4" height="9" rx="0.6" fill="#000" />
+    <rect x="8" y="7.8" width="8" height="2.4" rx="0.6" fill="#000" />
+    <rect x="7" y="16.6" width="10.5" height="2.4" rx="1.2" fill="#000" />
+  </mask>
+  <rect x="4" y="2.5" width="16" height="19" rx="3.5" fill="currentColor" mask={`url(#${maskId})`} />
+</svg>

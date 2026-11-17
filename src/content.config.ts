@@ -10,6 +10,8 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     author: z.string().default("Hey Bible Team"),
     heroImage: z.string().optional(),
+    // The same picture drawn for dark mode. Link previews always use heroImage.
+    heroImageDark: z.string().optional(),
     tags: z
       .array(
         z.enum([
@@ -19,6 +21,7 @@ const blog = defineCollection({
           "Community",
           "Agents",
           "Developers",
+          "Podcast",
         ]),
       )
       .default([]),

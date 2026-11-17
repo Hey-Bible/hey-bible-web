@@ -1,0 +1,60 @@
+<!doctype html>
+<!-- Hero image for the blog post about the new look: 1600×900.
+     Rendered to public/img/blog/a-new-look-hero.png by `npm run brand`.
+     Add ?night for the picture the post shows in dark mode
+     (a-new-look-hero-dark.png): the night sheet, with the meadow by night. -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>A new look for Hey Bible</title>
+    <link rel="stylesheet" href="brand.css" />
+    <style>
+      .canvas {
+        width: 1600px;
+        height: 900px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 64px;
+      }
+      .row { display: flex; align-items: center; gap: 70px; }
+      .sticker { --cut: 9px; }
+      .lockup { --logo: 104px; }
+      .tagline { margin: 0; font-size: 46px; color: var(--soft-ink); }
+      .words { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas">
+      <span class="decor" data-art="sprig-rose" style="width: 190px; left: -40px; bottom: -30px; transform: rotate(-24deg)"></span>
+      <span class="decor" data-art="sprig-sage" style="width: 190px; right: -36px; top: -44px; transform: rotate(204deg)"></span>
+      <span class="bit" data-art="sprig-sage" style="left: 262px; top: 424px; width: 78px; rotate: 30deg"></span>
+      <span class="bit" data-art="sprig-rose" style="left: 1346px; top: 640px; width: 78px; rotate: -30deg"></span>
+      <span class="bit" data-art="sprig-sage" style="left: 470px; top: 806px; width: 70px; rotate: 80deg"></span>
+      <span class="bit" data-art="star" style="left: 182px; top: 182px; width: 40px"></span>
+      <span class="bit" data-art="star" style="left: 806px; top: 88px; width: 30px; color: var(--rose)"></span>
+      <span class="bit" data-art="star" style="left: 1128px; top: 122px; width: 28px; color: var(--sage)"></span>
+      <span class="bit" data-art="star" style="left: 1452px; top: 332px; width: 34px; color: var(--sage)"></span>
+      <span class="bit" data-art="star" style="left: 330px; top: 662px; width: 32px; color: var(--rose)"></span>
+      <span class="bit" data-art="star" style="left: 1284px; top: 806px; width: 38px"></span>
+      <span class="bit" data-art="star" style="left: 1506px; top: 524px; width: 28px"></span>
+      <div class="row">
+        <span class="sticker" data-art="sun" style="width: 190px; transform: rotate(-8deg)"></span>
+        <span class="sticker" id="scene" data-art="meadow" style="width: 440px; transform: rotate(2deg)"></span>
+        <span class="sticker" data-art="moon" style="width: 180px; transform: rotate(8deg)"></span>
+      </div>
+      <div class="words">
+        <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
+        <p class="tagline">A friendlier look, everywhere</p>
+      </div>
+    </div>
+    <script>
+      if (new URLSearchParams(location.search).has('night')) {
+        document.getElementById('canvas').classList.add('night');
+        document.getElementById('scene').dataset.art = 'meadow-night';
+      }
+    </script>
+    <script src="art.js"></script>
+  </body>
+</html>

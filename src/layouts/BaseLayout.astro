@@ -10,15 +10,24 @@ interface Props {
   noindex?: boolean;
 }
 
+const DEFAULT_IMAGE = '/img/og-image.png';
+// Share images drawn by `npm run brand`, all 1200 by 630.
+const BRAND_SHARE_IMAGES = [DEFAULT_IMAGE, '/img/og-features.png'];
+// A share image that also has a moving version (`npm run brand:video`). The
+// video starts on the image, so a preview that plays it does not jump.
+const SHARE_VIDEOS: Record<string, string> = { [DEFAULT_IMAGE]: '/video/og.mp4' };
+
 const {
   title,
   description = 'Search, study, and share Scripture. Save favorites, add notes, chat with AI, create verse art, and get daily verses with the iOS widget. Free on iOS and Android.',
-  image = '/img/og-image.png',
+  image = DEFAULT_IMAGE,
   noindex = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const imageURL = new URL(image, Astro.site);
+const hasKnownSize = BRAND_SHARE_IMAGES.includes(image);
+const videoURL = SHARE_VIDEOS[image] && new URL(SHARE_VIDEOS[image], Astro.site);
 const isHomepage = Astro.url.pathname === '/';
 ---
 
@@ -34,7 +43,7 @@ const isHomepage = Astro.url.pathname === '/';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@300;400;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="icon" type="image/x-icon" href="/img/favicons/favicon.ico" />
@@ -42,12 +51,21 @@ const isHomepage = Astro.url.pathname === '/';
     <link rel="icon" type="image/png" sizes="32x32" href="/img/favicons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/img/favicons/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#F3E8D6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#232B3D" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageURL} />
-    <meta property="og:image:width" content="1280" />
-    <meta property="og:image:height" content="720" />
+    {/* Only the brand share images have a known size; blog heroes vary. */}
+    {hasKnownSize && <meta property="og:image:width" content="1200" />}
+    {hasKnownSize && <meta property="og:image:height" content="630" />}
+    {/* Messages plays this, muted and on a loop, in place of the picture. */}
+    {videoURL && <meta property="og:video" content={videoURL} />}
+    {videoURL && <meta property="og:video:secure_url" content={videoURL} />}
+    {videoURL && <meta property="og:video:type" content="video/mp4" />}
+    {videoURL && <meta property="og:video:width" content="1200" />}
+    {videoURL && <meta property="og:video:height" content="630" />}
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content="Hey Bible" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -87,6 +105,10 @@ const isHomepage = Astro.url.pathname === '/';
           ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
           : theme;
         document.documentElement.setAttribute('data-theme', resolved);
+        // Match the browser chrome to the theme the page actually paints,
+        // which can differ from the OS preference the media queries follow.
+        const color = resolved === 'dark' ? '#232B3D' : '#F3E8D6';
+        document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', color));
       })();
     </script>
   </head>
