@@ -72,6 +72,18 @@ describe("Brand images", () => {
     expect(meadow).toContain("m-lamb");
   });
 
+  it("keeps the site's meadow sticker the same scene as the brand art", () => {
+    const art = readFileSync(join(root, "brand/art.js"), "utf-8");
+    const site = readFileSync(join(root, "src/components/Sticker.astro"), "utf-8");
+    const siteMeadow = site.slice(site.indexOf("name === 'meadow'"));
+    expect(siteMeadow).toContain('clipPath id="shepherd-robe"');
+    // The sun, the cloud and where each figure stands are written the same in both
+    for (const part of ['cx="150" cy="56" r="17"', "M52 72 a11 11", "translate(134 68.4) scale(0.85)", "translate(48 84)", "translate(14 108) scale(0.62)"]) {
+      expect(art, `brand/art.js: ${part}`).toContain(part);
+      expect(siteMeadow, `Sticker.astro: ${part}`).toContain(part);
+    }
+  });
+
   it("has motion for every moving part the art and pages name", () => {
     const css = readFileSync(join(root, "brand/motion.css"), "utf-8");
     const files = ["brand/art.js", "brand/og-image.html", "brand/store/hero.html"];
