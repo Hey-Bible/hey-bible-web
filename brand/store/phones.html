@@ -4,9 +4,9 @@
 
   What it shows comes from the address:
     shots   two or three pictures of the app, separated by commas. Each is a
-            file in captures/ without ".png" (phone/search), or a path from the
-            site's public folder that starts with a slash
-            (/img/screenshots/2-search.webp).
+            file in captures/: a capture without ".png" (phone/search), or a
+            screenshot from a real phone with its ending (before/search.webp),
+            which already shows the camera.
     labels  a word under each phone, separated by commas (optional), for
             example "Before,After"
     night   add this for the dark version (use captures taken in dark mode)
@@ -90,9 +90,10 @@
         frame.className = 'frame';
         const img = document.createElement('img');
         img.alt = '';
-        img.src = shot.startsWith('/') ? `../../public${shot}` : `captures/${shot}.png`;
+        const fromPhone = /\.\w+$/.test(shot);
+        img.src = fromPhone ? `captures/${shot}` : `captures/${shot}.png`;
         frame.append(img);
-        if (!shot.startsWith('/')) {
+        if (!fromPhone) {
           const camera = document.createElement('span');
           camera.className = 'camera';
           frame.append(camera);

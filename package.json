@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "brand": "node scripts/brand/render.mjs && scripts/brand/make-icons.sh",
     "brand:video": "node scripts/brand/render-video.mjs",
-    "brand:capture": "node scripts/brand/capture-app.mjs"
+    "brand:capture": "node scripts/brand/capture-app.mjs",
+    "brand:widget": "scripts/brand/capture-widget.sh"
   },
   "repository": {
     "type": "git",

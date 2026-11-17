@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 // @ts-expect-error plain JavaScript module without type declarations
-import { jobs, storeFrames, storeSizes } from "../scripts/brand/render.mjs";
+import { featureScreens, jobs, storeFrames, storeSizes } from "../scripts/brand/render.mjs";
 // @ts-ignore - plain .mjs script
 import { devices, shots } from "../scripts/brand/capture-app.mjs";
 // @ts-expect-error plain JavaScript module without type declarations
@@ -15,6 +15,13 @@ function pngSize(path: string): [number, number] {
   const bytes = readFileSync(path);
   expect(bytes.subarray(1, 4).toString("ascii"), `${path} should be a PNG`).toBe("PNG");
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
+}
+
+/** Width and height from the header of a WebP file, as a browser writes it (the extended format). */
+function webpSize(path: string): [number, number] {
+  const bytes = readFileSync(path);
+  expect(bytes.subarray(8, 16).toString("ascii"), `${path} should be a WebP`).toBe("WEBPVP8X");
+  return [bytes.readUIntLE(24, 3) + 1, bytes.readUIntLE(27, 3) + 1];
 }
 
 /** Whether a stylesheet moves the class: a rule for it, or keyframes with its name. */
@@ -34,7 +41,7 @@ describe("Brand images", () => {
     for (const [, width, height, output] of jobs as [string, number, number, string][]) {
       const path = join(root, output);
       expect(existsSync(path), `${output} should exist; run npm run brand`).toBe(true);
-      expect(pngSize(path), output).toEqual([width, height]);
+      expect(output.endsWith(".webp") ? webpSize(path) : pngSize(path), output).toEqual([width, height]);
     }
   });
 
@@ -321,6 +328,72 @@ describe("Brand images", () => {
         expect(art, `${name} asks for "${sticker}"`).toMatch(new RegExp(`(^|\\s)'?${sticker}'?: \\(`, "m"));
         expect(["sage", "rose", "sky", "wheat"]).toContain(tint);
       }
+    });
+  });
+
+  describe("Features page screens", () => {
+    const screens = featureScreens as [string, string][];
+    const page = readFileSync(join(root, "src/pages/features.astro"), "utf-8");
+    const shown = [...page.matchAll(/screenshot: '([^']+)'/g)].map((match) => match[1]);
+    const all = jobs as [string, number, number, string][];
+
+    it("renders a picture for every feature card, half the size of a phone capture", () => {
+      expect(shown).toHaveLength(7);
+      expect(shown.sort()).toEqual(screens.map(([name]) => `/img/screenshots/${name}.webp`).sort());
+      for (const [name] of screens) {
+        const output = `public/img/screenshots/${name}.webp`;
+        const job = all.find(([, , , out]) => out === output);
+        expect(job, `${output} should have a render job`).toBeDefined();
+        expect(job![0]).toMatch(/^brand\/store\/screen\.html\?/);
+        expect([job![1], job![2]]).toEqual([660, 1434]);
+        expect(webpSize(join(root, output)), output).toEqual([660, 1434]);
+      }
+    });
+
+    it("makes each one from a capture of the app in the new look", () => {
+      const taken = (shots as [string, string, { dark?: boolean; devices?: string[] }?][]).filter(
+        ([, , options]) => !options?.dark,
+      );
+      for (const [name, show] of screens.filter(([, show]) => show !== "widget")) {
+        const capture = show.match(/^shot=phone\/([\w-]+)$/)?.[1];
+        expect(capture, `${name} should show a light phone capture`).toBeDefined();
+        expect(taken.map(([shot]) => shot), `capture-app.mjs should take "${capture}"`).toContain(capture);
+        expect(pngSize(join(root, "brand/store/captures/phone", `${capture}.png`))).toEqual([1320, 2868]);
+      }
+      // The two shots only this page uses are not taken for the tablet and Android sets
+      for (const only of ["notes", "translations"]) {
+        expect(taken.find(([shot]) => shot === only)?.[2]?.devices).toEqual(["phone"]);
+        expect(existsSync(join(root, "brand/store/captures/tablet", `${only}.png`))).toBe(false);
+      }
+    });
+
+    it("draws the widget with the widget's own code, in its three home screen sizes", () => {
+      expect(screens.filter(([, show]) => show === "widget").map(([name]) => name)).toEqual(["widget"]);
+      const script = readFileSync(join(root, "scripts/brand/capture-widget.sh"), "utf-8");
+      expect(script).toContain("ios/App/HeyBibleWidget");
+      expect(script).toContain("HeyBibleWidget.swift");
+      const render = readFileSync(join(root, "scripts/brand/widget-render.swift"), "utf-8");
+      const screen = readFileSync(join(root, "brand/store/screen.html"), "utf-8");
+      const sizes = { "small-lamp": [510, 510], medium: [1092, 510], large: [1092, 1146] };
+      for (const [name, size] of Object.entries(sizes)) {
+        expect(render).toContain(`"${name}"`);
+        expect(screen).toContain(`captures/widget/${name}.png`);
+        expect(pngSize(join(root, "brand/store/captures/widget", `${name}.png`)), name).toEqual(size);
+      }
+      // The verses are the demo account's favorites: public-domain text only
+      expect(render).not.toMatch(/English Standard|ESV|Christian Standard|CSB/);
+    });
+
+    it("leaves no old-look screenshot on the site, and keeps the one the blog's Before phone needs", () => {
+      expect(readdirSync(join(root, "public/img/screenshots")).sort()).toEqual(screens.map(([name]) => `${name}.webp`).sort());
+      expect(existsSync(join(root, "brand/store/captures/before/search.webp"))).toBe(true);
+      const before = all.find(([, , , output]) => output.endsWith("a-new-look-before-after.png"))!;
+      expect(before[0]).toContain("shots=before/search.webp,phone/search");
+      // The README shows the same pictures
+      const readme = readFileSync(join(root, "README.md"), "utf-8");
+      const pictures = [...readme.matchAll(/src="(public\/img\/screenshots\/[^"]+)"/g)].map((match) => match[1]);
+      expect(pictures.length).toBeGreaterThan(0);
+      for (const picture of pictures) expect(existsSync(join(root, picture)), picture).toBe(true);
     });
   });
 

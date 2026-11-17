@@ -1,4 +1,5 @@
-// Renders the brand image sources in brand/ to PNG files.
+// Renders the brand image sources in brand/ to PNG files (or WebP, where the
+// output's name ends in .webp).
 //
 //   npm run brand
 //   node scripts/brand/render.mjs store    only the files with "store" in their path
@@ -7,7 +8,7 @@
 // Google Chrome installed on this machine. The fonts come from Google Fonts,
 // so it also needs a network connection.
 import { chromium } from '@playwright/test';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -60,6 +61,29 @@ const storeJobs = storeSizes.flatMap(([folder, device, width, height]) =>
 
 const phones = 'brand/store/phones.html';
 
+/**
+ * The app screens on the site's Features page: one screen each, half the size
+ * of a phone capture, saved as public/img/screenshots/<name>.webp.
+ * [name, what brand/store/screen.html shows]
+ */
+export const featureScreens = [
+  ['search', 'shot=phone/search'],
+  ['notes', 'shot=phone/notes'],
+  ['chat', 'shot=phone/chat'],
+  ['verse-art', 'shot=phone/verse'],
+  ['sharing', 'shot=phone/feed'],
+  ['translations', 'shot=phone/translations'],
+  // The widget is not a screen of the app: `npm run brand:widget` draws it
+  ['widget', 'widget'],
+];
+
+const featureJobs = featureScreens.map(([name, show]) => [
+  `brand/store/screen.html?${show}`,
+  660,
+  1434,
+  `public/img/screenshots/${name}.webp`,
+]);
+
 /** [source, width, height, output] */
 export const jobs = [
   ['brand/og-image.html', 1200, 630, 'public/img/og-image.png'],
@@ -72,10 +96,11 @@ export const jobs = [
   ['brand/blog-sticker-look-hero.html?night', 1600, 900, 'public/img/blog/a-new-look-hero-dark.png'],
   [wide, 1080, 1080, 'public/img/blog/a-new-look-verse.png'],
   // The app itself, for the same post
-  [`${phones}?shots=/img/screenshots/2-search.webp,phone/search&labels=Before,After`, 1600, 1000, 'public/img/blog/a-new-look-before-after.png'],
+  [`${phones}?shots=before/search.webp,phone/search&labels=Before,After`, 1600, 1000, 'public/img/blog/a-new-look-before-after.png'],
   [`${phones}?shots=phone/favorites,phone/verse,phone/library`, 1600, 1000, 'public/img/blog/a-new-look-app.png'],
   [`${phones}?night&shots=phone/search-night,phone/verse-night`, 1600, 1000, 'public/img/blog/a-new-look-night.png'],
   ...storeJobs,
+  ...featureJobs,
   ['brand/social/avatar.html', 1024, 1024, `${social}/avatar.png`],
   ['brand/social/x-header.html', 1500, 500, `${social}/x-header.png`],
   // The same header is served from the site, where older links point.
@@ -125,6 +150,20 @@ export async function openSource(browser, source, width, height) {
   return page;
 }
 
+/**
+ * The browser takes its pictures as PNG. For an output that ends in .webp, the
+ * page re-encodes the picture, so there is nothing more to install.
+ */
+async function toWebp(page, png) {
+  const webp = await page.evaluate(async (base64) => {
+    const picture = await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());
+    const canvas = Object.assign(document.createElement('canvas'), { width: picture.width, height: picture.height });
+    canvas.getContext('2d').drawImage(picture, 0, 0);
+    return canvas.toDataURL('image/webp', 0.9).split(',')[1];
+  }, png.toString('base64'));
+  return Buffer.from(webp, 'base64');
+}
+
 async function main() {
   // `node scripts/brand/render.mjs store` renders only the files with "store" in their path
   const filter = process.argv[2];
@@ -133,7 +172,8 @@ async function main() {
     if (filter && !output.includes(filter)) continue;
     const page = await openSource(browser, source, width, height);
     mkdirSync(dirname(join(root, output)), { recursive: true });
-    await page.screenshot({ path: join(root, output), clip: { x: 0, y: 0, width, height } });
+    const png = await page.screenshot({ clip: { x: 0, y: 0, width, height } });
+    writeFileSync(join(root, output), output.endsWith('.webp') ? await toWebp(page, png) : png);
     await page.close();
     console.log(`${width}×${height}  ${output}`);
   }

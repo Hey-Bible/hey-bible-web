@@ -72,7 +72,7 @@ describe("Static build output", () => {
   });
 
   describe("FeatureCard (Features page)", () => {
-    it("renders all 6 features", () => {
+    it("renders all 7 features", () => {
       const html = readPage("features/index.html");
       const featureTitles = [
         "Search &amp; Favorites",
@@ -81,10 +81,24 @@ describe("Static build output", () => {
         "iOS Widget",
         "Verse Art",
         "Sharing",
+        "Multiple Translations",
       ];
       for (const title of featureTitles) {
         expect(html, `should contain "${title}"`).toContain(title);
       }
+    });
+
+    it("shows each feature with a screenshot in the new look that is in the build", () => {
+      const html = readPage("features/index.html");
+      const screenshots = [...html.matchAll(/data-screenshot="([^"]+)"/g)].map((match) => match[1]);
+      expect(screenshots).toHaveLength(7);
+      for (const screenshot of screenshots) {
+        // The old-look files were numbered: 2-search.webp, 9-widget.webp
+        expect(screenshot).toMatch(/^\/img\/screenshots\/[a-z-]+\.webp$/);
+        expect(html).toContain(`src="${screenshot}"`);
+        expect(existsSync(join(dist, screenshot)), screenshot).toBe(true);
+      }
+      expect(existsSync(join(dist, "img/screenshots/2-search.webp"))).toBe(false);
     });
 
     it("has CTA with app store buttons", () => {

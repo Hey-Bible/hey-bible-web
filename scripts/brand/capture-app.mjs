@@ -49,7 +49,7 @@ const click = (selector, text) => async (page) => {
 
 const verse = click('app-verse-card ion-card-title', 'Psalms 119:105');
 
-/** [name, path in the app, { dark, before(page) }] */
+/** [name, path in the app, { dark, before(page), devices }]; `devices` keeps a shot to the ones named */
 export const shots = [
   ['search', '/search'],
   ['favorites', '/favorites'],
@@ -59,6 +59,9 @@ export const shots = [
   ['gallery', '/library?segment=images', { before: click('ion-header ion-buttons[slot=end] ion-button') }],
   ['library', '/library?segment=all'],
   ['feed', '/feed'],
+  // Two more for the site's Features page, which only shows a phone
+  ['notes', '/library?segment=notes', { devices: ['phone'] }],
+  ['translations', '/search', { devices: ['phone'], before: click('ion-header ion-buttons[slot=end] ion-button') }],
   ['search-night', '/search', { dark: true }],
   ['verse-night', '/favorites', { dark: true, before: verse }],
 ];
@@ -73,14 +76,18 @@ async function signIn(context) {
   await page.locator('input[type=password]').first().fill(password);
   await page.keyboard.press('Enter');
   await page.waitForURL((url) => !url.pathname.startsWith('/login'), { timeout: 20000 });
-  // A new browser is shown the copyright notice once; read it and move on
+  await closeNotice(page, 8000);
+  await page.close();
+}
+
+/** A new browser is shown the copyright notice once, sometimes a page late; press OK and move on. */
+async function closeNotice(page, timeout) {
   const ok = page.locator('ion-alert button', { hasText: /^\s*OK\s*$/ });
   await ok
     .first()
-    .click({ timeout: 8000 })
+    .click({ timeout })
+    .then(() => page.waitForTimeout(800))
     .catch(() => {});
-  await page.waitForTimeout(800);
-  await page.close();
 }
 
 async function settle(page) {
@@ -101,7 +108,10 @@ async function main() {
   for (const [name, device] of Object.entries(devices)) {
     for (const dark of [false, true]) {
       const wanted = shots.filter(
-        ([shot, , options = {}]) => !!options.dark === dark && (!filter || `${name}/${shot}`.includes(filter)),
+        ([shot, , options = {}]) =>
+          !!options.dark === dark &&
+          (!options.devices || options.devices.includes(name)) &&
+          (!filter || `${name}/${shot}`.includes(filter)),
       );
       if (!wanted.length) continue;
       const context = await browser.newContext({
@@ -126,6 +136,7 @@ async function main() {
         const page = await context.newPage();
         await page.goto(APP + path, { waitUntil: 'domcontentloaded' });
         await settle(page);
+        await closeNotice(page, 500);
         if (options.before) {
           await options.before(page);
           await settle(page);
