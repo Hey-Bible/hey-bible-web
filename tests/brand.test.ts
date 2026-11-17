@@ -143,6 +143,43 @@ describe("Brand images", () => {
     expect(css).toMatch(/html\[data-theme="dark"\] \.only-dark \{\s*display: block;/);
   });
 
+  it("shows a real daily verse video in its blog post, from files the site serves", () => {
+    const post = readFileSync(join(root, "src/content/blog/daily-verse-videos.mdx"), "utf-8");
+    const video = post.match(/<video [^>]*>/)?.[0] ?? "";
+    expect(video).toContain('src="/video/daily-verse-psalm-118-24.mp4"');
+    expect(video).toContain('poster="/img/blog/daily-verse-videos-card.jpg"');
+    // Browsers only start a video by themselves when it is silent; the
+    // controls let a reader turn the music on
+    for (const attribute of ["autoplay", "loop", "muted", "playsinline", "controls"]) {
+      expect(video, attribute).toMatch(new RegExp(`\\s${attribute}(\\s|>)`));
+    }
+    expect(video).toMatch(/aria-label="[^"]{20,}"/);
+    // Every picture and video the post points to on this site exists
+    const local = [...post.matchAll(/(?:src|poster)="(\/[^"]+)"|\]\((\/img\/[^)]+)\)|heroImage: "(\/[^"]+)"/g)].map((m) => m[1] ?? m[2] ?? m[3]);
+    expect(local.length).toBeGreaterThanOrEqual(4);
+    for (const path of local) expect(existsSync(join(root, "public", path)), path).toBe(true);
+    // The example clips the first draft linked to are gone
+    expect(post).not.toContain("files.wdh.sh");
+
+    // The clip: an MP4 with its index at the front, small enough for a blog
+    // page, served from /video/ where the Worker answers Range requests
+    const bytes = readFileSync(join(root, "public/video/daily-verse-psalm-118-24.mp4"));
+    expect(bytes.subarray(4, 8).toString("ascii")).toBe("ftyp");
+    expect(bytes.indexOf("moov")).toBeLessThan(bytes.indexOf("mdat"));
+    expect(bytes.length).toBeLessThan(5_000_000);
+    const wrangler = readFileSync(join(root, "wrangler.jsonc"), "utf-8");
+    expect(wrangler).toMatch(/"run_worker_first":\s*\["\/video\/\*"\]/);
+    // The before and after pictures are frames of that clip, as JPEGs
+    for (const name of ["daily-verse-videos-before.jpg", "daily-verse-videos-card.jpg"]) {
+      const picture = readFileSync(join(root, "public/img/blog", name));
+      expect(picture.readUInt16BE(0), name).toBe(0xffd8);
+      expect(picture.length, name).toBeLessThan(400_000);
+    }
+
+    const css = readFileSync(join(root, "src/styles/global.css"), "utf-8");
+    expect(css).toMatch(/\.blog-prose img,\s*\.blog-prose video \{[^}]*max-width: 100%;/);
+  });
+
   it("keeps the site's meadow sticker the same scene as the brand art", () => {
     const art = readFileSync(join(root, "brand/art.js"), "utf-8");
     const site = readFileSync(join(root, "src/components/Sticker.astro"), "utf-8");

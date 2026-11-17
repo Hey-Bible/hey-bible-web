@@ -1,0 +1,71 @@
+---
+title: "The story of our morning verse videos"
+description: "Each morning clip is a short reminder that God is good, that he cares for you, and that he is fighting for you. They began as a landscape and a song, and grew a card, a longer cut, and a place in the app."
+pubDate: 2026-08-15
+updatedDate: 2026-11-17
+author: "Moses"
+tags: ["Feature", "Update"]
+heroImage: "/img/blog/daily-verse-videos-card.jpg"
+---
+
+Every morning at 7 Eastern we post one short clip: a landscape, a little music, and a verse. A little of God's word, enough to remember that he is good, that he cares for you, and that he is fighting for you.
+
+This is how those clips took shape.
+
+## A landscape and a song
+
+They began as the simple version. The picture and the song carried the post. The verse sat in the caption, under the video.
+
+![A big oak in autumn colour in a sunlit meadow, with no words on it](/img/blog/daily-verse-videos-before.jpg)
+
+*The oak, before the card.*
+
+We kept that quiet opening. Every clip still starts with only the landscape, for about half a second. Long enough to see where you are.
+
+## The verse on the film
+
+The next step was to put the verse on the film as well, so you can read it with the sound off.
+
+<video src="/video/daily-verse-psalm-118-24.mp4" poster="/img/blog/daily-verse-videos-card.jpg" width="1280" height="720" autoplay loop muted playsinline controls preload="metadata" aria-label="A daily verse video: an oak in autumn colour in a sunlit meadow. After a moment a dark, see-through card flips in over it with Psalm 118:24 from the Christian Standard Bible."></video>
+
+*The same oak, with Psalm 118:24 on the card. Turn the sound on for the guitar.*
+
+After that half second, a card flips in toward you. It rotates up into place, like a page turning up from the horizon. On it:
+
+- the reference in gold, with the translation beside it
+- a thin gold rule
+- the verse in warm cream
+- the translation's copyright line, small, underneath
+- a dark plate you can see through, so the landscape stays in the picture
+
+And in the corner, small and quiet: **@heybibleapp**.
+
+The plate is dark enough for the type, and clear enough that the landscape stays in the frame.
+
+Image models still struggle with text. They misspell words, smudge letters, or set the type in a font we would not use. So we generate the picture first, then set the type with real fonts, the way a film gets its titles.
+
+We tried the card first on Philippians 4:13, once wide and once tall. Every morning is those two cuts of one scene. The wide cut goes to Threads and Facebook. The tall cut goes to X, Instagram, YouTube, and TikTok.
+
+## The same card, in the app
+
+The video card gave us a reason to restyle verse images in the app. Those images had carried the verse on a wide white band with black type. We wanted the videos and the in-app pictures to share one face.
+
+We filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) so generated images could use the card from the videos: dark plate, gold reference, cream verse, gold rule, the same small watermark. We measured the plate's width and position off stills from the videos. A still cannot flip. It can use the same plate, type, and colours.
+
+That pull request merged the next day, August 16.
+
+## A little more time
+
+The clips had been fifteen seconds. We added ten more so the picture and the song had time to settle. The second half moves at the same pace as the first.
+
+We also started choosing the song from the still, after we could see it, on a newer model than the first beds. A sunrise meadow gets guitar. A woods path gets unhurried guitar. The oak in this post uses sunny fingerstyle guitar and light piano, in a major key.
+
+The type got simpler too. The verse is one cream line. We removed a gray copy that had sat under some of the letters.
+
+## Where they are now
+
+New morning videos use this card. The reference is gold, the verse is one cream line, and the plate is dark enough to read and clear enough that the landscape stays in the frame. Each morning is two cuts of that same scene, wide and tall. Clips that were already approved we left as they were.
+
+The first fifteen seconds are 1080p. The ten we add to finish the clip come back around 720p, so that is the file we ship. We are hoping the model we use adds a 1080p extend, or that another model offers 1080p at a price we can use every morning.
+
+Moses

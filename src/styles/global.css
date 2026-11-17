@@ -600,10 +600,17 @@ html[data-theme="dark"] .only-dark {
   color: var(--color-retro-primary);
 }
 
-.blog-prose img {
+.blog-prose img,
+.blog-prose video {
   border-radius: var(--radius-md);
   max-width: 100%;
   height: auto;
+}
+
+.blog-prose video {
+  display: block;
+  width: 100%;
+  margin: 1rem 0;
 }
 
 .blog-prose blockquote {
@@ -619,7 +626,8 @@ html[data-theme="dark"] .only-dark {
   font-weight: 700;
 }
 
-.blog-prose img {
+.blog-prose img,
+.blog-prose video {
   border: var(--sticker-edge-width) solid var(--color-sticker-edge);
   box-shadow: var(--sticker-shadow-sm);
 }
