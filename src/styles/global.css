@@ -241,6 +241,14 @@ h2 { font-size: 1.6rem; }
   box-shadow: var(--sticker-shadow) !important;
 }
 
+/* Horizontal scrollers clip anything outside their box, so the strip inside
+   leaves room for the sticker shadow (10px drop + 24px blur) plus the hover
+   lift/scale; otherwise the shadow stops at a hard edge. */
+.scroll-strip {
+  padding-top: 1.5rem;
+  padding-bottom: 3rem;
+}
+
 /* ═══════════════════════════════════════════
    HOVER
    ═══════════════════════════════════════════ */
