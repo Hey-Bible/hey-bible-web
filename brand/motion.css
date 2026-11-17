@@ -1,0 +1,178 @@
+/* Motion for the animated share video (public/video/og.mp4).
+
+   Every animation here runs once per loop, and starts and ends on the still
+   drawing, so the first frame of the video is the share image itself and the
+   last frame meets the first.
+
+   The animations are paused unless the page is opened with ?play (to watch
+   them in a browser). scripts/brand/render-video.mjs steps them frame by
+   frame instead, so the video comes out the same on every run. */
+:root {
+  --loop: 8s;
+}
+
+[class^='m-'],
+[class*=' m-'] {
+  animation-duration: var(--loop);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-play-state: paused;
+  /* Turn and scale each part of a drawing about its own box */
+  transform-box: fill-box;
+}
+
+.play [class^='m-'],
+.play [class*=' m-'] {
+  animation-play-state: running;
+}
+
+/* The big sheep breathes: four slow breaths, feet planted */
+.m-sheep {
+  transform-origin: 50% 100%;
+  animation-name: m-breathe;
+}
+@keyframes m-breathe {
+  0%, 25%, 50%, 75%, 100% { transform: scale(1, 1); }
+  12.5%, 37.5%, 62.5%, 87.5% { transform: scale(1.015, 1.045); }
+}
+
+/* The shepherd breathes too, slower than the sheep */
+.m-shepherd {
+  transform-origin: 50% 100%;
+  animation-name: m-breathe-slow;
+}
+@keyframes m-breathe-slow {
+  0%, 33.3%, 66.6%, 100% { transform: scale(1, 1); }
+  16.6%, 50%, 83.3% { transform: scale(1.008, 1.022); }
+}
+
+/* The lamb hops twice, with a little crouch before each hop */
+.m-lamb {
+  transform-origin: 50% 100%;
+  animation-name: m-hop;
+  animation-timing-function: linear;
+}
+@keyframes m-hop {
+  0%, 30% { transform: translateY(0) scale(1, 1); animation-timing-function: ease-in; }
+  33% { transform: translateY(0) scale(1.06, 0.9); animation-timing-function: ease-out; }
+  38% { transform: translateY(-13px) scale(0.97, 1.05); animation-timing-function: ease-in; }
+  43% { transform: translateY(0) scale(1.06, 0.92); animation-timing-function: ease-out; }
+  48% { transform: translateY(-9px) scale(0.98, 1.04); animation-timing-function: ease-in; }
+  53% { transform: translateY(0) scale(1.04, 0.95); animation-timing-function: ease-out; }
+  57%, 100% { transform: translateY(0) scale(1, 1); }
+}
+
+/* The sun swells and settles twice */
+.m-sun {
+  transform-origin: 50% 50%;
+  animation-name: m-glow;
+}
+@keyframes m-glow {
+  0%, 50%, 100% { transform: scale(1); }
+  25%, 75% { transform: scale(1.08); }
+}
+
+/* The cloud drifts out and back */
+.m-cloud {
+  animation-name: m-drift;
+}
+@keyframes m-drift {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(12px); }
+  75% { transform: translateX(-7px); }
+}
+
+/* Sprigs sway from the foot of the stem */
+.m-sprig {
+  transform-origin: 50% 100%;
+  animation-name: m-sway;
+}
+@keyframes m-sway {
+  0%, 50%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-4deg); }
+}
+
+/* Stars that are not in the still image: each one shows for a moment */
+.m-twinkle {
+  opacity: 0;
+  transform-origin: 50% 50%;
+  animation-name: m-twinkle-a;
+}
+.m-twinkle.b { animation-name: m-twinkle-b; }
+.m-twinkle.c { animation-name: m-twinkle-c; }
+.m-twinkle.d { animation-name: m-twinkle-d; }
+@keyframes m-twinkle-a {
+  0%, 6% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  14% { opacity: 1; transform: scale(1) rotate(0deg); }
+  24%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
+}
+@keyframes m-twinkle-b {
+  0%, 28% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  36% { opacity: 1; transform: scale(1) rotate(0deg); }
+  46%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
+}
+@keyframes m-twinkle-c {
+  0%, 52% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  60% { opacity: 1; transform: scale(1) rotate(0deg); }
+  70%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
+}
+@keyframes m-twinkle-d {
+  0%, 72% { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  80% { opacity: 1; transform: scale(1) rotate(0deg); }
+  90%, 100% { opacity: 0; transform: scale(0.3) rotate(20deg); }
+}
+
+/* Stars that are in the still image: always there, each gently pulsing */
+.m-glint {
+  transform-origin: 50% 50%;
+  animation-name: m-glint-a;
+}
+.m-glint.b { animation-name: m-glint-b; }
+.m-glint.c { animation-name: m-glint-c; }
+@keyframes m-glint-a {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(0.68) rotate(18deg); opacity: 0.6; }
+}
+@keyframes m-glint-b {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  30% { transform: scale(0.7) rotate(-16deg); opacity: 0.6; }
+  68% { transform: scale(1.1) rotate(6deg); opacity: 1; }
+}
+@keyframes m-glint-c {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  24% { transform: scale(1.1) rotate(-6deg); opacity: 1; }
+  72% { transform: scale(0.7) rotate(16deg); opacity: 0.6; }
+}
+
+/* The sun's eight rays turn one place round, so the end meets the start */
+.m-rays {
+  transform-origin: 50% 50%;
+  animation-name: m-turn;
+  animation-timing-function: linear;
+}
+@keyframes m-turn {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(45deg); }
+}
+
+/* Loose stickers and cards bob, each a little differently. Set an element's
+   resting tilt with the `rotate` property so this can move it from there. */
+.m-bob-a { animation-name: m-bob-a; }
+.m-bob-b { animation-name: m-bob-b; }
+.m-bob-c { animation-name: m-bob-c; }
+@keyframes m-bob-a {
+  0%, 50%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1.2%) rotate(1.2deg); }
+  75% { transform: translateY(1%) rotate(-1deg); }
+}
+@keyframes m-bob-b {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  35% { transform: translateY(1.4%) rotate(-1.4deg); }
+  70% { transform: translateY(-1%) rotate(0.8deg); }
+}
+@keyframes m-bob-c {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(1.5%, -1%); }
+  60% { transform: translate(-2%, 0.6%); }
+}

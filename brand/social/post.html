@@ -6,14 +6,16 @@
 
   What it says comes from the address:
     text   the verse or message
-    ref    the label above it, for example "Psalm 23:1 · KJV"
-    art    sheep, meadow, sun or moon (default meadow)
+    ref    the label above it, for example "Psalm 23:1 · WEB"
+    art    any drawing in ../art.js: meadow, meadow-night, sheep, shepherd,
+           bible, dove, lamp, cross, sun, moon and so on (default meadow, or
+           moon at night)
     night  add this for the dark version
 
   Example:
-    post.html?ref=Psalm 23:1 · KJV&text=The Lord is my shepherd; I shall not want.
+    post.html?ref=Psalm 23:1 · WEB&text=Yahweh is my shepherd: I shall lack nothing.
 
-  Use a public-domain translation (KJV, WEB) unless the translation's licence
+  Use a public-domain translation (WEB, KJV) unless the translation's licence
   allows the verse to be set in a picture.
 -->
 <html lang="en">
@@ -49,6 +51,12 @@
       .tall .text { font-size: calc(var(--u) * 62); }
       .tall .text.long { font-size: calc(var(--u) * 50); }
       .tall .text.longer { font-size: calc(var(--u) * 40); }
+      /* The art and the plate each carry a few sprigs and stars with them, so
+         the scatter keeps clear of both whatever shape the post is */
+      .scene { position: relative; width: 100%; display: flex; justify-content: center; }
+      .plate-wrap { position: relative; width: 100%; }
+      /* A square post has no room under the plate */
+      .canvas:not(.roomy) .roomy { display: none; }
       .plate {
         box-sizing: border-box;
         width: 100%;
@@ -95,10 +103,23 @@
     <div class="canvas" id="canvas">
       <span class="decor" data-art="sprig-sage" style="width: calc(var(--u) * 150); right: calc(var(--u) * -34); top: calc(var(--u) * -36); transform: rotate(204deg)"></span>
       <span class="decor" data-art="sprig-rose" style="width: calc(var(--u) * 150); left: calc(var(--u) * -36); bottom: calc(var(--u) * 110); transform: rotate(-24deg)"></span>
-      <span class="art sticker" id="art"></span>
-      <div class="plate">
-        <span class="ref" id="ref"></span>
-        <span class="text" id="text"></span>
+      <span class="bit" data-art="star" style="left: 30%; top: 7%; width: calc(var(--u) * 30); color: var(--rose)"></span>
+      <span class="bit" data-art="star" style="left: 66%; top: 10%; width: calc(var(--u) * 24); color: var(--sage)"></span>
+      <div class="scene">
+        <span class="art sticker" id="art"></span>
+        <span class="bit" data-art="star" style="left: 8%; top: 20%; width: calc(var(--u) * 40)"></span>
+        <span class="bit" data-art="sprig-sage" style="left: 14%; top: 74%; width: calc(var(--u) * 76); rotate: 30deg"></span>
+        <span class="bit" data-art="star" style="left: 90%; top: 34%; width: calc(var(--u) * 30); color: var(--sage)"></span>
+        <span class="bit" data-art="sprig-rose" style="left: 93%; top: 82%; width: calc(var(--u) * 70); rotate: -30deg"></span>
+      </div>
+      <div class="plate-wrap">
+        <div class="plate">
+          <span class="ref" id="ref"></span>
+          <span class="text" id="text"></span>
+        </div>
+        <span class="bit roomy" data-art="sprig-sage" style="left: 24%; top: calc(100% + calc(var(--u) * 95)); width: calc(var(--u) * 70); rotate: 75deg"></span>
+        <span class="bit roomy" data-art="star" style="left: 62%; top: calc(100% + calc(var(--u) * 75)); width: calc(var(--u) * 34)"></span>
+        <span class="bit roomy" data-art="star" style="left: 88%; top: calc(100% + calc(var(--u) * 125)); width: calc(var(--u) * 26); color: var(--rose)"></span>
       </div>
       <div class="foot">
         <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
@@ -107,12 +128,13 @@
     </div>
     <script>
       const params = new URLSearchParams(location.search);
-      const text = params.get('text') || 'The Lord is my shepherd; I shall not want.';
+      const text = params.get('text') || 'Yahweh is my shepherd: I shall lack nothing.';
       const night = params.has('night');
       document.getElementById('canvas').classList.toggle('night', night);
       document.getElementById('canvas').classList.toggle('tall', innerHeight / innerWidth > 1.5);
+      document.getElementById('canvas').classList.toggle('roomy', innerHeight / innerWidth > 1.2);
       document.getElementById('art').dataset.art = params.get('art') || (night ? 'moon' : 'meadow');
-      document.getElementById('ref').textContent = params.get('ref') || 'Psalm 23:1 · KJV';
+      document.getElementById('ref').textContent = params.get('ref') || 'Psalm 23:1 · WEB';
       const textEl = document.getElementById('text');
       textEl.textContent = text;
       textEl.classList.toggle('long', text.length > 140);

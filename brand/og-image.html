@@ -1,11 +1,14 @@
 <!doctype html>
 <!-- Source for public/img/og-image.png, the 1200×630 picture shown when a
-     heybible.org link is shared. Render it with `npm run brand`. -->
+     heybible.org link is shared, and for public/video/og.mp4, the same picture
+     in motion. Render the picture with `npm run brand` and the video with
+     `npm run brand:video`. Open this file with ?play to watch the motion. -->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Hey Bible share image</title>
     <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="motion.css" />
     <style>
       .canvas {
         width: 1200px;
@@ -22,19 +25,43 @@
         line-height: 1.25;
         color: var(--soft-ink);
       }
-      .sticker { --cut: 7px; width: 400px; transform: rotate(3deg); }
+      .sticker { --cut: 7px; width: 400px; transform: rotate(3deg); animation-name: m-float; }
+      /* The whole sticker rocks a little, as if it were stuck on by hand */
+      @keyframes m-float {
+        0%, 50%, 100% { transform: rotate(3deg) translateY(0); }
+        25% { transform: rotate(4.4deg) translateY(-6px); }
+        75% { transform: rotate(1.8deg) translateY(4px); }
+      }
+      .m-twinkle { position: absolute; width: 46px; color: var(--wheat); }
     </style>
   </head>
   <body>
     <div class="canvas">
       <span class="decor" data-art="sprig-rose" style="width: 150px; left: -34px; bottom: -22px; transform: rotate(-24deg)"></span>
       <span class="decor" data-art="sprig-sage" style="width: 150px; right: -30px; top: -34px; transform: rotate(204deg)"></span>
+      <span class="sticker" data-art="dove" style="position: absolute; --cut: 4px; width: 116px; left: 520px; top: 62px; transform: rotate(-6deg)"></span>
+      <span class="sticker" data-art="bible" style="position: absolute; --cut: 4px; width: 124px; left: 530px; top: 478px; transform: rotate(5deg)"></span>
+      <!-- Thin scatter of sprigs and stars; the stars pulse in the video -->
+      <span class="bit" data-art="sprig-sage" style="left: 370px; top: 112px; width: 70px; rotate: 65deg"></span>
+      <span class="bit" data-art="sprig-rose" style="left: 1010px; top: 572px; width: 66px; rotate: -70deg"></span>
+      <span class="bit m-glint" data-art="star" style="left: 200px; top: 108px; width: 34px"></span>
+      <span class="bit m-glint b" data-art="star" style="left: 880px; top: 60px; width: 26px; color: var(--rose)"></span>
+      <span class="bit m-glint c" data-art="star" style="left: 1160px; top: 318px; width: 26px; color: var(--sage)"></span>
+      <span class="bit m-glint b" data-art="star" style="left: 850px; top: 578px; width: 30px"></span>
+      <span class="bit m-glint" data-art="star" style="left: 400px; top: 510px; width: 24px; color: var(--sage)"></span>
       <div>
         <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
         <p class="tagline">Your complete Bible companion</p>
       </div>
-      <span class="sticker" data-art="meadow"></span>
+      <span class="sticker m-float" data-art="meadow"></span>
+      <span class="m-twinkle" data-art="star" style="right: 62px; top: 132px"></span>
+      <span class="m-twinkle b" data-art="star" style="right: 486px; top: 186px; width: 36px; color: var(--rose)"></span>
+      <span class="m-twinkle c" data-art="star" style="right: 58px; bottom: 138px; width: 38px; color: var(--sage)"></span>
+      <span class="m-twinkle d" data-art="star" style="right: 508px; bottom: 112px; width: 40px"></span>
     </div>
+    <script>
+      if (new URLSearchParams(location.search).has('play')) document.documentElement.classList.add('play');
+    </script>
     <script src="art.js"></script>
   </body>
 </html>

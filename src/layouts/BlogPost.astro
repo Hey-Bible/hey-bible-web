@@ -9,10 +9,11 @@ interface Props {
   updatedDate?: Date;
   author: string;
   heroImage?: string;
+  heroImageDark?: string;
   tags: string[];
 }
 
-const { title, description, pubDate, updatedDate, author, heroImage, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, author, heroImage, heroImageDark, tags } = Astro.props;
 ---
 
 <BaseLayout title={`${title} | Hey Bible Blog`} description={description} image={heroImage}>
@@ -23,7 +24,15 @@ const { title, description, pubDate, updatedDate, author, heroImage, tags } = As
           <img
             src={heroImage}
             alt={title}
-            class="w-full rounded-2xl mb-8"
+            class:list={["w-full rounded-2xl mb-8", heroImageDark && "only-light"]}
+            style="box-shadow: var(--sticker-shadow-sm);"
+          />
+        )}
+        {heroImage && heroImageDark && (
+          <img
+            src={heroImageDark}
+            alt={title}
+            class="w-full rounded-2xl mb-8 only-dark"
             style="box-shadow: var(--sticker-shadow-sm);"
           />
         )}

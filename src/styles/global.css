@@ -564,6 +564,17 @@ li {
    BLOG
    ═══════════════════════════════════════════ */
 
+/* A picture drawn once for each colour mode: mark the day one .only-light and
+   the night one .only-dark. Without a theme set, the day picture shows. */
+.only-dark,
+html[data-theme="dark"] .only-light {
+  display: none;
+}
+
+html[data-theme="dark"] .only-dark {
+  display: block;
+}
+
 .blog-prose {
   line-height: 1.8;
 }
