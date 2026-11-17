@@ -38,6 +38,27 @@ test.describe("Image scroller", () => {
   });
 });
 
+test.describe("Scroller shadows (Issue #32)", () => {
+  // The scrollers clip at their box, so the strip must leave room below each
+  // card for the sticker shadow (offset + blur) or it ends at a hard edge.
+  for (const [path, item] of [["/", ".carousel-slide"], ["/features", ".overflow-x-scroll .feature-card"]]) {
+    test(`${path} leaves room for the shadow below ${item}`, async ({ page }) => {
+      await page.goto(path);
+      const { room, shadow } = await page.locator(item).first().evaluate((el) => {
+        const scroller = el.closest(".overflow-x-scroll") as HTMLElement;
+        // Computed form: "rgba(...) 0px 10px 22px 0px" (x, y, blur, spread)
+        const [, y, blur] = (getComputedStyle(el).boxShadow.match(/-?[\d.]+(?=px)/g) ?? []).map(Number);
+        return {
+          room: scroller.getBoundingClientRect().bottom - el.getBoundingClientRect().bottom,
+          shadow: y + blur,
+        };
+      });
+      expect(shadow).toBeGreaterThan(0);
+      expect(room).toBeGreaterThanOrEqual(shadow);
+    });
+  }
+});
+
 test.describe("Lightbox", () => {
   test("opens on click and closes on Escape", async ({ page }) => {
     await page.goto("/");
