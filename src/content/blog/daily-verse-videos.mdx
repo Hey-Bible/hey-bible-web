@@ -1,6 +1,6 @@
 ---
-title: "Our verse videos were missing the verse"
-description: "Every morning we posted a landscape, a little music, and a verse almost nobody saw. Here is the card that fixed it, why you should never ask an image model to spell, and how the same card ended up in the app."
+title: "The morning verse videos grew a card"
+description: "The daily clips started as a landscape and a song, with the verse in the caption. We added a card on the film, then used that card to restyle verse images in the app."
 pubDate: 2026-08-15
 updatedDate: 2026-11-16
 author: "Moses"
@@ -8,27 +8,23 @@ tags: ["Feature", "Update"]
 heroImage: "/img/blog/daily-verse-videos-card.jpg"
 ---
 
-For months, our daily verse videos were missing one thing. The verse.
+Every morning at 7 Eastern we post one short clip: a landscape, a little music, and a verse. No sermon.
 
-Every morning at 7 we post a short clip: a landscape in morning light, a little music, one passage of Scripture. No sermon. But the Scripture lived in the caption, underneath the video. Scroll past with the sound off, and this is what you got:
+The first version was the simple one. The picture and the song carried the post. The verse sat in the caption, under the video.
 
 ![A big oak in autumn colour in a sunlit meadow, with no words on it](/img/blog/daily-verse-videos-before.jpg)
 
-*A lovely tree. Which verse was it? Exactly.*
+*The oak, before the card.*
 
-Beautiful, and easy to miss. Easier still to forget which verse you had just seen.
-
-This week we put the words **on** the film.
+We kept that quiet opening. The next step was to put the verse on the film as well, so you can read it with the sound off.
 
 <video src="/video/daily-verse-psalm-118-24.mp4" poster="/img/blog/daily-verse-videos-card.jpg" width="1280" height="720" autoplay loop muted playsinline controls preload="metadata" aria-label="A daily verse video: an oak in autumn colour in a sunlit meadow. After a moment a dark, see-through card flips in over it with Psalm 118:24 from the Christian Standard Bible."></video>
 
-*The same tree, as the daily video looks now: Psalm 118:24. Turn the sound on for the guitar.*
+*The same oak, with Psalm 118:24 on the card. Turn the sound on for the guitar.*
 
-## Half a second of nothing
+## The picture still opens the clip
 
-The picture still comes first. That was the part we refused to lose. So every clip opens the way it always did, with only the landscape, for about half a second. Long enough to know where you are.
-
-Then a card flips in toward you. It rotates up into place, like a page turning up from the horizon. On it:
+Every clip still starts with only the landscape, for about half a second. Then a card flips in toward you. It rotates up into place, like a page turning up from the horizon. On it:
 
 - the reference in gold, with the translation beside it
 - a thin gold rule
@@ -38,48 +34,46 @@ Then a card flips in toward you. It rotates up into place, like a page turning u
 
 And in the corner, small and quiet: **@heybibleapp**.
 
-That see-through plate does more work than it looks. A solid box would turn the landscape into a border around a text slide. Because you can see through it, the plate gives the type something to sit on, and the meadow carries on behind it.
+A solid box would cover the meadow. The plate is dark enough for the type, and clear enough that the landscape stays in the frame.
 
-We tried it first on Philippians 4:13, once wide and once tall. Every morning is those two cuts of one scene. Wide for some feeds, tall for others. That is the pattern for every new daily video. Clips that were already approved we left as they were.
+We tried this first on Philippians 4:13, once wide and once tall. Every morning is those two cuts of one scene. Wide for some feeds, tall for others. New daily videos use that pattern. Clips that were already approved we left as they were.
 
-## Never ask an image model to spell
+## Words go on last
 
-There is a tempting shortcut here: put the verse in the prompt and let the model paint the words into the sky.
+You can ask an image model to paint the verse into the sky. The letters often come back wrong. With Scripture, a near miss is the wrong verse.
 
-Don't. Image models are unreliable spellers, and what comes back is often garbled. With Scripture, nearly right is wrong.
+So we generate the picture first, then set the type with real fonts, the way a film gets its titles.
 
-So the first rule of the daily videos is **put the words on last**. Generate the living picture, then set the type over it with real fonts, the way a film gets its titles.
+A few other choices settled the same way:
 
-The other rules we wrote down along the way:
+- The song matches the still. A sunrise meadow gets guitar. A woods path gets unhurried guitar. The oak in this post uses sunny fingerstyle guitar and light piano, in a major key.
+- The motion stays slow and even. The first fifteen seconds and the ten we added later move as one shot.
+- One verse a day, at 7 AM Eastern. We make the clips at night.
 
-- **Match the music to the still**, not to a default piano patch. A sunrise meadow wants guitar. A woods path does not want brass. The brief for the autumn oak above was sunny fingerstyle guitar and light piano, in a joyful major key.
-- **Keep the motion slow and even.** The first fifteen seconds and the ten we added later have to feel like one shot.
-- **One verse a day, at 7 AM Eastern.** The factory can run at night. People should wake up to one quiet thing.
+[Season 2 of the podcast](/blog/behind-the-scenes-season-2) is a different look on purpose. Those chapter films are oil paintings and Ken Burns. The daily posts are photoreal morning light, made to sit in a social feed.
 
-None of this is how [Season 2 of the podcast](/blog/behind-the-scenes-season-2) looks, and that is on purpose. Those chapter films are old-master oil and Ken Burns. The daily posts are photoreal morning light, made to sit beside everything else in a social feed.
+## The same card, in the app
 
-## Then the app looked wrong
+The video card gave us a reason to restyle verse images in the app. Those images had carried the verse on a wide white band with black type. We wanted the videos and the in-app pictures to share one face.
 
-Hey Bible already makes verse images in the app. Until now, that picture carried its verse on a wide white band with black type across it. Same Scripture, same mission, a completely different face.
+We filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) so generated images could use the card from the videos: dark plate, gold reference, cream verse, gold rule, the same small watermark. We measured the plate's width and position off stills from the videos. A still cannot flip. It can use the same plate, type, and colours.
 
-If the videos and the in-app art disagree, the product feels like two teams. So we filed [issue #260](https://github.com/Hey-Bible/hey-bible-app/issues/260) and opened [PR #261](https://github.com/Hey-Bible/hey-bible-app/pull/261) to give the app the card from the videos: dark plate, gold reference, cream verse, gold rule, the same small watermark. We did not eyeball it, either. The plate's width and where it sits were measured off stills from the videos.
+That pull request merged the next day.
 
-Stills cannot flip, but they can wear the same clothes.
-
-If you follow [@heybibleapp](https://instagram.com/heybibleapp), you will start seeing the card on new posts. In the app, new verse images follow as soon as that PR lands.
+If you follow [@heybibleapp](https://instagram.com/heybibleapp), new posts use the card. New verse images in the app use it too.
 
 ## Since then
 
-*Added November 16.* A few things have changed since this was written.
+*Added November 16.*
 
-The clips got longer. They started at fifteen seconds. We added ten more so the picture and the song had room to settle. The second half has to move like the first. One shot, not a jump.
+We lengthened the clips. They had been fifteen seconds. We added ten more so the picture and the song had time to settle. The second half moves at the same pace as the first.
 
-The music changed with them. The early beds did not sit with the pictures. We switched to a newer model and started choosing the song from the still, after we could see it. A sunrise meadow wants guitar. A woods path does not want brass.
+We also changed the music. We pick the song from the still, after we can see it, on a newer model than the first beds.
 
-The card got quieter. One cream line of type. No gray copy sitting under the letters. A shadow that only shows on some characters reads as a mistake.
+We simplified the type. The verse is one cream line. We removed a gray copy that had sat under some of the letters.
 
-The card also reached the app the day after this was written. Hey Bible has a new default style for verse images: storybook sticker art on a cream page. Sticker art gets a cream plate of its own. The card from the videos stays on every other style, where it suits a photo-like picture.
+Hey Bible's default verse images are now storybook sticker art on a cream page. Sticker art uses a cream plate. Photo-like styles keep the dark card from the videos.
 
-And the plate is no longer stuck where we put it. You can now move the text on a verse image and restyle it yourself.
+You can move the text on a verse image and restyle it yourself.
 
-*— Moses*
+Moses
