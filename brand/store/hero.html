@@ -161,6 +161,19 @@
       <span class="loose m-glint b search-only" data-art="star" style="--x: 0; --y: 0; --w: 0; --sx: 3690; --sy: 1990; --sw: 56; color: var(--rose)"></span>
       <span class="loose m-glint c search-only" data-art="star" style="--x: 0; --y: 0; --w: 0; --sx: 150; --sy: 2010; --sw: 60"></span>
 
+      <!-- The header gets the same thin scatter, placed for its own shape -->
+      <span class="loose soft header-only" data-art="sprig-sage" style="--x: 1010; --y: 800; --w: 130; rotate: 60deg"></span>
+      <span class="loose soft header-only" data-art="sprig-rose" style="--x: 2780; --y: 300; --w: 130; rotate: -40deg"></span>
+      <span class="loose soft header-only" data-art="sprig-sage" style="--x: 3150; --y: 1480; --w: 130; rotate: 100deg"></span>
+      <span class="loose soft header-only" data-art="sprig-rose" style="--x: 1010; --y: 1470; --w: 130; rotate: 20deg"></span>
+      <span class="loose m-glint header-only" data-art="star" style="--x: 130; --y: 200; --w: 60; color: var(--rose)"></span>
+      <span class="loose m-glint b header-only" data-art="star" style="--x: 640; --y: 790; --w: 64"></span>
+      <span class="loose m-glint c header-only" data-art="star" style="--x: 1120; --y: 1150; --w: 60; color: var(--sage)"></span>
+      <span class="loose m-glint header-only" data-art="star" style="--x: 2040; --y: 440; --w: 56; color: var(--rose)"></span>
+      <span class="loose m-glint b header-only" data-art="star" style="--x: 2900; --y: 700; --w: 70"></span>
+      <span class="loose m-glint c header-only" data-art="star" style="--x: 3600; --y: 430; --w: 56; color: var(--sage)"></span>
+      <span class="loose m-glint header-only" data-art="star" style="--x: 3680; --y: 1450; --w: 60; color: var(--rose)"></span>
+
       <span class="loose m-twinkle" data-art="star" style="--x: 1180; --y: 250; --w: 90; --sx: 1320; --sy: 640; --sw: 110"></span>
       <span class="loose m-twinkle b" data-art="star" style="--x: 2700; --y: 1420; --w: 80; --sx: 2700; --sy: 1930; --sw: 100; color: var(--rose)"></span>
       <span class="loose m-twinkle c" data-art="star" style="--x: 2560; --y: 190; --w: 70; --sx: 2860; --sy: 700; --sw: 96; color: var(--sage)"></span>
@@ -177,6 +190,7 @@
     </div>
     <style>
       .canvas:not(.search) .search-only { display: none; }
+      .search .header-only { display: none; }
     </style>
     <script>
       const params = new URLSearchParams(location.search);

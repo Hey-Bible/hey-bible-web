@@ -90,3 +90,20 @@ body {
 .night .decor {
   opacity: 0.8;
 }
+
+/* Soft filler: small flat sprigs and four-point stars, scattered thinly in the
+   gaps between everything else. They have no sticker edge, so they read as a
+   pattern and can be cropped without loss. Place each by its centre, with left
+   and top, and tilt it with `rotate`. */
+.bit {
+  position: absolute;
+  translate: -50% -50%;
+}
+
+.bit[data-art^='sprig'] {
+  opacity: 0.7;
+}
+
+.bit[data-art='star'] {
+  color: var(--wheat);
+}

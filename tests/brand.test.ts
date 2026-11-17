@@ -101,6 +101,41 @@ describe("Brand images", () => {
     expect(css).toMatch(/@keyframes m-glint-a\s*\{\s*0%, 100% \{[^}]*opacity: 1/);
   });
 
+  it("gives the header its own thin scatter, hidden in the search asset", () => {
+    const page = readFileSync(join(root, "brand/store/hero.html"), "utf-8");
+    expect(page.match(/class="loose soft header-only" data-art="sprig-/g)?.length ?? 0).toBeGreaterThanOrEqual(3);
+    expect(page.match(/class="loose m-glint[^"]* header-only" data-art="star"/g)?.length ?? 0).toBeGreaterThanOrEqual(5);
+    expect(page).toMatch(/\.search \.header-only \{ display: none; \}/);
+  });
+
+  it("scatters a few soft sprigs and stars over every other picture in the kit", () => {
+    const css = readFileSync(join(root, "brand/brand.css"), "utf-8");
+    expect(css).toMatch(/\.bit \{[^}]*position: absolute/);
+    const pages = [
+      "brand/og-image.html",
+      "brand/og-features.html",
+      "brand/blog-sticker-look-hero.html",
+      "brand/social/x-header.html",
+      "brand/social/facebook-cover.html",
+      "brand/social/post.html",
+    ];
+    for (const file of pages) {
+      const page = readFileSync(join(root, file), "utf-8");
+      const sprigs = page.match(/class="bit[^"]*" data-art="sprig-/g)?.length ?? 0;
+      const stars = page.match(/class="bit[^"]*" data-art="star"/g)?.length ?? 0;
+      expect(sprigs, `${file}: sprigs`).toBeGreaterThanOrEqual(1);
+      expect(stars, `${file}: stars`).toBeGreaterThanOrEqual(4);
+      // Thin: a pattern, not a crowd
+      expect(sprigs + stars, `${file}: sprigs and stars`).toBeLessThanOrEqual(12);
+    }
+  });
+
+  it("keeps the scatter clear of a square post's plate", () => {
+    const page = readFileSync(join(root, "brand/social/post.html"), "utf-8");
+    expect(page).toContain(".canvas:not(.roomy) .roomy { display: none; }");
+    expect(page).toMatch(/classList\.toggle\('roomy', innerHeight \/ innerWidth > 1\.2\)/);
+  });
+
   it("labels every verse as World English Bible, which is free to set in a picture", () => {
     const sources = ["brand/store/hero.html", "brand/social/post.html", "scripts/brand/render.mjs"];
     let labels = 0;
