@@ -175,6 +175,30 @@ test.describe("Features page (Issue #11)", () => {
     });
   }
 
+  for (const [path, item, box] of [
+    ["/features", ".overflow-x-scroll .feature-card", "#feature-lightbox"],
+    ["/", ".carousel-slide", "#lightbox"],
+  ]) {
+    for (const [width, height, edge] of [
+      [1440, 900, 20],
+      [390, 844, 10],
+    ]) {
+      test(`the close button of an opened picture is in the top left corner (${path}, ${width} wide)`, async ({ page }) => {
+        await page.setViewportSize({ width, height });
+        await page.goto(path);
+        await page.locator(item).first().click();
+        const close = page.locator(`${box} .lightbox-close`);
+        await expect(close).toBeVisible();
+        const button = (await close.boundingBox())!;
+        expect(Math.round(button.x)).toBe(edge);
+        expect(Math.round(button.y)).toBe(edge);
+        // It still closes the picture
+        await close.click();
+        await expect(page.locator(box)).not.toHaveClass(/active/);
+      });
+    }
+  }
+
   test("CTA present with app store buttons", async ({ page }) => {
     await page.goto("/features");
     await expect(page.locator("text=Ready to get started?")).toBeVisible();
