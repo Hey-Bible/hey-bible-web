@@ -105,6 +105,100 @@ test.describe("Features page (Issue #11)", () => {
     await expect(cards).toHaveCount(11);
   });
 
+  test("a screenshot fills its card, and most of the window when it is opened", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/features");
+    const card = page.locator(".overflow-x-scroll .feature-card").first();
+    const inCard = (await card.locator("img").boundingBox())!;
+    expect(inCard.width / (await card.boundingBox())!.width).toBeGreaterThan(0.8);
+
+    await card.click();
+    const opened = page.locator("#feature-lightbox-img");
+    await expect(opened).toBeVisible();
+    const picture = (await opened.boundingBox())!;
+    expect(picture.height).toBeGreaterThan(900 * 0.7);
+    // Larger, but not stretched, and the whole card is still inside the window
+    expect(picture.width / picture.height).toBeCloseTo(990 / 2151, 2);
+    const frame = (await page.locator("#feature-lightbox-card").boundingBox())!;
+    expect(frame.y).toBeGreaterThanOrEqual(0);
+    expect(frame.y + frame.height).toBeLessThanOrEqual(900);
+  });
+
+  test("an opened screenshot is never taller than the phone it was taken on", async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1400 });
+    await page.goto("/features");
+    await page.locator(".overflow-x-scroll .feature-card").first().click();
+    const picture = (await page.locator("#feature-lightbox-img").boundingBox())!;
+    expect(Math.round(picture.height)).toBe(956);
+  });
+
+  test("a card with words only still opens at a readable width", async ({ page }) => {
+    await page.goto("/features");
+    await page.locator(".feature-card").last().click();
+    await expect(page.locator("#feature-lightbox-img")).toBeHidden();
+    expect((await page.locator("#feature-lightbox-card").boundingBox())!.width).toBeGreaterThanOrEqual(300);
+  });
+
+  for (const [path, item, box] of [
+    ["/features", ".overflow-x-scroll .feature-card", "#feature-lightbox"],
+    ["/", ".carousel-slide", "#lightbox"],
+  ]) {
+    test(`arrow keys step through the opened pictures without scrolling the row behind (${path})`, async ({ page }) => {
+      // Narrow enough that the row has somewhere to scroll
+      await page.setViewportSize({ width: 1000, height: 800 });
+      await page.goto(path);
+      const row = page.locator(".overflow-x-scroll");
+      const scrolled = () => row.evaluate((el) => el.scrollLeft);
+      const showing = () => page.locator(`${box} .lightbox-content img`).getAttribute("src");
+      await page.locator(item).first().click();
+      await expect(page.locator(box)).toHaveClass(/active/);
+      const first = await showing();
+
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(400);
+      expect(await showing()).not.toBe(first);
+      expect(await scrolled()).toBe(0);
+
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      await page.waitForTimeout(400);
+      expect(await showing()).toBe(first);
+      expect(await scrolled()).toBe(0);
+
+      // With the pictures closed, the arrow keys scroll the row again
+      await page.keyboard.press("Escape");
+      await expect(page.locator(box)).not.toHaveClass(/active/);
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(400);
+      expect(await scrolled()).toBeGreaterThan(0);
+    });
+  }
+
+  for (const [path, item, box] of [
+    ["/features", ".overflow-x-scroll .feature-card", "#feature-lightbox"],
+    ["/", ".carousel-slide", "#lightbox"],
+  ]) {
+    for (const [width, height, edge] of [
+      [1440, 900, 20],
+      [390, 844, 10],
+    ]) {
+      test(`the close button of an opened picture is in the top left corner (${path}, ${width} wide)`, async ({ page }) => {
+        await page.setViewportSize({ width, height });
+        await page.goto(path);
+        await page.locator(item).first().click();
+        const close = page.locator(`${box} .lightbox-close`);
+        await expect(close).toBeVisible();
+        const button = (await close.boundingBox())!;
+        expect(Math.round(button.x)).toBe(edge);
+        expect(Math.round(button.y)).toBe(edge);
+        // It still closes the picture
+        await close.click();
+        await expect(page.locator(box)).not.toHaveClass(/active/);
+      });
+    }
+  }
+
   test("CTA present with app store buttons", async ({ page }) => {
     await page.goto("/features");
     await expect(page.locator("text=Ready to get started?")).toBeVisible();

@@ -1,8 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 // @ts-expect-error plain JavaScript module without type declarations
-import { jobs } from "../scripts/brand/render.mjs";
+import { featureScreens, jobs, storeFrames, storeSizes } from "../scripts/brand/render.mjs";
+// @ts-ignore - plain .mjs script
+import { devices, shots } from "../scripts/brand/capture-app.mjs";
 // @ts-expect-error plain JavaScript module without type declarations
 import { FPS, videos } from "../scripts/brand/render-video.mjs";
 
@@ -13,6 +15,13 @@ function pngSize(path: string): [number, number] {
   const bytes = readFileSync(path);
   expect(bytes.subarray(1, 4).toString("ascii"), `${path} should be a PNG`).toBe("PNG");
   return [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
+}
+
+/** Width and height from the header of a WebP file, as a browser writes it (the extended format). */
+function webpSize(path: string): [number, number] {
+  const bytes = readFileSync(path);
+  expect(bytes.subarray(8, 16).toString("ascii"), `${path} should be a WebP`).toBe("WEBPVP8X");
+  return [bytes.readUIntLE(24, 3) + 1, bytes.readUIntLE(27, 3) + 1];
 }
 
 /** Whether a stylesheet moves the class: a rule for it, or keyframes with its name. */
@@ -32,7 +41,7 @@ describe("Brand images", () => {
     for (const [, width, height, output] of jobs as [string, number, number, string][]) {
       const path = join(root, output);
       expect(existsSync(path), `${output} should exist; run npm run brand`).toBe(true);
-      expect(pngSize(path), output).toEqual([width, height]);
+      expect(output.endsWith(".webp") ? webpSize(path) : pngSize(path), output).toEqual([width, height]);
     }
   });
 
@@ -254,6 +263,153 @@ describe("Brand images", () => {
     const page = readFileSync(join(root, "brand/social/post.html"), "utf-8");
     expect(page).toContain(".canvas:not(.roomy) .roomy { display: none; }");
     expect(page).toMatch(/classList\.toggle\('roomy', innerHeight \/ innerWidth > 1\.2\)/);
+  });
+
+  describe("store screenshots", () => {
+    const frames = storeFrames as [string, string, string, string, string, string, string?][];
+    const sizes = storeSizes as [string, string, number, number][];
+
+    it("makes a set for the iPhone, the iPad and Google Play, at sizes those stores take", () => {
+      expect(Object.fromEntries(sizes.map(([folder, , width, height]) => [folder, [width, height]]))).toEqual({
+        "iphone-6.9": [1320, 2868],
+        "ipad-13": [2064, 2752],
+        "play-phone": [1080, 1920],
+      });
+      // Google Play turns away a picture more than twice as tall as it is wide
+      const [, , width, height] = sizes.find(([folder]) => folder === "play-phone")!;
+      expect(height / width).toBeLessThanOrEqual(2);
+      // Google Play takes eight screenshots at most, the App Store ten
+      expect(frames.length).toBeGreaterThanOrEqual(3);
+      expect(frames.length).toBeLessThanOrEqual(8);
+    });
+
+    it("has a rendered picture for every frame in every set", () => {
+      const outputs = (jobs as [string, number, number, string][]).map(([, , , output]) => output);
+      for (const [folder, , width, height] of sizes) {
+        frames.forEach(([name], i) => {
+          const output = `brand/store/screenshots/${folder}/${i + 1}-${name}.png`;
+          expect(outputs, output).toContain(output);
+          expect(pngSize(join(root, output)), output).toEqual([width, height]);
+        });
+      }
+    });
+
+    it("has a picture of the app for every frame, taken at each device's own size", () => {
+      const taken = (shots as [string, string, object?][]).map(([name]) => name);
+      for (const [, device] of sizes) {
+        const { width, height, scale } = (devices as Record<string, { width: number; height: number; scale: number }>)[device];
+        for (const [, capture] of frames) {
+          expect(taken, `capture-app.mjs should take "${capture}"`).toContain(capture);
+          const path = join(root, "brand/store/captures", device, `${capture}.png`);
+          expect(existsSync(path), `${device}/${capture}.png should exist; run npm run brand:capture`).toBe(true);
+          expect(pngSize(path), `${device}/${capture}.png`).toEqual([width * scale, height * scale]);
+        }
+      }
+      // An iPhone and iPad capture fills its store picture exactly, so it can also be used bare
+      const phone = (devices as Record<string, { width: number; height: number; scale: number }>).phone;
+      expect([phone.width * phone.scale, phone.height * phone.scale]).toEqual([1320, 2868]);
+    });
+
+    it("shows a dark capture on the night frame and light ones everywhere else", () => {
+      const dark = new Set(
+        (shots as [string, string, { dark?: boolean }?][]).filter(([, , options]) => options?.dark).map(([name]) => name),
+      );
+      for (const [name, capture, , , , , extra = ""] of frames) {
+        expect(dark.has(capture), `${name} uses ${capture}`).toBe(/(^|&)night(&|$)/.test(extra));
+      }
+      expect(frames.filter(([, capture]) => dark.has(capture))).toHaveLength(1);
+    });
+
+    it("gives every frame a short line that fits, and a sticker the kit can draw", () => {
+      const art = readFileSync(join(root, "brand/art.js"), "utf-8");
+      for (const [name, , title, sub, sticker, tint] of frames) {
+        expect(title.length, `${name}: "${title}"`).toBeLessThanOrEqual(26);
+        expect(sub.length, `${name}: "${sub}"`).toBeLessThanOrEqual(46);
+        expect(art, `${name} asks for "${sticker}"`).toMatch(new RegExp(`(^|\\s)'?${sticker}'?: \\(`, "m"));
+        expect(["sage", "rose", "sky", "wheat"]).toContain(tint);
+      }
+    });
+  });
+
+  describe("Features page screens", () => {
+    const screens = featureScreens as [string, string][];
+    const page = readFileSync(join(root, "src/pages/features.astro"), "utf-8");
+    const shown = [...page.matchAll(/screenshot: '([^']+)'/g)].map((match) => match[1]);
+    const all = jobs as [string, number, number, string][];
+
+    it("renders a picture for every feature card, three quarters the size of a phone capture", () => {
+      expect(shown).toHaveLength(7);
+      expect(shown.sort()).toEqual(screens.map(([name]) => `/img/screenshots/${name}.webp`).sort());
+      for (const [name] of screens) {
+        const output = `public/img/screenshots/${name}.webp`;
+        const job = all.find(([, , , out]) => out === output);
+        expect(job, `${output} should have a render job`).toBeDefined();
+        expect(job![0]).toMatch(/^brand\/store\/screen\.html\?/);
+        expect([job![1], job![2]]).toEqual([990, 2151]);
+        expect(webpSize(join(root, output)), output).toEqual([990, 2151]);
+      }
+    });
+
+    it("makes each one from a capture of the app in the new look", () => {
+      const taken = (shots as [string, string, { dark?: boolean; devices?: string[] }?][]).filter(
+        ([, , options]) => !options?.dark,
+      );
+      for (const [name, show] of screens.filter(([, show]) => show !== "widget")) {
+        const capture = show.match(/^shot=phone\/([\w-]+)$/)?.[1];
+        expect(capture, `${name} should show a light phone capture`).toBeDefined();
+        expect(taken.map(([shot]) => shot), `capture-app.mjs should take "${capture}"`).toContain(capture);
+        expect(pngSize(join(root, "brand/store/captures/phone", `${capture}.png`))).toEqual([1320, 2868]);
+      }
+      // The two shots only this page uses are not taken for the tablet and Android sets
+      for (const only of ["notes", "translations"]) {
+        expect(taken.find(([shot]) => shot === only)?.[2]?.devices).toEqual(["phone"]);
+        expect(existsSync(join(root, "brand/store/captures/tablet", `${only}.png`))).toBe(false);
+      }
+    });
+
+    it("draws the widget with the widget's own code, in its three home screen sizes", () => {
+      expect(screens.filter(([, show]) => show === "widget").map(([name]) => name)).toEqual(["widget"]);
+      const script = readFileSync(join(root, "scripts/brand/capture-widget.sh"), "utf-8");
+      expect(script).toContain("ios/App/HeyBibleWidget");
+      expect(script).toContain("HeyBibleWidget.swift");
+      const render = readFileSync(join(root, "scripts/brand/widget-render.swift"), "utf-8");
+      const screen = readFileSync(join(root, "brand/store/screen.html"), "utf-8");
+      const sizes = { "small-lamp": [510, 510], medium: [1092, 510], large: [1092, 1146] };
+      for (const [name, size] of Object.entries(sizes)) {
+        expect(render).toContain(`"${name}"`);
+        expect(screen).toContain(`captures/widget/${name}.png`);
+        expect(pngSize(join(root, "brand/store/captures/widget", `${name}.png`)), name).toEqual(size);
+      }
+      // The verses are the demo account's favorites: public-domain text only
+      expect(render).not.toMatch(/English Standard|ESV|Christian Standard|CSB/);
+    });
+
+    it("leaves no old-look screenshot on the site, and keeps the one the blog's Before phone needs", () => {
+      expect(readdirSync(join(root, "public/img/screenshots")).sort()).toEqual(screens.map(([name]) => `${name}.webp`).sort());
+      expect(existsSync(join(root, "brand/store/captures/before/search.webp"))).toBe(true);
+      const before = all.find(([, , , output]) => output.endsWith("a-new-look-before-after.png"))!;
+      expect(before[0]).toContain("shots=before/search.webp,phone/search");
+      // The README shows the same pictures
+      const readme = readFileSync(join(root, "README.md"), "utf-8");
+      const pictures = [...readme.matchAll(/src="(public\/img\/screenshots\/[^"]+)"/g)].map((match) => match[1]);
+      expect(pictures.length).toBeGreaterThan(0);
+      for (const picture of pictures) expect(existsSync(join(root, picture)), picture).toBe(true);
+    });
+  });
+
+  it("shows the app in the new-look post: before and after, by day and by night", () => {
+    const post = readFileSync(join(root, "src/content/blog/a-new-look.mdx"), "utf-8");
+    expect(post).not.toMatch(/^draft:\s*true/m);
+    for (const name of ["a-new-look-before-after", "a-new-look-app", "a-new-look-night"]) {
+      const picture = post.match(new RegExp(`!\\[([^\\]]+)\\]\\(/img/blog/${name}\\.png\\)`));
+      expect(picture, `${name}.png should be in the post`).not.toBeNull();
+      expect(picture![1].length, `${name}.png needs a description`).toBeGreaterThan(40);
+      expect(pngSize(join(root, "public/img/blog", `${name}.png`))).toEqual([1600, 1000]);
+    }
+    // The pictures are made from captures of the app, not drawn by hand
+    const made = (jobs as [string, number, number, string][]).filter(([, , , output]) => /a-new-look-(before-after|app|night)/.test(output));
+    expect(made).toHaveLength(3);
+    for (const [source] of made) expect(source).toMatch(/^brand\/store\/phones\.html\?.*shots=/);
   });
 
   it("labels every verse as World English Bible, which is free to set in a picture", () => {

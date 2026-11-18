@@ -1,0 +1,90 @@
+<!doctype html>
+<!--
+  One screen of the app on its own, for the site's Features page: 990×2151,
+  three quarters the size of a phone capture. It fills the window it is opened in.
+
+  What it shows comes from the address:
+    shot    a picture of the app in captures/, without ".png", for example
+            "phone/search". Make these with `npm run brand:capture`.
+    widget  add this instead of a shot for the iOS home screen widget: its three
+            sizes, drawn by the widget's own code (`npm run brand:widget`), on a
+            sticker wallpaper
+
+  Example:
+    screen.html?shot=phone/notes
+
+  Rendered by `npm run brand`.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible app screen</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <style>
+      /* One unit is a point on the phone: the screen is 440 wide and 956 tall */
+      .canvas {
+        --u: calc(100vw / 440);
+        width: 100vw;
+        height: 100vh;
+      }
+      .shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+      /* The captures leave room at the top for the camera; draw it */
+      .camera {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--u) * 14);
+        translate: -50% 0;
+        width: calc(var(--u) * 122);
+        height: calc(var(--u) * 35);
+        border-radius: calc(var(--u) * 18);
+        background: #2a1d19;
+      }
+
+      /* The home screen: sky, a hill, and the widget in its three sizes */
+      .home { display: none; }
+      .widgets .home { display: block; }
+      .widgets .shot { display: none; }
+      .home { position: absolute; inset: 0; background: linear-gradient(#bcd9e6, #e3eef0 62%, #f3e8d6); }
+      .hill {
+        position: absolute;
+        left: calc(var(--u) * -60);
+        right: calc(var(--u) * -60);
+        bottom: calc(var(--u) * -150);
+        height: calc(var(--u) * 330);
+        border-radius: 50%;
+        background: var(--sage);
+        border: calc(var(--u) * 3) solid #5b4636;
+      }
+      .widget {
+        position: absolute;
+        display: block;
+        border-radius: calc(var(--u) * 24);
+        box-shadow: 0 calc(var(--u) * 8) calc(var(--u) * 18) rgba(67, 48, 42, 0.2);
+      }
+      .home [data-art] { position: absolute; }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas">
+      <img class="shot" id="shot" alt="" />
+      <div class="home">
+        <span data-art="cloud" style="left: calc(var(--u) * 232); top: calc(var(--u) * 690); width: calc(var(--u) * 76)"></span>
+        <div class="hill"></div>
+        <img class="widget" src="captures/widget/medium.png" alt="" style="left: calc(var(--u) * 38); top: calc(var(--u) * 84); width: calc(var(--u) * 364)" />
+        <img class="widget" src="captures/widget/large.png" alt="" style="left: calc(var(--u) * 38); top: calc(var(--u) * 276); width: calc(var(--u) * 364)" />
+        <img class="widget" src="captures/widget/small-lamp.png" alt="" style="left: calc(var(--u) * 38); top: calc(var(--u) * 680); width: calc(var(--u) * 170)" />
+        <span class="sticker" data-art="sun" style="--cut: calc(var(--u) * 3); left: calc(var(--u) * 334); top: calc(var(--u) * 676); width: calc(var(--u) * 64)"></span>
+        <span class="sticker" data-art="shepherd" style="--cut: calc(var(--u) * 3); left: calc(var(--u) * 318); top: calc(var(--u) * 724); width: calc(var(--u) * 78)"></span>
+        <span class="sticker" data-art="sheep" style="--cut: calc(var(--u) * 3); left: calc(var(--u) * 232); top: calc(var(--u) * 782); width: calc(var(--u) * 84)"></span>
+      </div>
+      <span class="camera"></span>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const widgets = params.has('widget');
+      document.getElementById('canvas').classList.toggle('widgets', widgets);
+      if (!widgets) document.getElementById('shot').src = `captures/${params.get('shot') ?? 'phone/search'}.png`;
+    </script>
+    <script src="../art.js"></script>
+  </body>
+</html>

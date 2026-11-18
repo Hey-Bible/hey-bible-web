@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+  A row of phones showing the app, for blog posts and the site: 1600×1000.
+
+  What it shows comes from the address:
+    shots   two or three pictures of the app, separated by commas. Each is a
+            file in captures/: a capture without ".png" (phone/search), or a
+            screenshot from a real phone with its ending (before/search.webp),
+            which already shows the camera.
+    labels  a word under each phone, separated by commas (optional), for
+            example "Before,After"
+    night   add this for the dark version (use captures taken in dark mode)
+
+  Example:
+    phones.html?shots=phone/search,phone/verse,phone/library
+
+  Rendered by `npm run brand`.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible app screens</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <style>
+      .canvas {
+        width: 1600px;
+        height: 1000px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 76px;
+        padding-top: 84px;
+      }
+      .phone { position: relative; flex: none; width: 400px; }
+      .three .phone:nth-child(odd of .phone) { margin-top: 44px; }
+      .labelled { padding-top: 112px; }
+      .labelled .phone { width: 372px; }
+      .three .phone:first-of-type { rotate: -3deg; }
+      .three .phone:last-of-type { rotate: 3deg; }
+      .frame {
+        padding: 7px;
+        background: #43302a;
+        border-radius: 52px;
+        box-shadow: 0 0 0 6px #fff, 0 16px 30px rgba(67, 48, 42, 0.26);
+      }
+      .night .frame { box-shadow: 0 0 0 6px #fff, 0 16px 30px rgba(0, 0, 0, 0.45); }
+      .frame { position: relative; }
+      .frame img { display: block; width: 100%; height: auto; border-radius: 45px; }
+      /* The app's own pictures have room at the top for the camera; draw it */
+      .camera { position: absolute; left: 50%; top: 20px; translate: -50% 0; width: 108px; height: 31px; border-radius: 16px; background: #2a1d19; }
+      .label {
+        position: absolute;
+        left: 50%;
+        top: -78px;
+        translate: -50% 0;
+        padding: 8px 26px 10px;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        font-size: 34px;
+        line-height: 1;
+        background: var(--card);
+        border: 5px solid var(--edge);
+        border-radius: 999px;
+        box-shadow: 0 6px 12px var(--shadow);
+        rotate: -3deg;
+      }
+      .decor { width: 190px; }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas">
+      <span class="decor" data-art="sprig-rose" style="left: -40px; bottom: -30px; transform: rotate(-24deg)"></span>
+      <span class="decor" data-art="sprig-sage" style="right: -36px; top: -44px; transform: rotate(204deg)"></span>
+      <span class="bit" data-art="star" style="left: 96px; top: 150px; width: 40px"></span>
+      <span class="bit" data-art="star" style="left: 1506px; top: 560px; width: 34px; color: var(--rose)"></span>
+      <span class="bit" data-art="star" style="left: 70px; top: 610px; width: 30px; color: var(--sage)"></span>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const canvas = document.getElementById('canvas');
+      const shots = (params.get('shots') ?? 'phone/search,phone/verse,phone/library').split(',');
+      const labels = (params.get('labels') ?? '').split(',');
+      canvas.classList.toggle('night', params.has('night'));
+      canvas.classList.toggle('three', shots.length === 3);
+      canvas.classList.toggle('labelled', labels.some(Boolean));
+      shots.forEach((shot, i) => {
+        const phone = document.createElement('div');
+        phone.className = 'phone';
+        const frame = document.createElement('div');
+        frame.className = 'frame';
+        const img = document.createElement('img');
+        img.alt = '';
+        const fromPhone = /\.\w+$/.test(shot);
+        img.src = fromPhone ? `captures/${shot}` : `captures/${shot}.png`;
+        frame.append(img);
+        if (!fromPhone) {
+          const camera = document.createElement('span');
+          camera.className = 'camera';
+          frame.append(camera);
+        }
+        phone.append(frame);
+        if (labels[i]) {
+          const label = document.createElement('span');
+          label.className = 'label';
+          label.textContent = labels[i];
+          phone.append(label);
+        }
+        canvas.append(phone);
+      });
+    </script>
+    <script src="../art.js"></script>
+  </body>
+</html>

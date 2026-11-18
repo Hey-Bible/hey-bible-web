@@ -72,7 +72,7 @@ describe("Static build output", () => {
   });
 
   describe("FeatureCard (Features page)", () => {
-    it("renders all 6 features", () => {
+    it("renders all 7 features", () => {
       const html = readPage("features/index.html");
       const featureTitles = [
         "Search &amp; Favorites",
@@ -81,10 +81,43 @@ describe("Static build output", () => {
         "iOS Widget",
         "Verse Art",
         "Sharing",
+        "Multiple Translations",
       ];
       for (const title of featureTitles) {
         expect(html, `should contain "${title}"`).toContain(title);
       }
+    });
+
+    it("shows each feature with a screenshot in the new look that is in the build", () => {
+      const html = readPage("features/index.html");
+      const screenshots = [...html.matchAll(/data-screenshot="([^"]+)"/g)].map((match) => match[1]);
+      expect(screenshots).toHaveLength(7);
+      for (const screenshot of screenshots) {
+        // The old-look files were numbered: 2-search.webp, 9-widget.webp
+        expect(screenshot).toMatch(/^\/img\/screenshots\/[a-z-]+\.webp$/);
+        expect(html).toContain(`src="${screenshot}"`);
+        expect(existsSync(join(dist, screenshot)), screenshot).toBe(true);
+      }
+      expect(existsSync(join(dist, "img/screenshots/2-search.webp"))).toBe(false);
+    });
+
+    it("lets a screenshot fill its card, and sizes the opened one by the window", () => {
+      const html = readPage("features/index.html");
+      const pictures = [...html.matchAll(/<img[^>]*alt="[^"]* screenshot"[^>]*>/g)].map((match) => match[0]);
+      expect(pictures).toHaveLength(7);
+      for (const picture of pictures) {
+        expect(picture).toContain("w-full");
+        expect(picture).not.toMatch(/max-h-\[/);
+        // Its shape is known before it loads, so the row of cards does not jump
+        expect(picture).toMatch(/width="990"[^>]*height="2151"/);
+      }
+      // The opened picture used to sit in a 320px card at 60% of the window's height
+      const opened = html.match(/<img[^>]*id="feature-lightbox-img"[^>]*>/)![0];
+      expect(opened).toContain("feature-lightbox-img");
+      expect(opened).not.toContain("60vh");
+      expect(html).not.toContain("width: 320px; max-width: 90vw");
+      const lightbox = readFileSync(join(import.meta.dirname, "..", "src/components/FeatureLightbox.astro"), "utf-8");
+      expect(lightbox).toMatch(/\.feature-lightbox-img \{[^}]*max-height: min\(calc\(100dvh - 15rem\), 956px\)/);
     });
 
     it("has CTA with app store buttons", () => {
@@ -383,22 +416,28 @@ describe("Static build output", () => {
     });
   });
 
-  describe("Draft posts", () => {
-    it("keeps the new-look post out of the build until it is published", () => {
-      const source = readFileSync(
-        join(dist, "..", "src/content/blog/a-new-look.mdx"),
-        "utf-8",
-      );
-      // When the draft flag comes off, replace this test with one for the page.
-      expect(source).toMatch(/^draft: true$/m);
-      expect(existsSync(join(dist, "blog/a-new-look/index.html"))).toBe(false);
-      expect(readPage("blog/index.html")).not.toContain("A New Look for Hey Bible");
-      expect(readPage("blog/tag/update/index.html")).not.toContain("A New Look for Hey Bible");
+  describe("New-look post", () => {
+    it("publishes the post about the new look, on the blog and under its tags", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      expect(post).toContain("A New Look for Hey Bible");
+      expect(readPage("blog/index.html")).toContain("A New Look for Hey Bible");
+      expect(readPage("blog/tag/update/index.html")).toContain("A New Look for Hey Bible");
     });
 
-    it("has the pictures the draft uses ready to publish", () => {
+    it("shows the app in it, with every picture the post names in the build", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      for (const name of ["before-after", "app", "night", "verse"]) {
+        expect(post, `a-new-look-${name}.png`).toContain(`/img/blog/a-new-look-${name}.png`);
+        expect(existsSync(join(dist, `img/blog/a-new-look-${name}.png`))).toBe(true);
+      }
       expect(existsSync(join(dist, "img/blog/a-new-look-hero.png"))).toBe(true);
-      expect(existsSync(join(dist, "img/blog/a-new-look-verse.png"))).toBe(true);
+      expect(existsSync(join(dist, "img/blog/a-new-look-hero-dark.png"))).toBe(true);
+    });
+
+    it("says where the look is live today without promising a store date", () => {
+      const post = readPage("blog/a-new-look/index.html");
+      expect(post).toContain("https://heybible.app");
+      expect(post).toContain("with the next update");
     });
   });
 

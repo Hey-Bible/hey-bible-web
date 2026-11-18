@@ -7,10 +7,15 @@ interface Props {
 }
 
 const { icon, title, description, screenshot } = Astro.props;
+// A card with a screenshot is as wide as the screenshot should be, so the
+// picture fills it; a card with words only keeps a comfortable line length
+const width = screenshot
+  ? 'w-[264px] md:w-[312px] p-3 md:p-4'
+  : 'min-w-[220px] max-w-[250px] md:min-w-[330px] md:max-w-[375px] p-3 md:p-5';
 ---
 
 <div
-  class="feature-card sticker-card p-3 md:p-5 transition-all duration-300 hover:-translate-y-1 min-w-[220px] max-w-[250px] md:min-w-[330px] md:max-w-[375px] flex-shrink-0 cursor-pointer flex flex-col"
+  class:list={['feature-card sticker-card transition-all duration-300 hover:-translate-y-1 flex-shrink-0 cursor-pointer flex flex-col', width]}
   data-title={`${icon} ${title}`}
   data-description={description}
   data-screenshot={screenshot || ''}
@@ -22,7 +27,9 @@ const { icon, title, description, screenshot } = Astro.props;
       <img
         src={screenshot}
         alt={`${title} screenshot`}
-        class="rounded-xl max-h-[300px] md:max-h-[450px] mx-auto logo-glow"
+        class="rounded-xl w-full h-auto logo-glow"
+        width="990"
+        height="2151"
         style="box-shadow: var(--sticker-shadow-sm);"
       />
     </div>

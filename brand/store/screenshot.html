@@ -1,0 +1,186 @@
+<!doctype html>
+<!--
+  Store screenshot template: a line of words over a picture of the app in a
+  sticker phone. One file makes every size; it fills the window it is opened in:
+
+    1320×2868  App Store, iPhone 6.9"
+    2064×2752  App Store, iPad 13"
+    1080×1920  Google Play, phone
+
+  What it shows comes from the address:
+    shot   a picture of the app in captures/, without ".png", for example
+           "phone/search". Make these with `npm run brand:capture`.
+    title  the big line
+    sub    the smaller line under it (optional)
+    art    a drawing from ../art.js that sits on the corner of the device
+    tint   the colour of the wash behind the device: sage, rose, sky or wheat
+    night  add this for the dark version (use a capture taken in dark mode)
+
+  Example:
+    screenshot.html?shot=phone/search&title=Find any verse&art=sheep&tint=sage
+
+  Render the whole set with `npm run brand`.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible store screenshot</title>
+    <link rel="stylesheet" href="../brand.css" />
+    <style>
+      /* One unit is a 1320th of the width, so the layout scales with the window */
+      .canvas {
+        --u: calc(100vw / 1320);
+        --tint: var(--sage);
+        width: 100vw;
+        height: 100vh;
+      }
+      .words {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(var(--u) * 150);
+        height: calc(var(--u) * 400);
+        padding: 0 calc(var(--u) * 90);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: calc(var(--u) * 30);
+        text-align: center;
+      }
+      .title {
+        margin: 0;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        font-size: calc(var(--u) * 124);
+        line-height: 1.08;
+        text-wrap: balance;
+      }
+      .sub {
+        margin: 0;
+        font-size: calc(var(--u) * 52);
+        line-height: 1.25;
+        color: var(--soft-ink);
+        text-wrap: balance;
+      }
+      .sub:empty { display: none; }
+
+      /* A soft wash of colour behind the device */
+      .wash {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--u) * 1010);
+        translate: -50% 0;
+        width: calc(var(--u) * 1500);
+        height: calc(var(--u) * 1500);
+        border-radius: 50%;
+        background: var(--tint);
+        opacity: 0.45;
+      }
+      .night .wash { opacity: 0.16; }
+
+      /* The device: a dark rim, then the white die-cut edge, then a shadow.
+         If it is taller than the room left, the bottom runs off the picture. */
+      .device {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--u) * 640);
+        translate: -50% 0;
+        width: calc(var(--u) * 990);
+        padding: calc(var(--u) * 16);
+        box-sizing: border-box;
+        background: #43302a;
+        border-radius: calc(var(--u) * 124);
+        box-shadow:
+          0 0 0 calc(var(--u) * 13) #fff,
+          0 calc(var(--u) * 34) calc(var(--u) * 60) rgba(67, 48, 42, 0.28);
+      }
+      .night .device { box-shadow: 0 0 0 calc(var(--u) * 13) #fff, 0 calc(var(--u) * 34) calc(var(--u) * 60) rgba(0, 0, 0, 0.45); }
+      .device img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: calc(var(--u) * 108);
+      }
+      /* The camera: a pill on an iPhone, a dot on an Android phone, nothing on a tablet */
+      .camera {
+        position: absolute;
+        left: 50%;
+        top: calc(var(--u) * 46);
+        translate: -50% 0;
+        width: calc(var(--u) * 270);
+        height: calc(var(--u) * 78);
+        border-radius: calc(var(--u) * 40);
+        background: #2a1d19;
+      }
+      .android .camera { top: calc(var(--u) * 40); width: calc(var(--u) * 44); height: calc(var(--u) * 44); }
+      .tablet .camera { display: none; }
+
+      /* A tablet is wider and squarer, so everything sits a little tighter */
+      .tablet .words { top: calc(var(--u) * 70); height: calc(var(--u) * 250); gap: calc(var(--u) * 16); }
+      .tablet .title { font-size: calc(var(--u) * 84); }
+      .tablet .sub { font-size: calc(var(--u) * 36); }
+      .tablet .device { top: calc(var(--u) * 380); width: calc(var(--u) * 1010); padding: calc(var(--u) * 14); border-radius: calc(var(--u) * 54); box-shadow: 0 0 0 calc(var(--u) * 9) #fff, 0 calc(var(--u) * 24) calc(var(--u) * 44) rgba(67, 48, 42, 0.28); }
+      .tablet .device img { border-radius: calc(var(--u) * 40); }
+      .tablet .wash { top: calc(var(--u) * 600); }
+
+      /* A shorter picture (Google Play) has less room above the device */
+      .short .words { top: calc(var(--u) * 110); height: calc(var(--u) * 360); }
+      .short .device { top: calc(var(--u) * 540); }
+
+      .art {
+        position: absolute;
+        --cut: calc(var(--u) * 9);
+        width: calc(var(--u) * var(--w, 280));
+        right: calc(var(--u) * 46);
+        top: calc(var(--u) * 520);
+        rotate: 8deg;
+      }
+      .tablet .art { --cut: calc(var(--u) * 6); width: calc(var(--u) * var(--w, 280) * 0.62); right: calc(var(--u) * 66); top: calc(var(--u) * 300); }
+      .short .art { top: calc(var(--u) * 420); }
+      .art.left { right: auto; left: calc(var(--u) * 46); rotate: -8deg; }
+      .tablet .art.left { left: calc(var(--u) * 66); }
+      .decor { width: calc(var(--u) * 240); }
+      .bit[data-art='star'] { width: calc(var(--u) * 60); }
+    </style>
+  </head>
+  <body>
+    <div class="canvas" id="canvas">
+      <span class="decor" data-art="sprig-sage" style="right: calc(var(--u) * -70); top: calc(var(--u) * -60); transform: rotate(204deg)"></span>
+      <span class="decor" data-art="sprig-rose" style="left: calc(var(--u) * -60); top: calc(var(--u) * 470); transform: rotate(24deg)"></span>
+      <span class="bit" data-art="star" style="left: 10%; top: calc(var(--u) * 120)"></span>
+      <span class="bit" data-art="star" style="left: 88%; top: calc(var(--u) * 430); color: var(--rose)"></span>
+      <div class="wash"></div>
+      <div class="words">
+        <h1 class="title" id="title"></h1>
+        <p class="sub" id="sub"></p>
+      </div>
+      <div class="device">
+        <img id="shot" alt="" />
+        <span class="camera"></span>
+      </div>
+      <span class="art sticker" id="art"></span>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const canvas = document.getElementById('canvas');
+      const shot = params.get('shot') ?? 'phone/search';
+      const tints = ['sage', 'rose', 'sky', 'wheat'];
+      const tint = tints.includes(params.get('tint')) ? params.get('tint') : 'sage';
+      canvas.classList.toggle('night', params.has('night'));
+      canvas.classList.toggle('tablet', shot.startsWith('tablet/'));
+      canvas.classList.toggle('android', shot.startsWith('android/'));
+      // The iPhone picture is more than twice as tall as it is wide; Google Play's is not
+      canvas.classList.toggle('short', !shot.startsWith('tablet/') && innerHeight / innerWidth < 2);
+      canvas.style.setProperty('--tint', `var(--${tint})`);
+      document.getElementById('title').textContent = params.get('title') ?? 'Find any verse';
+      document.getElementById('sub').textContent = params.get('sub') ?? '';
+      document.getElementById('shot').src = `captures/${shot}.png`;
+      const art = document.getElementById('art');
+      art.dataset.art = params.get('art') ?? 'sheep';
+      art.classList.toggle('left', params.has('left'));
+      if (params.get('w')) art.style.setProperty('--w', params.get('w'));
+    </script>
+    <script src="../art.js"></script>
+  </body>
+</html>
