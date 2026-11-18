@@ -62,9 +62,10 @@
       if (e.key === 'Escape' && lightbox!.classList.contains('active')) {
         closeLightbox();
       }
-      if (lightbox!.classList.contains('active')) {
-        if (e.key === 'ArrowLeft') showLightboxSlide(lightboxCurrent - 1);
-        if (e.key === 'ArrowRight') showLightboxSlide(lightboxCurrent + 1);
+      if (lightbox!.classList.contains('active') && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        // Without this the row of pictures behind also scrolls sideways
+        e.preventDefault();
+        showLightboxSlide(e.key === 'ArrowLeft' ? lightboxCurrent - 1 : lightboxCurrent + 1);
       }
     });
 

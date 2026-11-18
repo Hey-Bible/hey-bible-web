@@ -139,6 +139,42 @@ test.describe("Features page (Issue #11)", () => {
     expect((await page.locator("#feature-lightbox-card").boundingBox())!.width).toBeGreaterThanOrEqual(300);
   });
 
+  for (const [path, item, box] of [
+    ["/features", ".overflow-x-scroll .feature-card", "#feature-lightbox"],
+    ["/", ".carousel-slide", "#lightbox"],
+  ]) {
+    test(`arrow keys step through the opened pictures without scrolling the row behind (${path})`, async ({ page }) => {
+      // Narrow enough that the row has somewhere to scroll
+      await page.setViewportSize({ width: 1000, height: 800 });
+      await page.goto(path);
+      const row = page.locator(".overflow-x-scroll");
+      const scrolled = () => row.evaluate((el) => el.scrollLeft);
+      const showing = () => page.locator(`${box} .lightbox-content img`).getAttribute("src");
+      await page.locator(item).first().click();
+      await expect(page.locator(box)).toHaveClass(/active/);
+      const first = await showing();
+
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(400);
+      expect(await showing()).not.toBe(first);
+      expect(await scrolled()).toBe(0);
+
+      await page.keyboard.press("ArrowLeft");
+      await page.keyboard.press("ArrowLeft");
+      await page.waitForTimeout(400);
+      expect(await showing()).toBe(first);
+      expect(await scrolled()).toBe(0);
+
+      // With the pictures closed, the arrow keys scroll the row again
+      await page.keyboard.press("Escape");
+      await expect(page.locator(box)).not.toHaveClass(/active/);
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(400);
+      expect(await scrolled()).toBeGreaterThan(0);
+    });
+  }
+
   test("CTA present with app store buttons", async ({ page }) => {
     await page.goto("/features");
     await expect(page.locator("text=Ready to get started?")).toBeVisible();
