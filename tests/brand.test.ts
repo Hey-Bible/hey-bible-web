@@ -337,7 +337,7 @@ describe("Brand images", () => {
     const shown = [...page.matchAll(/screenshot: '([^']+)'/g)].map((match) => match[1]);
     const all = jobs as [string, number, number, string][];
 
-    it("renders a picture for every feature card, half the size of a phone capture", () => {
+    it("renders a picture for every feature card, three quarters the size of a phone capture", () => {
       expect(shown).toHaveLength(7);
       expect(shown.sort()).toEqual(screens.map(([name]) => `/img/screenshots/${name}.webp`).sort());
       for (const [name] of screens) {
@@ -345,8 +345,8 @@ describe("Brand images", () => {
         const job = all.find(([, , , out]) => out === output);
         expect(job, `${output} should have a render job`).toBeDefined();
         expect(job![0]).toMatch(/^brand\/store\/screen\.html\?/);
-        expect([job![1], job![2]]).toEqual([660, 1434]);
-        expect(webpSize(join(root, output)), output).toEqual([660, 1434]);
+        expect([job![1], job![2]]).toEqual([990, 2151]);
+        expect(webpSize(join(root, output)), output).toEqual([990, 2151]);
       }
     });
 

@@ -101,6 +101,25 @@ describe("Static build output", () => {
       expect(existsSync(join(dist, "img/screenshots/2-search.webp"))).toBe(false);
     });
 
+    it("lets a screenshot fill its card, and sizes the opened one by the window", () => {
+      const html = readPage("features/index.html");
+      const pictures = [...html.matchAll(/<img[^>]*alt="[^"]* screenshot"[^>]*>/g)].map((match) => match[0]);
+      expect(pictures).toHaveLength(7);
+      for (const picture of pictures) {
+        expect(picture).toContain("w-full");
+        expect(picture).not.toMatch(/max-h-\[/);
+        // Its shape is known before it loads, so the row of cards does not jump
+        expect(picture).toMatch(/width="990"[^>]*height="2151"/);
+      }
+      // The opened picture used to sit in a 320px card at 60% of the window's height
+      const opened = html.match(/<img[^>]*id="feature-lightbox-img"[^>]*>/)![0];
+      expect(opened).toContain("feature-lightbox-img");
+      expect(opened).not.toContain("60vh");
+      expect(html).not.toContain("width: 320px; max-width: 90vw");
+      const lightbox = readFileSync(join(import.meta.dirname, "..", "src/components/FeatureLightbox.astro"), "utf-8");
+      expect(lightbox).toMatch(/\.feature-lightbox-img \{[^}]*max-height: min\(calc\(100dvh - 15rem\), 956px\)/);
+    });
+
     it("has CTA with app store buttons", () => {
       const html = readPage("features/index.html");
       expect(html).toContain("Ready to get started?");

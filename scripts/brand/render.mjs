@@ -62,8 +62,10 @@ const storeJobs = storeSizes.flatMap(([folder, device, width, height]) =>
 const phones = 'brand/store/phones.html';
 
 /**
- * The app screens on the site's Features page: one screen each, half the size
- * of a phone capture, saved as public/img/screenshots/<name>.webp.
+ * The app screens on the site's Features page: one screen each, three quarters
+ * the size of a phone capture, saved as public/img/screenshots/<name>.webp.
+ * The page's lightbox shows them up to 956px tall, the height of the phone, so
+ * this keeps them sharp there on a screen with two pixels to the point.
  * [name, what brand/store/screen.html shows]
  */
 export const featureScreens = [
@@ -79,8 +81,8 @@ export const featureScreens = [
 
 const featureJobs = featureScreens.map(([name, show]) => [
   `brand/store/screen.html?${show}`,
-  660,
-  1434,
+  990,
+  2151,
   `public/img/screenshots/${name}.webp`,
 ]);
 

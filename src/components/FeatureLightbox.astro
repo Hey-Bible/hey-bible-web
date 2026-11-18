@@ -4,19 +4,49 @@
 <div id="feature-lightbox" class="lightbox">
   <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
   <button class="lightbox-nav lightbox-prev" aria-label="Previous feature">&larr;</button>
-  <div class="lightbox-content" style="width: 320px; max-width: 90vw;">
-    <div
-      id="feature-lightbox-card"
-      class="sticker-card p-6 w-full flex flex-col"
-      style="min-height: 200px;"
-    >
+  <div class="lightbox-content">
+    <div id="feature-lightbox-card" class="feature-lightbox-card sticker-card flex flex-col">
       <h3 id="feature-lightbox-title" class="text-xl mb-2" style={`color: var(--color-retro-text);`}></h3>
       <p id="feature-lightbox-desc" class="text-sm leading-relaxed opacity-80 mb-4" style={`color: var(--color-retro-text);`}></p>
-      <img id="feature-lightbox-img" src="" alt="" class="rounded-xl mx-auto flex-1 object-contain" style="box-shadow: var(--sticker-shadow-sm); max-height: 60vh; width: 100%;" />
+      <img id="feature-lightbox-img" src="" alt="" class="feature-lightbox-img rounded-xl mx-auto" style="box-shadow: var(--sticker-shadow-sm);" />
     </div>
   </div>
   <button class="lightbox-nav lightbox-next" aria-label="Next feature">&rarr;</button>
 </div>
+
+<style>
+  /* The card wraps the screenshot, and the screenshot is as tall as the window
+     allows: up to 956px, the height of the phone it was taken on. 15rem is the
+     room the card's words, padding and a margin above and below need. */
+  .feature-lightbox-card {
+    width: fit-content;
+    min-width: min(320px, 90vw);
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+  .feature-lightbox-img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(calc(100vh - 15rem), 956px);
+    max-height: min(calc(100dvh - 15rem), 956px);
+  }
+  /* The words wrap to the width of the screenshot instead of widening the card */
+  .feature-lightbox-card h3,
+  .feature-lightbox-card p {
+    width: 0;
+    min-width: 100%;
+  }
+  .feature-lightbox-img:hover {
+    transform: none;
+  }
+  @media (max-width: 600px) {
+    .feature-lightbox-card {
+      padding: 1rem;
+    }
+  }
+</style>
 
 <script>
   function initFeatureLightbox() {
