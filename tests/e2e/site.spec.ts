@@ -4,7 +4,7 @@ test.describe("Navigation", () => {
   test("homepage loads", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/Hey Bible/);
-    await expect(page.locator("main h1")).toContainText("Bible Companion");
+    await expect(page.locator("main h1")).toHaveText("Your AI-powered Bible companion");
   });
 
   test("all pages load", async ({ page }) => {

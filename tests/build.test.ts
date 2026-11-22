@@ -187,6 +187,32 @@ describe("Static build output", () => {
       expect(html).toContain("SoftwareApplication");
       expect(html).toContain("schema.org");
     });
+
+    it("uses the app's tagline, Your AI-powered Bible companion, in the title, heading and JSON-LD", () => {
+      const html = readPage("index.html");
+      expect(html).toContain("<title>Hey Bible - Your AI-powered Bible companion</title>");
+      expect(html).toMatch(/<h1[^>]*>Your AI-powered Bible companion<\/h1>/);
+      expect(html).toContain('"description":"Your AI-powered Bible companion. Search,');
+    });
+
+    it("no longer calls Hey Bible a complete Bible companion anywhere on the site or in the brand art", () => {
+      const sources = [
+        "src/pages/index.astro",
+        "src/layouts/BaseLayout.astro",
+        "package.json",
+        "brand/og-image.html",
+        "brand/store/hero.html",
+      ];
+      for (const file of sources) {
+        const text = readFileSync(join(import.meta.dirname, "..", file), "utf-8");
+        expect(text, file).not.toMatch(/complete bible companion/i);
+      }
+      for (const file of ["brand/og-image.html", "brand/store/hero.html"]) {
+        expect(readFileSync(join(import.meta.dirname, "..", file), "utf-8"), file).toContain(
+          '<p class="tagline">Your AI-powered Bible companion</p>',
+        );
+      }
+    });
   });
 
   describe("AI agent gateway", () => {

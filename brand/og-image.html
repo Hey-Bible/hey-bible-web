@@ -24,6 +24,8 @@
         font-size: 40px;
         line-height: 1.25;
         color: var(--soft-ink);
+        /* Two even lines rather than one word left on its own */
+        text-wrap: balance;
       }
       .sticker { --cut: 7px; width: 400px; transform: rotate(3deg); animation-name: m-float; }
       /* The whole sticker rocks a little, as if it were stuck on by hand */
@@ -51,7 +53,7 @@
       <span class="bit m-glint" data-art="star" style="left: 400px; top: 510px; width: 24px; color: var(--sage)"></span>
       <div>
         <div class="lockup"><span data-art="mark"></span><span class="wordmark">Hey Bible</span></div>
-        <p class="tagline">Your complete Bible companion</p>
+        <p class="tagline">Your AI-powered Bible companion</p>
       </div>
       <span class="sticker m-float" data-art="meadow"></span>
       <span class="m-twinkle" data-art="star" style="right: 62px; top: 132px"></span>
