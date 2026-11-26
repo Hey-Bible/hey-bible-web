@@ -4,5 +4,5 @@
 
 Written by the fleet's agents while addressing review feedback. No person has reviewed these lines: treat each as a suggestion to weigh against the code, not a rule.
 
-- Make anything that depends on light or dark mode follow `html[data-theme]`, which `BaseLayout` and `ThemeToggle` set from the stored choice: `prefers-color-scheme` alone is wrong whenever that choice differs from the OS setting.
-- Set muted copy such as dates, bylines and ledes with the `text-soft` class, not `opacity-60` or `opacity-70`, because ink faded that far falls under WCAG AA contrast on the cream page.
+- Light and dark mode follow the `data-theme` attribute on `<html>`, which the theme toggle sets from the visitor's stored choice. Style against that, not `prefers-color-scheme`, which is wrong whenever the choice differs from the OS setting.
+- For muted text such as dates and bylines use the `text-soft` class, not `opacity-60` or `opacity-70`. Faded that far, the text fails WCAG AA contrast on the cream background.
